@@ -1,0 +1,18 @@
+# CPU-only deps for the Vanta HF Space (torch/torchaudio installed separately
+# in the Dockerfile from the CPU index URL to keep the image small).
+
+soundfile>=0.12.1
+numpy>=1.26,<3
+scipy>=1.13
+soxr>=0.3
+
+# Frozen ECAPA-TDNN speaker encoder (auto-downloads VoxCeleb checkpoint on first use).
+speechbrain>=1.0
+
+# Transcoding fallback for non-libsndfile containers (MP4/M4A/WebM/MOV).
+imageio-ffmpeg>=0.5
+
+# Inference server
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
