@@ -1,0 +1,30 @@
+# Core — PyTorch installed separately with CUDA index URL
+# torch
+# torchaudio
+
+# Audio I/O and processing
+soundfile>=0.12.1
+librosa>=0.10.2
+numpy>=1.26
+scipy>=1.13
+
+# Phase 2: pretrained speaker encoder (ECAPA-TDNN from VoxCeleb)
+speechbrain>=1.0
+
+# Phase 4: evaluation metrics.
+# - pystoi: pure-Python STOI.
+# - torch-pesq: pure-PyTorch PESQ. The reference `pesq` package needs a C
+#   compiler and has no prebuilt wheel for Python 3.13.
+pystoi>=0.4
+torch-pesq>=0.1
+
+# Utilities
+tqdm>=4.66
+pyyaml>=6.0
+
+# Phase 5: inference server
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+# Bundled ffmpeg binary for decoding MP4/M4A/WebM uploads before libsndfile
+imageio-ffmpeg>=0.5

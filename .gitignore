@@ -1,0 +1,43 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Datasets (too big for git)
+data/
+datasets/
+
+# Model checkpoints
+checkpoints/
+*.pt
+*.pth
+*.onnx
+
+# Logs
+*.log
+
+# Frontend
+web/node_modules/
+web/.next/
+web/.vercel/
+web/out/
+web/.env.local
+# Keep .env.production (public vars, safe to commit)
+
+# HF Space staging clone — source of truth is the HF repo itself
+deploy/_hf_push/
+# Local-only files inside deploy/hf-space/ (built from repo root via build.sh)
+deploy/hf-space/vanta/
+deploy/hf-space/checkpoints/
+deploy/hf-space/server.py
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# OS
+Thumbs.db
+.DS_Store
