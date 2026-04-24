@@ -178,6 +178,3 @@ Backend ships as a Docker image to a Hugging Face Space — see [`deploy/hf-spac
 - Dereverb (model preserves reverb by design; removing it is a separate task)
 - MOS-rated user study (metrics reported are objective only)
 
-## License
-
-MIT. See [LICENSE](LICENSE).
