@@ -71,27 +71,27 @@ export function EngineCenter({
             />
           </g>
 
-          {/* Node Indicators (Floating at x=30 and x=770) */}
+          {/* Node Indicators (Aligned with brace ends at x=70 and x=730) */}
           {/* Reference */}
-          <g transform="translate(30, 110)">
+          <g transform="translate(70, 110)">
             <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
             <circle r="3" fill="var(--c-green)" />
             <text x="10" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">REFERENCE</text>
           </g>
           {/* Noise */}
-          <g transform="translate(30, 330)">
+          <g transform="translate(70, 330)">
             <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
             <circle r="3" fill="var(--c-red)" />
             <text x="10" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">NOISE</text>
           </g>
           {/* Clean Voice */}
-          <g transform="translate(770, 110)">
+          <g transform="translate(730, 110)">
             <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
             <circle r="3" fill="var(--c-green)" />
             <text x="-70" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">CLEAN VOICE</text>
           </g>
           {/* Residue (Noise) */}
-          <g transform="translate(770, 330)">
+          <g transform="translate(730, 330)">
             <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
             <circle r="3" fill="var(--c-purple)" />
             <text x="-95" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">RESIDUE (NOISE)</text>
