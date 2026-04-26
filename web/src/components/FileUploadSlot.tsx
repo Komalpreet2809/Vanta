@@ -48,24 +48,21 @@ export function FileUploadSlot({
   const sizeStr = file ? `${(file.size / 1024).toFixed(1)} KB` : "";
 
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
+    <div className="panel p-5">
       {/* header */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <span className="text-[15px] text-[var(--accent)] font-medium tabular-nums">
-            {slot}
-          </span>
-          <span className="text-[15px] text-[var(--text)] font-medium">
-            {label}
-          </span>
-        </div>
+        <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--text)]">
+          {label}
+        </span>
         {file ? (
           <button
             type="button"
             onClick={() => onFile(null)}
-            className="text-[12px] text-[var(--text-soft)] hover:text-[var(--text)] px-3 py-1 rounded-md border border-[var(--border)] hover:border-[var(--border-strong)] transition-colors"
+            className="flex h-6 w-6 items-center justify-center border border-[var(--border)] hover:bg-[var(--accent-red)]/10 transition-colors"
           >
-            Clear
+            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         ) : null}
       </div>
@@ -81,32 +78,33 @@ export function FileUploadSlot({
         onClick={() => !file && inputRef.current?.click()}
         role="button"
         tabIndex={0}
-        className={`rounded-lg border bg-[var(--bg-input)] px-4 py-3 transition-all duration-200 ${
-          dragOver
-            ? "border-[var(--accent)] bg-[var(--bg-card)] scale-[1.02] shadow-lg shadow-[var(--accent)]/20"
-            : "border-[var(--border)]"
+        className={`inset-panel min-h-[50px] transition-all duration-200 ${
+          dragOver ? "bg-[var(--bg-hover)] border-[var(--border-strong)]" : ""
         } ${!file ? "cursor-pointer hover:border-[var(--border-strong)]" : ""}`}
       >
         {file ? (
-          <div className="flex items-center gap-3">
-            {/* music icon tile */}
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[var(--accent-soft)] border border-[var(--accent)]/20">
-              <Music className="h-4 w-4 text-[var(--accent)]" />
+          <div className="flex items-center gap-3 px-3 py-2.5">
+            <div className="h-8 w-8 shrink-0 border border-[var(--border)] flex items-center justify-center bg-[var(--bg-card)]">
+               <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+               </svg>
             </div>
-            {/* filename + meta */}
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[14px] text-[var(--text)] font-medium">
+              <div className="truncate text-[12px] font-bold text-[var(--text)]">
                 {file.name}
               </div>
-              <div className="text-[12px] text-[var(--text-dim)]">
-                {sizeStr} • <span className="text-[var(--accent)]">Ready</span>
+              <div className="text-[10px] text-[var(--text-dim)] uppercase">
+                {sizeStr} • <span className="text-[var(--accent-green)]">Loaded</span>
               </div>
             </div>
           </div>
         ) : (
-          <div className="flex h-12 items-center justify-center">
-            <span className="text-[13px] text-[var(--text-dim)]">
-              <span className="text-[var(--text-soft)]">Click</span> or drag and drop a file here
+          <div className="flex h-[80px] flex-col items-center justify-center gap-2 px-4 py-3 border border-dashed border-[var(--border)] m-1">
+            <svg className="h-5 w-5 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0l-4 4m4-4v12" />
+            </svg>
+            <span className="text-[10px] text-[var(--text-dim)] text-center leading-tight">
+              Drag & drop audio files here<br/>or click to browse
             </span>
           </div>
         )}
@@ -121,18 +119,6 @@ export function FileUploadSlot({
           }}
         />
       </div>
-
-      {/* "Ready" footer */}
-      {file ? (
-        <div className="flex items-center gap-1.5 mt-3">
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[var(--accent-soft)]">
-            <svg viewBox="0 0 12 12" className="h-3 w-3 text-[var(--accent)]" fill="currentColor">
-              <path d="M5 8.5L2.5 6l-1 1L5 10.5 11 4.5l-1-1z" />
-            </svg>
-          </span>
-          <span className="text-[12px] text-[var(--text-soft)]">Ready</span>
-        </div>
-      ) : null}
     </div>
   );
 }

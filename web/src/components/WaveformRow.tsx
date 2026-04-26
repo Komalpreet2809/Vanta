@@ -7,8 +7,7 @@ import WaveSurfer from "wavesurfer.js";
 type Props = {
   source: Blob | File | string | null;
   label: string;
-  /** Reference uses the green accent; everything else stays neutral. */
-  variant?: "accent" | "neutral";
+  color?: string; // Hex or CSS variable
   onPlayingChange?: (playing: boolean) => void;
   onDownload?: () => void;
 };
@@ -16,7 +15,7 @@ type Props = {
 export function WaveformRow({
   source,
   label,
-  variant = "neutral",
+  color = "var(--accent-charcoal)",
   onPlayingChange,
   onDownload,
 }: Props) {
@@ -31,18 +30,15 @@ export function WaveformRow({
     if (!containerRef.current) return;
     if (!source) return;
 
-    const accent = variant === "accent" ? "#4ade80" : "#aab1b6";
-    const progress = variant === "accent" ? "#22c55e" : "#e7eaec";
-
     const ws = WaveSurfer.create({
       container: containerRef.current,
-      waveColor: accent,
-      progressColor: progress,
-      cursorColor: "transparent",
+      waveColor: color,
+      progressColor: color,
+      cursorColor: "var(--border-strong)",
       barWidth: 2,
-      barGap: 2,
-      barRadius: 1,
-      height: 60,
+      barGap: 1,
+      barRadius: 0,
+      height: 40,
       normalize: true,
       interact: true,
     });
@@ -77,83 +73,52 @@ export function WaveformRow({
       wsRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [source, variant]);
+  }, [source, color]);
 
   if (!source) return null;
 
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-5 py-4">
-      {/* header: label + actions */}
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[14px] text-[var(--text)] font-medium">
-          {label}
-        </span>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => wsRef.current?.playPause()}
-            disabled={!ready}
-            className="flex items-center gap-1.5 rounded-md border border-[var(--border-strong)] px-3 py-1.5 text-[12px] text-[var(--text-soft)] hover:text-[var(--text)] hover:border-[var(--text-soft)] disabled:opacity-50 transition-colors"
-          >
-            {playing ? (
-              <>
-                <Pause className="h-3.5 w-3.5" />
-                Pause
-              </>
-            ) : (
-              <>
-                <Play className="h-3.5 w-3.5 fill-current" />
-                Play
-              </>
-            )}
-          </button>
-          {onDownload ? (
-            <button
-              type="button"
-              onClick={onDownload}
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-colors"
-              aria-label="download"
-            >
-              <Download className="h-3.5 w-3.5" />
-            </button>
-          ) : null}
-        </div>
-      </div>
-
-      {/* circular play + waveform + duration */}
-      <div className="flex items-center gap-4">
+    <div className="inset-panel px-3 py-2">
+      <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => wsRef.current?.playPause()}
           disabled={!ready}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--bg-input)] border border-[var(--border-strong)] text-[var(--text-soft)] hover:text-[var(--text)] hover:border-[var(--text-soft)] disabled:opacity-40 transition-colors"
+          className="industrial-button flex h-7 w-7 shrink-0 items-center justify-center border-[var(--border-strong)] bg-[var(--bg-card)] disabled:opacity-40"
         >
           {playing ? (
-            <Pause className="h-3.5 w-3.5" />
+            <Pause className="h-3 w-3 fill-current" />
           ) : (
-            <Play className="h-3.5 w-3.5 fill-current ml-0.5" />
+            <Play className="h-3 w-3 fill-current ml-0.5" />
           )}
         </button>
 
         <div className="flex-1 min-w-0">
           <div ref={containerRef} className="wf" />
-          <div className="mt-1 flex items-center justify-between text-[11px] text-[var(--text-dim)] tabular-nums">
+          <div className="mt-0.5 flex items-center justify-between text-[9px] font-bold text-[var(--text-dim)] uppercase tabular-nums">
             <span>{formatTime(time)}</span>
-            <span>{formatTime(duration, true)}</span>
+            <span>{formatTime(duration)}</span>
           </div>
         </div>
+
+        {onDownload && (
+          <button
+            type="button"
+            onClick={onDownload}
+            className="industrial-button flex h-7 w-7 shrink-0 items-center justify-center border-[var(--border-strong)] bg-[var(--bg-card)]"
+            aria-label="download"
+          >
+            <Download className="h-3 w-3" />
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
-function formatTime(seconds: number, withCs = false): string {
-  if (!isFinite(seconds)) return withCs ? "00:00.00" : "00:00";
+function formatTime(seconds: number): string {
+  if (!isFinite(seconds)) return "00:00";
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
-  if (!withCs) {
-    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-  }
-  const cs = Math.floor((seconds - Math.floor(seconds)) * 100);
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${String(cs).padStart(2, "0")}`;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
