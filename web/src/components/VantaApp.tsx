@@ -67,7 +67,7 @@ export function VantaApp() {
           {/* INPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
             <div className="p-4 h-14 flex items-center">
-              <h2 className="font-mono-heading font-black text-[15px] uppercase tracking-[0.1em] opacity-90">Inputs</h2>
+              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-[0.2em] opacity-90">Inputs</h2>
             </div>
             
             <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
@@ -113,7 +113,7 @@ export function VantaApp() {
           {/* OUTPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
             <div className="p-4 h-14 flex items-center">
-              <h2 className="font-mono-heading font-black text-[15px] uppercase tracking-[0.1em] opacity-90">Outputs</h2>
+              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-[0.2em] opacity-90">Outputs</h2>
             </div>
 
             <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
