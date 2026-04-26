@@ -1,26 +1,20 @@
 "use client";
 
 import { Upload } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 type Props = {
-  /** Called when a file is dropped/selected. The parent decides which slot
-   *  (reference vs noise) to assign it to via the chooser dialog. */
-  onFile: (f: File) => void;
+  onFile: (file: File) => void;
 };
 
-const ACCEPT =
-  "audio/*,video/*,.wav,.mp3,.flac,.ogg,.m4a,.mp4,.webm,.mov,.aac";
-
 export function DropZone({ onFile }: Props) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [dragOver, setDragOver] = useState(false);
+  const [active, setActive] = useState(false);
 
-  const onDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
       e.preventDefault();
-      setDragOver(false);
-      const f = e.dataTransfer.files?.[0];
+      setActive(false);
+      const f = e.dataTransfer.files[0];
       if (f) onFile(f);
     },
     [onFile],
@@ -30,37 +24,30 @@ export function DropZone({ onFile }: Props) {
     <div
       onDragOver={(e) => {
         e.preventDefault();
-        setDragOver(true);
+        setActive(true);
       }}
-      onDragLeave={() => setDragOver(false)}
-      onDrop={onDrop}
-      onClick={() => inputRef.current?.click()}
-      role="button"
-      tabIndex={0}
-      className={`flex items-center gap-3 rounded-md border border-dashed px-4 py-4 cursor-pointer transition-colors ${
-        dragOver
-          ? "border-[var(--text-soft)] bg-[var(--bg-elevated)]"
-          : "border-[var(--border-strong)] bg-transparent hover:bg-[var(--bg-elevated)]"
+      onDragLeave={() => setActive(false)}
+      onDrop={handleDrop}
+      onClick={() => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "audio/*";
+        input.onchange = (e) => {
+          const f = (e.target as HTMLInputElement).files?.[0];
+          if (f) onFile(f);
+        };
+        input.click();
+      }}
+      className={`panel p-8 border-dashed flex flex-col items-center justify-center text-center gap-3 cursor-pointer transition-all ${
+        active ? "bg-[var(--bg-page)] scale-[1.01] border-[var(--text)]" : "bg-[var(--bg-page)]/20 hover:bg-[var(--bg-page)]/40"
       }`}
     >
-      <span className="flex h-9 w-9 items-center justify-center rounded-sm border border-[var(--border-strong)] bg-[var(--bg-elevated)]">
-        <Upload className="h-3.5 w-3.5 text-[var(--text-soft)]" />
+      <div className="h-10 w-10 flex items-center justify-center rounded-full border border-dashed border-[var(--border)] opacity-40">
+        <Upload className="h-5 w-5" />
+      </div>
+      <span className="text-[11px] font-bold text-[var(--text-soft)] uppercase tracking-widest leading-relaxed">
+        Drag & drop audio files here<br />or click to browse
       </span>
-      <span className="text-[12px] text-[var(--text-soft)] leading-tight">
-        Drag & drop audio files here
-        <br />
-        <span className="text-[var(--text-dim)]">or click to browse</span>
-      </span>
-      <input
-        ref={inputRef}
-        type="file"
-        accept={ACCEPT}
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) onFile(f);
-        }}
-      />
     </div>
   );
 }

@@ -4,51 +4,30 @@ import { Download, Music, Pause, Play, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
-type Variant = "green" | "red" | "purple";
+type Variant = "charcoal" | "red" | "green" | "purple";
 
 type Props = {
-  /** Section title shown above the card, e.g. "REFERENCE AUDIO". */
   heading: string;
-  /** When provided, the card shows the file with a waveform. */
   source?: Blob | File | null;
-  /** Display name shown above the size — defaults to source.name. */
   filenameOverride?: string;
-  /** Color of the waveform / accent dot. */
   variant?: Variant;
-  /** Show a clear (×) button. */
   onClear?: () => void;
-  /** Show a download button. */
   onDownload?: () => void;
-  /** Renders the empty state with this label when no source. */
   emptyLabel?: string;
 };
 
-const COLOR: Record<Variant, { wave: string; progress: string; tile: string; tileBorder: string }> = {
-  green: {
-    wave: "#3d5a3d",
-    progress: "#2c4429",
-    tile: "rgba(61, 90, 61, 0.12)",
-    tileBorder: "rgba(61, 90, 61, 0.3)",
-  },
-  red: {
-    wave: "#b84a3d",
-    progress: "#8e3528",
-    tile: "rgba(184, 74, 61, 0.12)",
-    tileBorder: "rgba(184, 74, 61, 0.3)",
-  },
-  purple: {
-    wave: "#6e548a",
-    progress: "#523f68",
-    tile: "rgba(110, 84, 138, 0.12)",
-    tileBorder: "rgba(110, 84, 138, 0.3)",
-  },
+const COLOR: Record<Variant, { wave: string; progress: string }> = {
+  charcoal: { wave: "#444444", progress: "#222222" },
+  red: { wave: "#b84a3d", progress: "#8e3528" },
+  green: { wave: "#3d5a3d", progress: "#2c4429" },
+  purple: { wave: "#6e548a", progress: "#523f68" },
 };
 
 export function AudioCard({
   heading,
   source,
   filenameOverride,
-  variant = "green",
+  variant = "charcoal",
   onClear,
   onDownload,
   emptyLabel,
@@ -77,7 +56,7 @@ export function AudioCard({
       barWidth: 1.5,
       barGap: 1.5,
       barRadius: 0,
-      height: 36,
+      height: 32,
       normalize: true,
       interact: true,
     });
@@ -100,93 +79,63 @@ export function AudioCard({
     };
   }, [source, variant]);
 
-  const filename =
-    filenameOverride ??
-    (source instanceof File ? source.name : "audio.wav");
-  const sizeStr = source ? `${(source.size / 1024).toFixed(1)} KB` : "";
-  const colors = COLOR[variant];
+  const filename = filenameOverride ?? (source instanceof File ? source.name : "audio.wav");
+  const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div>
-      <h3 className="font-medium text-[12px] tracking-[0.14em] uppercase text-[var(--text-soft)] mb-3">
+    <div className="flex flex-col gap-3">
+      <h3 className="font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-soft)]">
         {heading}
       </h3>
 
       {source ? (
-        <div className="rounded-md border border-[var(--border)] bg-[var(--bg-elevated)] overflow-hidden">
-          {/* file row */}
-          <div className="flex items-center gap-3 px-3 py-2.5 border-b border-[var(--border-faint)]">
-            <div
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm"
-              style={{
-                background: colors.tile,
-                border: `1px solid ${colors.tileBorder}`,
-              }}
-            >
-              <Music
-                className="h-4 w-4"
-                style={{ color: colors.wave }}
-              />
+        <div className="panel p-4 bg-[var(--bg-card)] flex flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <div className="h-10 w-10 flex items-center justify-center rounded-sm border border-[var(--border-strong)] bg-[var(--bg-page)] shadow-inner">
+              <Music className="h-4 w-4 opacity-60" />
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-[13px] text-[var(--text)] font-medium">
-                {filename}
-              </div>
-              <div className="text-[11px] text-[var(--text-dim)] tabular-nums">
+            <div className="flex-1 min-w-0">
+              <div className="truncate text-[13px] font-bold text-[var(--text)]">{filename}</div>
+              <div className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">
                 {sizeStr} • {formatTime(duration)}
               </div>
             </div>
-            {onClear ? (
-              <button
-                type="button"
-                onClick={onClear}
-                className="flex h-7 w-7 items-center justify-center rounded-sm text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--bg-input)]"
-                aria-label="clear"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            ) : null}
-            {onDownload ? (
-              <button
-                type="button"
-                onClick={onDownload}
-                className="flex h-7 w-7 items-center justify-center rounded-sm text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--bg-input)]"
-                aria-label="download"
-              >
-                <Download className="h-3.5 w-3.5" />
-              </button>
-            ) : null}
-          </div>
-
-          {/* waveform row */}
-          <div className="flex items-center gap-3 px-3 py-2.5">
-            <button
-              type="button"
-              onClick={() => wsRef.current?.playPause()}
-              disabled={!ready}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-[var(--border-strong)] bg-[var(--bg-page)] text-[var(--text)] hover:bg-[var(--bg-input)] disabled:opacity-40"
-              aria-label={playing ? "pause" : "play"}
-            >
-              {playing ? (
-                <Pause className="h-3 w-3" />
-              ) : (
-                <Play className="h-3 w-3 fill-current ml-0.5" />
+            <div className="flex gap-2">
+              {onDownload && (
+                <button onClick={onDownload} className="industrial-button h-10 w-10 flex items-center justify-center bg-[var(--bg-page)]">
+                  <Download className="h-4 w-4" />
+                </button>
               )}
-            </button>
-            <div className="min-w-0 flex-1">
-              <div ref={containerRef} className="wf" />
+              {onClear && (
+                <button onClick={onClear} className="industrial-button h-10 w-10 flex items-center justify-center bg-[var(--bg-page)]">
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-3 pb-2 text-[11px] text-[var(--text-dim)] tabular-nums">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => wsRef.current?.playPause()}
+              disabled={!ready}
+              className="industrial-button h-10 w-10 flex items-center justify-center bg-[var(--bg-page)] shadow-inner"
+            >
+              {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 fill-current ml-0.5" />}
+            </button>
+            <div className="flex-1 min-w-0">
+              <div ref={containerRef} className="h-8" />
+            </div>
+          </div>
+
+          <div className="flex justify-between text-[11px] font-bold tabular-nums text-[var(--text-dim)]">
             <span>{formatTime(time)}</span>
             <span>{formatTime(duration)}</span>
           </div>
         </div>
       ) : (
-        <div className="rounded-md border border-dashed border-[var(--border-strong)] bg-[var(--bg-elevated)]/50 px-3 py-6 text-center">
-          <span className="text-[12px] text-[var(--text-dim)]">
-            {emptyLabel ?? "—"}
+        <div className="panel p-8 border-dashed flex flex-col items-center justify-center text-center gap-3 bg-[var(--bg-page)]/20">
+          <span className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-[0.2em]">
+            {emptyLabel ?? "No signal loaded"}
           </span>
         </div>
       )}
