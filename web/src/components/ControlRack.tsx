@@ -1,6 +1,5 @@
 "use client";
 
-import { Sparkles, Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 
 type Props = {
@@ -27,15 +26,9 @@ export function ControlRack({
         className="group flex items-center gap-3 rounded-xl bg-[var(--accent-deep)] hover:bg-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed px-8 py-3.5 text-[15px] font-bold text-[#06140b] transition-all shadow-[0_0_24px_rgba(74,222,128,0.18)] hover:shadow-[0_0_32px_rgba(74,222,128,0.3)] uppercase tracking-wider"
       >
         {isRunning ? (
-          <>
-            <Loader2 className="h-5 w-5 animate-spin" />
-            <span>Extracting Voice…</span>
-          </>
+          <span>Extracting Voice…</span>
         ) : (
-          <>
-            <Sparkles className="h-5 w-5" />
-            <span>Extract Voice</span>
-          </>
+          <span>Extract Voice</span>
         )}
       </motion.button>
     </div>
