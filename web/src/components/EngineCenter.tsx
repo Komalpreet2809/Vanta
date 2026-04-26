@@ -36,7 +36,7 @@ export function EngineCenter({
           />
           {/* Reference Dot */}
           <circle cx="60" cy="120" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="60" cy="120" r="3" fill="var(--c-green)" />
+          <circle cx="60" cy="120" r="3" fill="var(--c-brown)" />
           <text x="50" y="105" className="text-xs font-bold fill-[var(--text-main)]">Reference</text>
           
           {/* Noise Line */}
