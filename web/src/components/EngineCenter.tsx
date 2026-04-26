@@ -140,7 +140,8 @@ export function EngineCenter({
           {/* Subtle Glow behind the orb */}
           <div className="absolute -inset-10 bg-[#6B7B5B]/5 rounded-full blur-3xl -z-10" />
         </div>
-...
+      </div>
+
       {/* Status indicator - Matches reference exactly */}
       <div className="mt-12 flex flex-col items-center gap-1">
          <div className="flex items-center gap-2">
