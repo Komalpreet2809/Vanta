@@ -117,13 +117,6 @@ export function WaveformRow({
               <Download className="h-3.5 w-3.5" />
             </button>
           ) : null}
-          <button
-            type="button"
-            className="flex h-7 w-7 items-center justify-center rounded-md text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--bg-input)] transition-colors"
-            aria-label="more"
-          >
-            <MoreVertical className="h-3.5 w-3.5" />
-          </button>
         </div>
       </div>
 
