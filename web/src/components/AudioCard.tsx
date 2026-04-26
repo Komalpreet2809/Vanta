@@ -13,6 +13,7 @@ type Props = {
   variant?: Variant;
   onClear?: () => void;
   onDownload?: () => void;
+  onFile?: (file: File) => void;
   emptyLabel?: string;
 };
 
@@ -30,6 +31,7 @@ export function AudioCard({
   variant = "charcoal",
   onClear,
   onDownload,
+  onFile,
   emptyLabel,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -38,6 +40,7 @@ export function AudioCard({
   const [ready, setReady] = useState(false);
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || !source) {
@@ -89,7 +92,7 @@ export function AudioCard({
       </h3>
 
       {source ? (
-        <div className="card-border p-3 flex flex-col gap-3">
+        <div className="card-border p-3 flex flex-col gap-3 bg-[var(--bg-card)]">
           {/* File Info Row */}
           <div className="flex items-center gap-3">
             <div className="btn-icon h-10 w-10 shrink-0">
@@ -132,10 +135,38 @@ export function AudioCard({
           </div>
         </div>
       ) : (
-        <div className="card-border border-dashed p-6 flex items-center justify-center text-center">
-          <span className="text-sm text-[var(--text-muted)]">
-            {emptyLabel ?? "No signal loaded"}
-          </span>
+        <div 
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragging(false);
+            if (onFile && e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]);
+          }}
+          onClick={() => {
+            if (!onFile) return;
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "audio/*";
+            input.onchange = (e) => {
+              const f = (e.target as HTMLInputElement).files?.[0];
+              if (f) onFile(f);
+            };
+            input.click();
+          }}
+          className={`card-border border-dashed p-6 flex flex-col items-center justify-center text-center transition-colors min-h-[120px] ${
+            onFile ? "cursor-pointer hover:bg-black/5" : ""
+          } ${isDragging ? "bg-black/5" : "bg-[var(--bg-app)]"}`}
+        >
+          {onFile ? (
+            <div className="text-sm text-[var(--text-main)] leading-tight text-center">
+              Drag & drop audio files here<br />or click to browse
+            </div>
+          ) : (
+            <span className="text-sm text-[var(--text-muted)]">
+              {emptyLabel ?? "No signal loaded"}
+            </span>
+          )}
         </div>
       )}
     </div>

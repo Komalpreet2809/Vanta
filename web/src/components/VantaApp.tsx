@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { AudioCard } from "./AudioCard";
-import { DropZone } from "./DropZone";
 import { EngineCenter } from "./EngineCenter";
 import { Header } from "./Header";
 import { TipsCard } from "./TipsCard";
@@ -65,15 +64,6 @@ export function VantaApp() {
     URL.revokeObjectURL(url);
   }, []);
 
-  const handleDrop = useCallback(
-    (f: File) => {
-      if (!enrollment) setEnrollment(f);
-      else if (!mixture) setMixture(f);
-      else setMixture(f);
-    },
-    [enrollment, mixture],
-  );
-
   return (
     <div className="min-h-screen bg-[var(--bg-app)] flex items-center justify-center p-8">
       {/* Main Container Outline */}
@@ -95,6 +85,7 @@ export function VantaApp() {
                 source={enrollment}
                 variant="charcoal"
                 onClear={() => setEnrollment(null)}
+                onFile={(f) => setEnrollment(f)}
                 emptyLabel="No reference audio loaded"
               />
 
@@ -103,10 +94,10 @@ export function VantaApp() {
                 source={mixture}
                 variant="red"
                 onClear={() => setMixture(null)}
+                onFile={(f) => setMixture(f)}
                 emptyLabel="No noisy recording loaded"
               />
 
-              <DropZone onFile={handleDrop} />
               <TipsCard />
             </div>
           </section>
