@@ -80,7 +80,7 @@ export function VantaApp() {
                   onClear={() => setEnrollment(null)}
                   onFile={(f) => setEnrollment(f)}
                   emptyLabel="No reference audio loaded"
-                  className="h-full"
+                  className="w-full"
                 />
               </div>
 
@@ -92,7 +92,7 @@ export function VantaApp() {
                   onClear={() => setMixture(null)}
                   onFile={(f) => setMixture(f)}
                   emptyLabel="No noisy recording loaded"
-                  className="h-full"
+                  className="w-full"
                 />
               </div>
             </div>
@@ -131,7 +131,7 @@ export function VantaApp() {
                       : undefined
                   }
                   emptyLabel={"Clean voice will appear here\nafter processing"}
-                  className="h-full"
+                  className="w-full"
                 />
               </div>
 
@@ -147,7 +147,7 @@ export function VantaApp() {
                       : undefined
                   }
                   emptyLabel={"Residue will appear here\nafter processing"}
-                  className="h-full"
+                  className="w-full"
                 />
               </div>
             </div>
