@@ -19,7 +19,7 @@ type Props = {
 };
 
 const COLOR: Record<Variant, { wave: string; progress: string }> = {
-  charcoal: { wave: "#555555", progress: "#111111" },
+  charcoal: { wave: "#999999", progress: "#222222" },
   red: { wave: "#B54545", progress: "#8A2A2A" },
   green: { wave: "#4A6B4A", progress: "#2B3D2B" },
   purple: { wave: "#745296", progress: "#4B3263" },

@@ -22,6 +22,28 @@
   --c-charcoal: #222222; /* Matches the dark orb in the image */
 }
 
+.dark {
+  --bg-app: #121212;
+  --bg-center: #0F0F0F;
+  --bg-card: #1A1B1E;
+  --bg-btn: #25262B;
+  
+  --border-main: #333333;
+  --border-card: #2C2E33;
+  --border-dashed: #404249;
+  
+  --text-main: #E1E1E1;
+  --text-muted: #909296;
+  
+  /* Keep accent colors but maybe slightly desaturate for dark mode if needed */
+  --c-green: #51CF66;
+  --c-red: #FF6B6B;
+  --c-purple: #B197FC;
+  --c-brown: #FFD43B;
+  --c-dark-green: #2B8A3E;
+  --c-charcoal: #000000;
+}
+
 @theme inline {
   --color-background: var(--bg-app);
   --color-foreground: var(--text-main);
@@ -31,7 +53,7 @@
 
 @layer base {
   body {
-    @apply bg-[var(--bg-app)] text-[var(--text-main)] font-sans antialiased;
+    @apply bg-[var(--bg-app)] text-[var(--text-main)] font-sans antialiased transition-colors duration-300;
   }
 }
 
@@ -45,7 +67,7 @@
   }
   
   .btn-icon {
-    @apply flex items-center justify-center border border-[var(--border-card)] rounded-[4px] bg-[var(--bg-btn)] hover:bg-black/5 transition-colors text-[var(--text-main)];
+    @apply flex items-center justify-center border border-[var(--border-card)] rounded-[4px] bg-[var(--bg-btn)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-[var(--text-main)];
   }
 }
 
@@ -65,15 +87,15 @@
 
 @layer components {
   .panel {
-    @apply border border-[var(--border-strong)] bg-[var(--bg-card)] rounded-sm;
+    @apply border border-[var(--border-main)] bg-[var(--bg-card)] rounded-sm;
   }
 
   .inset-panel {
-    @apply border border-[var(--border-strong)] bg-[var(--bg-page)] shadow-inner rounded-sm;
+    @apply border border-[var(--border-main)] bg-[var(--bg-app)] shadow-inner rounded-sm;
   }
 
   .industrial-button {
-    @apply border border-[var(--border-strong)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] active:translate-y-[1px] active:shadow-inner transition-all rounded-sm font-bold uppercase tracking-widest text-[var(--text)];
+    @apply border border-[var(--border-main)] bg-[var(--bg-card)] hover:bg-black/5 dark:hover:bg-white/5 active:translate-y-[1px] active:shadow-inner transition-all rounded-sm font-bold uppercase tracking-widest text-[var(--text-main)];
   }
 }
 
@@ -87,12 +109,12 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-page);
+  background: var(--bg-app);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
+  background: var(--border-card);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
+  background: var(--text-muted);
 }
