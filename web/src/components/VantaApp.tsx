@@ -87,21 +87,19 @@ export function VantaApp() {
     <div className="min-h-screen flex flex-col bg-[var(--bg-page)] font-mono selection:bg-[var(--text)] selection:text-[var(--bg-page)]">
       {/* Top Header */}
       <header className="px-10 py-6 border-b border-[var(--border-strong)] flex items-center justify-between">
-        <div className="flex items-center gap-3">
-           <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-             <path d="M12 2v20M5 7v10M19 7v10M2 12h20" strokeLinecap="round"/>
+        <div className="flex items-center gap-4">
+           {/* Refined Industrial Wave Logo */}
+           <svg className="h-10 w-10 text-[var(--text)]" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+             <path d="M4 20h4l4-12 8 24 4-12h12" />
+             <path d="M12 12l8 16 4-8" className="opacity-40" />
            </svg>
-          <span className="text-[20px] font-bold tracking-[0.3em] uppercase">Vanta</span>
+          <span className="text-[24px] font-bold tracking-[0.4em] uppercase">Vanta</span>
         </div>
 
         <div className="flex items-center gap-4">
-           <button onClick={() => setIsHistoryOpen(true)} className="industrial-button px-5 py-2 text-[12px] font-bold uppercase flex items-center gap-2">
+           <button onClick={() => setIsHistoryOpen(true)} className="industrial-button px-6 py-2.5 text-[12px] font-bold uppercase flex items-center gap-2">
              <HistoryIcon className="h-4 w-4" />
              History
-           </button>
-           <button className="industrial-button px-5 py-2 text-[12px] font-bold uppercase flex items-center gap-2">
-             <Settings className="h-4 w-4" />
-             Settings
            </button>
         </div>
       </header>
