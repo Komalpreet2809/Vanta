@@ -18,14 +18,14 @@ export function EngineCenter({
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
       {/* Header Text - Matches inspo.png exactly */}
-      <div className="text-center mb-8">
-        <h1 className="text-[28px] font-bold tracking-[0.2em] text-[#1a1a1a] uppercase mb-2">
-          Vanta Engine
-        </h1>
-        <p className="text-[14px] text-[#444444] font-medium tracking-wide">
-          Isolates the target voice from noise.
-        </p>
-      </div>
+        <div className="flex flex-col items-center gap-1 mb-8">
+          <h1 className="font-mono-heading font-black text-[28px] uppercase tracking-[0.2em] text-[var(--c-green)]">
+            VANTA ENGINE
+          </h1>
+          <p className="text-[12px] font-medium opacity-80 text-[#444444]">
+            Isolates the target voice from noise.
+          </p>
+        </div>
 
       {/* SVG Diagram Container - Set to take full width and a fixed aspect for consistency */}
       <div className="relative w-full aspect-[1.5/1] flex items-center justify-center">
