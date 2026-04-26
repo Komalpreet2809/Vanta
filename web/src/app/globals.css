@@ -15,7 +15,7 @@
   --text-main: #333330;
   --text-muted: #888880;
   
-  --c-green: #6B7B5B;
+  --c-green: #2A2A28; /* Changed from sage green to charcoal for retro touch */
   --c-red: #D16D6D;
   --c-purple: #9284B1;
   --c-brown: #9E896A;
@@ -37,7 +37,7 @@
   --text-main: #E1E1E1;
   --text-muted: #909296;
   
-  --c-green: #51CF66;
+  --c-green: #E1E1E1; /* Monochrome dark mode equivalent */
   --c-red: #FF6B6B;
   --c-purple: #B197FC;
   --c-brown: #FFD43B;
