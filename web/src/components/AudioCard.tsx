@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioLines, Download, FileAudio, MoreHorizontal, Music, Pause, Play, X } from "lucide-react";
+import { AudioLines, Download, FileAudio, MoreHorizontal, Music, Pause, Play, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
@@ -174,11 +174,16 @@ export function AudioCard({
           } ${isDragging ? "bg-black/5 dark:bg-white/5" : "bg-transparent"}`}
         >
           <div className="flex flex-col items-center gap-3">
-            <FileAudio className="h-7 w-7 stroke-[1.5] text-[var(--text-main)]" />
-            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium">
-              {(emptyLabel ?? (onFile ? "Drag & drop an audio file here\nor click to browse" : "No signal loaded")).split('\n').map((line, i) => (
-                <div key={i}>{line}</div>
-              ))}
+            <Upload className="h-7 w-7 stroke-[1.5] text-[var(--text-main)] opacity-70" />
+            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium px-4">
+              {onFile ? (
+                <>
+                  drag and drop an audio file here<br />
+                  or click to browse
+                </>
+              ) : (
+                emptyLabel ?? "No signal loaded"
+              )}
             </div>
           </div>
         </div>
