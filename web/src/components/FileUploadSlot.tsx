@@ -102,7 +102,6 @@ export function FileUploadSlot({
                 {sizeStr} • <span className="text-[var(--accent)]">Ready</span>
               </div>
             </div>
-            </div>
           </div>
         ) : (
           <div className="flex h-12 items-center justify-center">
