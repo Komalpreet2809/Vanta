@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioLines, Download, FileAudio, MoreHorizontal, Music, Pause, Play, Upload, X } from "lucide-react";
+import { AudioLines, Download, FileAudio, Music, Pause, Play, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
@@ -103,7 +103,7 @@ export function AudioCard({
             {heading}
           </h3>
         </div>
-        <MoreHorizontal className="h-4 w-4 opacity-40 cursor-pointer hover:opacity-100 transition-opacity" />
+
       </div>
 
       {source ? (

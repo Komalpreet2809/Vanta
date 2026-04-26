@@ -1,6 +1,6 @@
 "use client";
 
-import { Lightbulb, MoreHorizontal } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 
 export function TipsCard() {
   return (
@@ -12,7 +12,7 @@ export function TipsCard() {
           </div>
           <span className="font-mono-heading text-[13px] font-black uppercase tracking-tight text-[var(--c-green)]">TIPS</span>
         </div>
-        <MoreHorizontal className="h-4 w-4 opacity-40 cursor-pointer hover:opacity-100 transition-opacity" />
+
       </div>
       <ul className="list-disc pl-5 text-[12px] text-[var(--text-main)] space-y-1.5 marker:text-[var(--text-main)] font-medium opacity-80">
         <li>Supports WAV, MP3, M4A</li>
