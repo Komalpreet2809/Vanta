@@ -70,46 +70,45 @@ export function VantaApp() {
 
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] divide-x divide-[var(--border-main)] overflow-hidden">
           {/* INPUTS COLUMN */}
-          <section className="p-4 flex flex-col h-full overflow-hidden">
-            <div className="mb-4">
-              <h2 className="font-mono-heading font-black text-lg uppercase mb-1">Inputs</h2>
-              <p className="text-[13px] text-[var(--text-main)]">Provide reference and noise audio.</p>
+          <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
+            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center">
+              <h2 className="font-mono-heading font-black text-[13px] uppercase tracking-wider">Inputs</h2>
+            </div>
+            
+            <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
+              <div className="flex-1 min-h-0">
+                <AudioCard
+                  heading="Reference Audio"
+                  source={enrollment}
+                  variant="brown"
+                  onClear={() => setEnrollment(null)}
+                  onFile={(f) => setEnrollment(f)}
+                  emptyLabel="No reference audio loaded"
+                  className="h-full"
+                />
+              </div>
+
+              <div className="flex-1 min-h-0">
+                <AudioCard
+                  heading="Noise Audio"
+                  source={mixture}
+                  variant="red"
+                  onClear={() => setMixture(null)}
+                  onFile={(f) => setMixture(f)}
+                  emptyLabel="No noisy recording loaded"
+                  className="h-full"
+                />
+              </div>
             </div>
 
-            <div className="flex-1 flex flex-col gap-4">
-              <AudioCard
-                heading="Reference Audio"
-                source={enrollment}
-                variant="brown"
-                onClear={() => setEnrollment(null)}
-                onFile={(f) => setEnrollment(f)}
-                emptyLabel="No reference audio loaded"
-                className="flex-1"
-              />
-
-              <AudioCard
-                heading="Noise Audio"
-                source={mixture}
-                variant="red"
-                onClear={() => setMixture(null)}
-                onFile={(f) => setMixture(f)}
-                emptyLabel="No noisy recording loaded"
-                className="flex-1"
-              />
-
+            <div className="p-4 border-t border-[var(--border-main)]/10 h-32 flex items-start overflow-hidden">
               <TipsCard />
             </div>
           </section>
 
-          {/* ENGINE COLUMN */}
-          <section className="bg-[var(--bg-center)] p-4 flex flex-col h-full overflow-hidden">
-            <div className="text-center mb-4">
-              <h2 className="font-mono-heading font-black text-lg uppercase mb-1">Vanta Engine</h2>
-              <p className="text-[13px] text-[var(--text-main)]">Isolates the target voice from noise.</p>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-center">
-              <EngineCenter
+          {/* ENGINE COLUMN - The focal point matching inspo.png */}
+          <section className="bg-[var(--bg-center)] p-0 flex flex-col h-full overflow-hidden">
+             <EngineCenter
                 canExtract={!!canRun}
                 status={status}
                 hasReference={!!enrollment}
@@ -117,52 +116,56 @@ export function VantaApp() {
                 hasOutput={!!result}
                 onExtract={run}
               />
-            </div>
           </section>
 
           {/* OUTPUTS COLUMN */}
-          <section className="p-4 flex flex-col h-full overflow-hidden">
-            <div className="mb-4">
-              <h2 className="font-mono-heading font-black text-lg uppercase mb-1">Outputs</h2>
-              <p className="text-[13px] text-[var(--text-main)]">Clean voice and residue (noise).</p>
+          <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
+            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center">
+              <h2 className="font-mono-heading font-black text-[13px] uppercase tracking-wider">Outputs</h2>
             </div>
 
-            <div className="flex-1 flex flex-col gap-4">
-              <AudioCard
-                heading="Clean Voice"
-                source={result?.extracted ?? null}
-                filenameOverride="Extracted_Voice.mp3"
-                variant="green"
-                onDownload={
-                  result
-                    ? () => download(result.extracted, "vanta_extracted.mp3")
-                    : undefined
-                }
-                emptyLabel={"Clean voice will appear here\nafter processing"}
-                className="flex-1"
-              />
-
-              <AudioCard
-                heading="Residue (Noise)"
-                source={result?.residue ?? null}
-                filenameOverride="Residue_Noise.mp3"
-                variant="purple"
-                onDownload={
-                  result
-                    ? () => download(result.residue, "vanta_residue.mp3")
-                    : undefined
-                }
-                emptyLabel={"Residue will appear here\nafter processing"}
-                className="flex-1"
-              />
-
-              <div className="card-border p-3 flex items-start gap-3 bg-[var(--bg-app)]">
-                 <Info className="h-4 w-4 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
-                 <p className="text-[12px] text-[var(--text-main)] leading-relaxed">
-                   Your outputs will be available here<br />once processing is complete.
-                 </p>
+            <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
+              <div className="flex-1 min-h-0">
+                <AudioCard
+                  heading="Clean Voice"
+                  source={result?.extracted ?? null}
+                  filenameOverride="Extracted_Voice.mp3"
+                  variant="green"
+                  onDownload={
+                    result
+                      ? () => download(result.extracted, "vanta_extracted.mp3")
+                      : undefined
+                  }
+                  emptyLabel={"Clean voice will appear here\nafter processing"}
+                  className="h-full"
+                />
               </div>
 
+              <div className="flex-1 min-h-0">
+                <AudioCard
+                  heading="Residue (Noise)"
+                  source={result?.residue ?? null}
+                  filenameOverride="Residue_Noise.mp3"
+                  variant="purple"
+                  onDownload={
+                    result
+                      ? () => download(result.residue, "vanta_residue.mp3")
+                      : undefined
+                  }
+                  emptyLabel={"Residue will appear here\nafter processing"}
+                  className="h-full"
+                />
+              </div>
+            </div>
+
+            <div className="p-4 border-t border-[var(--border-main)]/10 h-32 flex items-start overflow-hidden">
+               <div className="card-border p-3 flex items-start gap-3 bg-[var(--bg-app)] shadow-sm w-full">
+                  <Info className="h-4 w-4 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-[var(--text-main)] leading-relaxed font-medium">
+                    Your outputs will be available here once processing is complete.<br />
+                    Both signals are extracted in real-time.
+                  </p>
+               </div>
             </div>
           </section>
         </main>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Play } from "lucide-react";
+import { motion } from "motion/react";
 
 type Props = {
   canExtract: boolean;
@@ -22,103 +22,161 @@ export function EngineCenter({
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full max-w-3xl mx-auto">
-      {/* SVG Diagram Container */}
-      <div className="relative w-full aspect-[2/1] flex items-center justify-center">
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
-          {/* Large Dashed Outer Circle - The anchor for the brackets */}
-          <circle cx="400" cy="200" r="160" fill="none" stroke="var(--border-main)" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      {/* Header Text - Matches inspo.png exactly */}
+      <div className="text-center mb-8">
+        <h1 className="text-[28px] font-bold tracking-[0.2em] text-[#1a1a1a] uppercase mb-2">
+          Vanta Engine
+        </h1>
+        <p className="text-[14px] text-[#444444] font-medium tracking-wide">
+          Isolates the target voice from noise.
+        </p>
+      </div>
+
+      {/* SVG Diagram Container - Set to take full width and a fixed aspect for consistency */}
+      <div className="relative w-full aspect-[1.5/1] flex items-center justify-center">
+        <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
+          {/* Dashed Outer Circle */}
+          <circle cx="400" cy="220" r="160" fill="none" stroke="#222222" strokeWidth="1" strokeDasharray="4 4" opacity="0.3" />
+
+          {/* Junction Points on the dashed circle */}
+          <circle cx="240" cy="220" r="5" fill="#222222" />
+          <circle cx="560" cy="220" r="5" fill="#222222" />
+
+          {/* Bracket Arms meeting at junctions (240, 220) and (560, 220) */}
           
-          {/* LEFT SIGNAL BRACKET - Joining exactly on the dashed circle */}
-          <g>
-            {/* Junction Point on the dashed circle (400 - 160 = 240) */}
-            <circle cx="240" cy="200" r="5" fill="var(--text-main)" />
-            
-            {/* Reference to Junction */}
-            <path
-              d="M 100 120 Q 240 120 240 160 L 240 180 Q 240 200 240 200"
-              fill="none"
-              stroke="var(--border-main)"
-              strokeWidth="1.5"
-            />
-            {/* Noise to Junction */}
-            <path
-              d="M 100 280 Q 240 280 240 240 L 240 220 Q 240 200 240 200"
-              fill="none"
-              stroke="var(--border-main)"
-              strokeWidth="1.5"
-            />
-          </g>
+          {/* Reference Arm (Top Left to Junction) */}
+          <path
+            d="M 0 110 Q 240 110 240 220"
+            fill="none"
+            stroke="#222222"
+            strokeWidth="1.2"
+            opacity="0.6"
+          />
+          {/* Noise Arm (Bottom Left to Junction) */}
+          <path
+            d="M 0 330 Q 240 330 240 220"
+            fill="none"
+            stroke="#222222"
+            strokeWidth="1.2"
+            opacity="0.6"
+          />
+          {/* Clean Voice Arm (Junction to Top Right) */}
+          <path
+            d="M 560 220 Q 560 110 800 110"
+            fill="none"
+            stroke="#222222"
+            strokeWidth="1.2"
+            opacity="0.6"
+          />
+          {/* Residue Arm (Junction to Bottom Right) */}
+          <path
+            d="M 560 220 Q 560 330 800 330"
+            fill="none"
+            stroke="#222222"
+            strokeWidth="1.2"
+            opacity="0.6"
+          />
 
-          {/* RIGHT SIGNAL BRACKET - Joining exactly on the dashed circle */}
-          <g>
-            {/* Junction Point on the dashed circle (400 + 160 = 560) */}
-            <circle cx="560" cy="200" r="5" fill="var(--text-main)" />
-            
-            {/* Junction to Clean */}
-            <path
-              d="M 560 200 Q 560 200 560 180 L 560 160 Q 560 120 700 120"
-              fill="none"
-              stroke="var(--border-main)"
-              strokeWidth="1.5"
-            />
-            {/* Junction to Residue */}
-            <path
-              d="M 560 200 Q 560 200 560 220 L 560 240 Q 560 280 700 280"
-              fill="none"
-              stroke="var(--border-main)"
-              strokeWidth="1.5"
-            />
-          </g>
+          {/* Junction to Orb connectors */}
+          <path d="M 240 220 L 300 220" stroke="#222222" strokeWidth="1.2" opacity="0.4" />
+          <path d="M 560 220 L 500 220" stroke="#222222" strokeWidth="1.2" opacity="0.4" />
 
-          {/* Source/Sink Nodes */}
+          {/* Node Indicators at the edges with Labels */}
           {/* Reference */}
-          <circle cx="100" cy="120" r="8" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="100" cy="120" r="4" fill="#4A6B4A" />
-          <text x="75" y="100" className="text-[12px] font-bold fill-[var(--text-main)]">Reference</text>
-          
+          <g transform="translate(0, 110)">
+            <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
+            <circle r="3.5" fill="#4A6B4A" />
+            <text x="5" y="-15" className="text-[12px] font-bold fill-[#1a1a1a]">Reference</text>
+          </g>
           {/* Noise */}
-          <circle cx="100" cy="280" r="8" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="100" cy="280" r="4" fill="#B54545" />
-          <text x="85" y="305" className="text-[12px] font-bold fill-[var(--text-main)]">Noise</text>
-
+          <g transform="translate(0, 330)">
+            <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
+            <circle r="3.5" fill="#B54545" />
+            <text x="5" y="25" className="text-[12px] font-bold fill-[#1a1a1a]">Noise</text>
+          </g>
           {/* Clean Voice */}
-          <circle cx="700" cy="120" r="8" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="700" cy="120" r="4" fill="#4A6B4A" />
-          <text x="665" y="100" className="text-[12px] font-bold fill-[var(--text-main)]">Clean Voice</text>
-
+          <g transform="translate(800, 110)">
+            <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
+            <circle r="3.5" fill="#4A6B4A" />
+            <text x="-75" y="-15" className="text-[12px] font-bold fill-[#1a1a1a]">Clean Voice</text>
+          </g>
           {/* Residue (Noise) */}
-          <circle cx="700" cy="280" r="8" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="700" cy="280" r="4" fill="#745296" />
-          <text x="640" y="305" className="text-[12px] font-bold fill-[var(--text-main)]">Residue (Noise)</text>
+          <g transform="translate(800, 330)">
+            <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
+            <circle r="3.5" fill="#745296" />
+            <text x="-95" y="25" className="text-[12px] font-bold fill-[#1a1a1a]">Residue (Noise)</text>
+          </g>
         </svg>
 
-        {/* Central Hero Circle - Contained within the dashed outer ring */}
+        {/* Central Hero Circle */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <button
+          <motion.button
             disabled={!canExtract || isRunning}
             onClick={onExtract}
-            className={`group relative h-[240px] w-[240px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[6px] border-[#333333] shadow-[0_0_60px_rgba(0,0,0,0.3)] overflow-hidden disabled:opacity-90 active:scale-95`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`group relative h-[280px] w-[280px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[1px] border-[#444444] shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden disabled:opacity-90`}
           >
-            {/* Status Arc */}
-            <div className={`absolute inset-[-6px] rounded-full border-[6px] border-transparent border-t-[var(--c-green)] transition-all duration-1000 ${isRunning ? 'animate-spin' : 'opacity-40'}`} />
+            {/* Outer Subtle Ring */}
+            <div className="absolute inset-[8px] rounded-full border-[1px] border-white/5" />
             
-            <div className="absolute inset-[6px] rounded-full border-[1px] border-white/10" />
-
-            <div className="flex items-center gap-[5px] h-16 mb-4">
-              {[0.4, 0.6, 1.0, 0.7, 0.4].map((h, i) => (
-                <div key={i} className={`w-[5px] rounded-sm bg-white transition-all duration-300 ${isRunning ? 'animate-pulse' : ''}`} style={{ height: `${h * 100}%` }} />
+            {/* Waveform Icon */}
+            <div className="flex items-center gap-[6px] h-14 mb-5">
+              {[0.4, 0.7, 1.0, 0.8, 0.5, 0.8, 1.0, 0.7, 0.4].map((h, i) => (
+                <motion.div
+                  key={i}
+                  animate={isRunning ? { height: ["40%", "100%", "40%"] } : { height: `${h * 100}%` }}
+                  transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.1 }}
+                  className="w-[5px] rounded-full bg-white"
+                />
               ))}
             </div>
 
-            <span className="text-[22px] font-mono font-black text-white uppercase tracking-tighter mb-6 leading-none">Extract Voice</span>
+            {/* Main Text */}
+            <span className="text-[24px] font-bold text-white uppercase tracking-[0.15em] mb-6 leading-none">
+              Extract Voice
+            </span>
             
-            <div className="h-8 w-8 flex items-center justify-center">
-               <Play className="h-8 w-8 text-white fill-current translate-x-0.5" />
+            {/* Play Button Icon */}
+            <div className="h-10 w-10 flex items-center justify-center">
+               <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                 <path d="M8 5v14l11-7z" />
+               </svg>
             </div>
-          </button>
+
+            {/* Running Status Indicator */}
+            {isRunning && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute inset-0 bg-black/30 flex items-center justify-center"
+              >
+                <div className="w-full h-full border-[6px] border-transparent border-t-white/40 rounded-full animate-spin" />
+              </motion.div>
+            )}
+          </motion.button>
+          
+          {/* Subtle Glow behind the orb */}
+          <div className="absolute -inset-10 bg-black/10 rounded-full blur-3xl -z-10" />
         </div>
+      </div>
+
+      {/* Status indicator below the diagram - inspired by the small "Ready" dot in the image */}
+      <div className="mt-12 flex flex-col items-center gap-2">
+         <div className="flex items-center gap-2">
+            <div className={`h-2.5 w-2.5 rounded-full ${isRunning ? 'bg-amber-500 animate-pulse' : 'bg-[#4A6B4A]'}`} />
+            <span className="text-[13px] font-bold uppercase tracking-widest text-[#1a1a1a]">
+              {isRunning ? 'Processing...' : 'Ready'}
+            </span>
+         </div>
+         <p className="text-[11px] font-medium text-[#666666] tracking-tight">
+           {isRunning ? 'Engine is active.' : 'Engine is idle.'}
+         </p>
       </div>
     </div>
   );
 }
+
+
+
