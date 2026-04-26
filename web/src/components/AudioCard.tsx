@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Music, Pause, Play, X } from "lucide-react";
+import { Download, FileAudio, Music, Pause, Play, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
@@ -86,13 +86,13 @@ export function AudioCard({
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div className="flex flex-col gap-2">
-      <h3 className="font-mono-heading text-sm uppercase">
+    <div className="card-border p-4 flex flex-col gap-4 bg-[var(--bg-app)]">
+      <h3 className="font-mono-heading text-[13px] tracking-wide uppercase">
         {heading}
       </h3>
 
       {source ? (
-        <div className="card-border p-3 flex flex-col gap-3 bg-[var(--bg-card)]">
+        <div className="flex flex-col gap-4">
           {/* File Info Row */}
           <div className="flex items-center gap-3">
             <div className="btn-icon h-10 w-10 shrink-0">
@@ -154,16 +154,19 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`card-border border-dashed p-6 flex flex-col items-center justify-center text-center transition-colors min-h-[120px] ${
+          className={`border border-dashed border-[var(--border-main)] rounded-md p-6 flex flex-col items-center justify-center text-center transition-colors min-h-[140px] ${
             onFile ? "cursor-pointer hover:bg-black/5" : ""
-          } ${isDragging ? "bg-black/5" : "bg-[var(--bg-app)]"}`}
+          } ${isDragging ? "bg-black/5" : "bg-transparent"}`}
         >
           {onFile ? (
-            <div className="text-sm text-[var(--text-main)] leading-tight text-center">
-              Drag & drop audio files here<br />or click to browse
+            <div className="flex flex-col items-center gap-3">
+              <FileAudio className="h-6 w-6 stroke-[1.5] text-[var(--text-main)]" />
+              <div className="text-[13px] text-[var(--text-main)] leading-relaxed text-center">
+                Drag & drop an audio file here<br />or click to browse
+              </div>
             </div>
           ) : (
-            <span className="text-sm text-[var(--text-muted)]">
+            <span className="text-[13px] text-[var(--text-muted)]">
               {emptyLabel ?? "No signal loaded"}
             </span>
           )}
