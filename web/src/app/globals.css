@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  /* Exact Palette from Image */
-  --bg-app: #DCD9D0; /* Precise aged industrial beige */
-  --bg-center: #DCD9D0;
-  --bg-card: #DCD9D0;
+  /* Subtle layered industrial palette */
+  --bg-app: #D4D1C7; /* Slightly deeper base */
+  --bg-header: #E2E0D8; /* Lighter top bar */
+  --bg-footer: #E2E0D8; /* Matching bottom bar */
+  --bg-card: #DCD9D0; /* Original clean beige for cards */
   --bg-btn: #DCD9D0;
   
   --border-main: #222222;
@@ -19,13 +20,14 @@
   --c-purple: #745296;
   --c-brown: #A68A64;
   --c-dark-green: #2B3D2B;
-  --c-charcoal: #222222; /* Matches the dark orb in the image */
+  --c-charcoal: #222222;
 }
 
 .dark {
-  --bg-app: #121212;
-  --bg-center: #0F0F0F;
-  --bg-card: #1A1B1E;
+  --bg-app: #0A0A0A; /* Deeper base */
+  --bg-header: #141414; /* Slightly lighter header */
+  --bg-footer: #141414;
+  --bg-card: #1A1B1E; /* Distinct cards */
   --bg-btn: #25262B;
   
   --border-main: #333333;
@@ -35,7 +37,6 @@
   --text-main: #E1E1E1;
   --text-muted: #909296;
   
-  /* Keep accent colors but maybe slightly desaturate for dark mode if needed */
   --c-green: #51CF66;
   --c-red: #FF6B6B;
   --c-purple: #B197FC;
