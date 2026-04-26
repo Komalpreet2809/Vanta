@@ -1,93 +1,76 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  /* Deep Obsidian Palette */
-  --bg-page: #040506;
-  --bg-card: #090a0c;
-  --bg-input: #0e1013;
-  --bg-hover: #14171c;
+  /* Analog Paper Palette */
+  --bg-page: #e2dfd2;
+  --bg-card: #eceae0;
+  --bg-input: #f4f2e9;
+  --bg-hover: #dad7c7;
 
-  /* Borders / Lines */
-  --border: #1a1e23;
-  --border-strong: #2a3139;
+  /* Industrial Borders */
+  --border: #a19d8e;
+  --border-strong: #7a776a;
+  --border-radius: 4px;
 
-  /* Text */
-  --text: #f0f2f5;
-  --text-soft: #94a3b8;
-  --text-dim: #64748b;
-  --text-faint: #334155;
+  /* Industrial Typography */
+  --text: #2a2a2a;
+  --text-soft: #5a5a5a;
+  --text-dim: #8a8a8a;
 
-  /* Accent (Neon Green) */
-  --accent: #4ade80;
-  --accent-rgb: 74, 222, 128;
-  --accent-deep: #166534;
-  --accent-glow: rgba(74, 222, 128, 0.15);
-  
-  /* Status */
-  --ok: #4ade80;
-  --warn: #f59e0b;
-  --err: #ef4444;
+  /* Status / Accents */
+  --accent-green: #48a868;
+  --accent-red: #c24d4d;
+  --accent-purple: #7e69ab;
+  --accent-charcoal: #333333;
 }
 
 @theme inline {
   --color-background: var(--bg-page);
   --color-foreground: var(--text);
-  --font-sans: var(--font-sans);
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 html,
 body {
   background: var(--bg-page);
   color: var(--text);
-  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--accent);
-  color: #000;
+  background: var(--text);
+  color: var(--bg-page);
 }
 
-/* ─── Layout Utils ─────────────────────────────────────────────────── */
-.glass {
-  background: rgba(9, 10, 12, 0.7);
-  backdrop-filter: blur(12px);
+/* ─── Industrial Components ────────────────────────────────────────── */
+.panel {
+  background: var(--bg-card);
   border: 1px solid var(--border);
+  border-bottom: 2px solid var(--border-strong);
+  border-right: 2px solid var(--border-strong);
 }
 
-.orb-glow {
-  box-shadow: 0 0 60px 10px var(--accent-glow);
+.inset-panel {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  box-shadow: inset 1px 1px 4px rgba(0,0,0,0.05);
 }
 
-/* ─── Animations ─────────────────────────────────────────────────────── */
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.industrial-button {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  box-shadow: 1px 1px 0px var(--border-strong);
+  transition: all 0.1s;
 }
 
-@keyframes spin-slow-reverse {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
-
-@keyframes pulse-subtle {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.05); opacity: 1; }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 12s linear infinite;
-}
-
-.animate-spin-slow-reverse {
-  animation: spin-slow-reverse 18s linear infinite;
-}
-
-.animate-pulse-subtle {
-  animation: pulse-subtle 4s ease-in-out infinite;
+.industrial-button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0px 0px 0px transparent;
 }
 
 .wf {
   width: 100%;
-  height: 56px;
+  height: 50px;
 }
+
