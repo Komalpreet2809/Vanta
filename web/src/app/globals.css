@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* High Fidelity Analog Paper Palette */
+  /* Ultra-Fidelity Analog Paper Palette */
   --bg-page: #e2dfd2;
   --bg-card: #dcd9ca;
   --bg-hover: #d2cfc0;
@@ -15,18 +15,18 @@
   --text-soft: #3d3d3d;
   --text-dim: #6e6a5e;
 
-  /* Brand Accents */
-  --c-green: #3d5a3d;
-  --c-red: #b84a3d;
-  --c-purple: #6e548a;
+  /* Brand Accents (Olive & Muted) */
+  --c-green: #4b5d4b;
+  --c-red: #9e4638;
+  --c-purple: #6a5a8a;
   
   /* Engine Specifics */
   --engine: #2a2a2a;
   
   /* Status Colors */
-  --ok: #3d5a3d;
-  --err: #b84a3d;
-  --warn: #b8943d;
+  --ok: #4b5d4b;
+  --err: #9e4638;
+  --warn: #9e7a38;
 }
 
 @theme inline {
@@ -38,7 +38,18 @@
 
 @layer base {
   body {
-    @apply bg-[var(--bg-page)] text-[var(--text)] font-mono antialiased;
+    @apply bg-[var(--bg-page)] text-[var(--text)] font-mono antialiased relative;
+  }
+  
+  /* Paper Grain Effect */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 100;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/baseFilter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 }
 
