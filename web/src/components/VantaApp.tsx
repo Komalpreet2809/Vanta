@@ -4,7 +4,6 @@ import { Cpu, History as HistoryIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { ControlRack } from "./ControlRack";
 import { FileUploadSlot } from "./FileUploadSlot";
-import type { Quality } from "./QualityDropdown";
 import { WaveformRow } from "./WaveformRow";
 import { MultiStageProgress } from "./MultiStageProgress";
 import { HistorySidebar, type HistoryItem } from "./HistorySidebar";
@@ -26,7 +25,6 @@ export function VantaApp() {
   const [result, setResult] = useState<Result | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
-  const [quality, setQuality] = useState<Quality>("high");
   const [backend, setBackend] = useState<"checking" | "online" | "offline">(
     "checking",
   );
@@ -198,8 +196,6 @@ export function VantaApp() {
               canExtract={!!canRun}
               status={status}
               onExtract={run}
-              quality={quality}
-              onQualityChange={setQuality}
             />
           )}
         </div>
