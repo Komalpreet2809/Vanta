@@ -2,24 +2,24 @@
 
 :root {
   /* Exact Palette from Image */
-  --bg-app: #DEDCD1; /* Darker, aged industrial beige */
-  --bg-center: #D6D4C8; /* Slightly deeper for the center section */
-  --bg-card: #DEDCD1;
-  --bg-btn: #DEDCD1;
+  --bg-app: #DCD9D0; /* Precise aged industrial beige */
+  --bg-center: #DCD9D0;
+  --bg-card: #DCD9D0;
+  --bg-btn: #DCD9D0;
   
-  --border-main: #333333;
+  --border-main: #222222;
   --border-card: #B0AE9F;
   --border-dashed: #999999;
   
-  --text-main: #111111;
-  --text-muted: #555555;
+  --text-main: #1A1A1A;
+  --text-muted: #666666;
   
   --c-green: #4A6B4A;
   --c-red: #B54545;
   --c-purple: #745296;
   --c-brown: #A68A64;
-  --c-dark-green: #2B3D2B; /* For the outer ring of the orb */
-  --c-charcoal: #1E1E1E; /* For the inner orb */
+  --c-dark-green: #2B3D2B;
+  --c-charcoal: #222222; /* Matches the dark orb in the image */
 }
 
 @theme inline {
