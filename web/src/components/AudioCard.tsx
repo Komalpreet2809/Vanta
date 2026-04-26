@@ -169,7 +169,7 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`h-full border border-dashed border-[var(--border-dashed)] rounded-[6px] flex items-center justify-center transition-all min-h-[120px] ${
+          className={`flex-1 border border-dashed border-[var(--border-dashed)] rounded-[6px] flex items-center justify-center transition-all min-h-[120px] ${
             onFile ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/5" : ""
           } ${isDragging ? "bg-black/5 dark:bg-white/5" : "bg-transparent"}`}
         >
