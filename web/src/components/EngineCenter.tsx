@@ -37,11 +37,11 @@ export function EngineCenter({
       <div className="relative w-full aspect-[1.5/1] flex items-center justify-center">
         <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
           
-          {/* LEFT CURLY BRACE { */}
+          {/* LEFT CURLY BRACE { - Updated to stop at x=280 (circumference) */}
           <g>
             {/* Top Curve */}
             <path
-              d="M 0 110 C 150 110, 150 220, 260 220"
+              d="M 0 110 C 150 110, 150 220, 280 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
@@ -49,21 +49,19 @@ export function EngineCenter({
             />
             {/* Bottom Curve */}
             <path
-              d="M 0 330 C 150 330, 150 220, 260 220"
+              d="M 0 330 C 150 330, 150 220, 280 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
               opacity="0.8"
             />
-            {/* The "Tip" connector to the orb */}
-            <path d="M 260 220 L 300 220" stroke="#222222" strokeWidth="1.5" opacity="0.4" />
           </g>
 
-          {/* RIGHT CURLY BRACE } */}
+          {/* RIGHT CURLY BRACE } - Updated to stop at x=520 (circumference) */}
           <g>
             {/* Top Curve */}
             <path
-              d="M 800 110 C 650 110, 650 220, 540 220"
+              d="M 800 110 C 650 110, 650 220, 520 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
@@ -71,19 +69,17 @@ export function EngineCenter({
             />
             {/* Bottom Curve */}
             <path
-              d="M 800 330 C 650 330, 650 220, 540 220"
+              d="M 800 330 C 650 330, 650 220, 520 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
               opacity="0.8"
             />
-            {/* The "Tip" connector to the orb */}
-            <path d="M 540 220 L 500 220" stroke="#222222" strokeWidth="1.5" opacity="0.4" />
           </g>
 
-          {/* Junction Points on the tips */}
-          <circle cx="260" cy="220" r="4" fill="#222222" />
-          <circle cx="540" cy="220" r="4" fill="#222222" />
+          {/* Junction Points on the tips (moved to 280 and 520) */}
+          <circle cx="280" cy="220" r="4" fill="#222222" />
+          <circle cx="520" cy="220" r="4" fill="#222222" />
 
           {/* Node Indicators at the edges with Labels */}
           {/* Reference */}
@@ -180,6 +176,7 @@ export function EngineCenter({
     </div>
   );
 }
+
 
 
 
