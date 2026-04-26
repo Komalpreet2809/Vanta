@@ -1,6 +1,6 @@
 "use client";
 
-import { Music, Play, Pause, X } from "lucide-react";
+import { Music } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -24,7 +24,6 @@ export function FileUploadSlot({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [playing, setPlaying] = useState(false);
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -43,25 +42,8 @@ export function FileUploadSlot({
       audioRef.current.src = "";
       audioRef.current = null;
     }
-    setPlaying(false);
   }, [file]);
 
-  const togglePlay = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!file) return;
-    if (!audioRef.current) {
-      const url = URL.createObjectURL(file);
-      const a = new Audio(url);
-      a.addEventListener("ended", () => setPlaying(false));
-      audioRef.current = a;
-    }
-    if (audioRef.current.paused) {
-      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-    } else {
-      audioRef.current.pause();
-      setPlaying(false);
-    }
-  };
 
   const sizeStr = file ? `${(file.size / 1024).toFixed(1)} KB` : "";
 
@@ -120,31 +102,7 @@ export function FileUploadSlot({
                 {sizeStr} • <span className="text-[var(--accent)]">Ready</span>
               </div>
             </div>
-            {/* play */}
-            <button
-              type="button"
-              onClick={togglePlay}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-strong)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-[var(--text-soft)] transition-colors"
-              aria-label={playing ? "pause" : "play"}
-            >
-              {playing ? (
-                <Pause className="h-4 w-4" />
-              ) : (
-                <Play className="h-4 w-4 fill-current" />
-              )}
-            </button>
-            {/* close (clear) */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onFile(null);
-              }}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] hover:border-[var(--err)] hover:text-[var(--err)] text-[var(--text-dim)] transition-colors"
-              aria-label="clear file"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            </div>
           </div>
         ) : (
           <div className="flex h-12 items-center justify-center">
