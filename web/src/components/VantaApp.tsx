@@ -66,8 +66,8 @@ export function VantaApp() {
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] overflow-hidden">
           {/* INPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
-            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center">
-              <h2 className="font-mono-heading font-black text-[13px] uppercase tracking-wider">Inputs</h2>
+            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center bg-black/2 dark:bg-white/2">
+              <h2 className="font-mono-heading font-black text-[15px] uppercase tracking-[0.1em] opacity-90">Inputs</h2>
             </div>
             
             <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
@@ -112,8 +112,8 @@ export function VantaApp() {
 
           {/* OUTPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
-            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center">
-              <h2 className="font-mono-heading font-black text-[13px] uppercase tracking-wider">Outputs</h2>
+            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center bg-black/2 dark:bg-white/2">
+              <h2 className="font-mono-heading font-black text-[15px] uppercase tracking-[0.1em] opacity-90">Outputs</h2>
             </div>
 
             <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
@@ -162,11 +162,11 @@ export function VantaApp() {
           </section>
         </main>
 
-        <footer className="px-6 py-1.5 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-app)]">
-           <span className="text-[10px] font-mono font-semibold tracking-wide">VANTA v1.0.0</span>
-           <div className="flex items-center gap-2">
+        <footer className="px-6 py-2 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-app)]">
+           <span className="text-[11px] font-mono font-bold tracking-tight opacity-70">VANTA v1.0.0</span>
+           <div className="flex items-center gap-2 opacity-80">
               <div className={`h-2 w-2 rounded-full ${backend === "online" ? "bg-[var(--c-green)]" : "bg-[var(--c-red)]"}`} />
-              <span className="text-[10px] font-semibold">{backend === "online" ? "Ready" : "Offline"}</span>
+              <span className="text-[11px] font-bold tracking-tight">{backend === "online" ? "Ready" : "Offline"}</span>
            </div>
         </footer>
     </div>
