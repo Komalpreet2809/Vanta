@@ -22,104 +22,109 @@ export function EngineCenter({
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto">
+    <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl mx-auto">
       {/* SVG Diagram Container */}
-      <div className="relative w-full h-[320px] mb-2 flex items-center justify-center">
-        <svg viewBox="0 0 500 320" className="w-full h-full absolute inset-0">
-          {/* Signal Paths - Curved and Industrial */}
-          {/* Reference Path */}
-          <path
-            d="M 60 100 L 110 100 Q 120 100 120 110 L 120 150 Q 120 160 130 160 L 150 160"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-            strokeDasharray="4 4"
-          />
-          <circle cx="60" cy="100" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="60" cy="100" r="3" fill="var(--c-brown)" />
-          <text x="50" y="85" className="text-[11px] font-bold fill-[var(--text-main)]">Reference</text>
+      <div className="relative w-[540px] h-[400px] flex items-center justify-center">
+        {/* Signal Lines (SVG) */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 540 400">
+          {/* Large Dashed Outer Circle */}
+          <circle cx="270" cy="200" r="160" fill="none" stroke="var(--border-main)" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
           
-          {/* Noise Path */}
-          <path
-            d="M 60 220 L 110 220 Q 120 220 120 210 L 120 170 Q 120 160 130 160 L 150 160"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-            strokeDasharray="4 4"
-          />
-          <circle cx="60" cy="220" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="60" cy="220" r="3" fill="var(--c-red)" />
-          <text x="50" y="245" className="text-[11px] font-bold fill-[var(--text-main)]">Noisy Audio</text>
+          {/* Signal Paths - Curved into side junctions */}
+          <g>
+            {/* Left Junction Point */}
+            <circle cx="180" cy="200" r="5" fill="var(--text-main)" />
+            
+            {/* Reference to Junction */}
+            <path
+              d="M 60 120 Q 150 120 150 160 L 150 180 Q 150 200 180 200"
+              fill="none"
+              stroke="var(--border-main)"
+              strokeWidth="1.5"
+            />
+            {/* Noise to Junction */}
+            <path
+              d="M 60 280 Q 150 280 150 240 L 150 220 Q 150 200 180 200"
+              fill="none"
+              stroke="var(--border-main)"
+              strokeWidth="1.5"
+            />
+          </g>
 
-          {/* Clean Path */}
-          <path
-            d="M 350 160 L 370 160 Q 380 160 380 150 L 380 110 Q 380 100 390 100 L 440 100"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-          />
-          <circle cx="440" cy="100" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="440" cy="100" r="3" fill={hasOutput ? "var(--c-green)" : "var(--border-main)"} />
-          <text x="415" y="85" className="text-[11px] font-bold fill-[var(--text-main)]">Clean</text>
+          <g>
+            {/* Right Junction Point */}
+            <circle cx="360" cy="200" r="5" fill="var(--text-main)" />
+            
+            {/* Junction to Clean */}
+            <path
+              d="M 360 200 Q 390 200 390 180 L 390 160 Q 390 120 480 120"
+              fill="none"
+              stroke="var(--border-main)"
+              strokeWidth="1.5"
+            />
+            {/* Junction to Residue */}
+            <path
+              d="M 360 200 Q 390 200 390 220 L 390 240 Q 390 280 480 280"
+              fill="none"
+              stroke="var(--border-main)"
+              strokeWidth="1.5"
+            />
+          </g>
 
-          {/* Residue Path */}
-          <path
-            d="M 350 160 L 370 160 Q 380 160 380 170 L 380 210 Q 380 220 390 220 L 440 220"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-          />
-          <circle cx="440" cy="220" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="440" cy="220" r="3" fill={hasOutput ? "var(--c-purple)" : "var(--border-main)"} />
-          <text x="415" y="245" className="text-[11px] font-bold fill-[var(--text-main)]">Residue</text>
+          {/* Source/Sink Nodes */}
+          {/* Reference */}
+          <circle cx="60" cy="120" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="60" cy="120" r="5" fill="#4A6B4A" />
+          <text x="35" y="100" className="text-[12px] font-bold fill-[var(--text-main)]">Reference</text>
+          
+          {/* Noise */}
+          <circle cx="60" cy="280" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="60" cy="280" r="5" fill="#B54545" />
+          <text x="45" y="305" className="text-[12px] font-bold fill-[var(--text-main)]">Noise</text>
 
-          {/* Outer ring of the orb diagram */}
-          <circle cx="250" cy="160" r="70" fill="none" stroke="var(--border-main)" strokeWidth="0.5" opacity="0.3" />
-          <circle cx="250" cy="160" r="85" fill="none" stroke="var(--border-main)" strokeWidth="0.5" opacity="0.1" />
+          {/* Clean Voice */}
+          <circle cx="480" cy="120" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="480" cy="120" r="5" fill="#4A6B4A" />
+          <text x="445" y="100" className="text-[12px] font-bold fill-[var(--text-main)]">Clean Voice</text>
+
+          {/* Residue (Noise) */}
+          <circle cx="480" cy="280" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="480" cy="280" r="5" fill="#745296" />
+          <text x="420" y="305" className="text-[12px] font-bold fill-[var(--text-main)]">Residue (Noise)</text>
         </svg>
 
-        {/* The Exact "Circular Thingy" from Inspo */}
-        <div className="relative z-10">
-          <div className={`relative h-[130px] w-[130px] rounded-full border-[1px] border-[#B0AE9F] bg-[#DFDDD5] flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]`}>
-            {/* Outer inner ring */}
-            <div className="absolute h-[110px] w-[110px] rounded-full border-[1px] border-[#B8B6B0]" />
+        {/* Central Core Circle (THE HERO COMPONENT) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <button
+            disabled={!canExtract || isRunning}
+            onClick={onExtract}
+            className={`group relative h-[210px] w-[210px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[5px] border-[#333333] shadow-[0_0_50px_rgba(0,0,0,0.15)] overflow-hidden disabled:opacity-90 active:scale-95`}
+          >
+            {/* Green Progress/Status Ring (Industrial heavy) */}
+            <div className={`absolute inset-[-5px] rounded-full border-[5px] border-transparent border-t-[var(--c-green)] transition-all duration-1000 ${isRunning ? 'animate-spin' : 'opacity-40'}`} />
             
-            {/* Inner Dark Core */}
-            <div className={`h-[80px] w-[80px] rounded-full bg-[#1E1E1E] flex items-center justify-center border-[4px] border-[#2B3D2B] transition-all duration-700 ${isRunning ? 'shadow-[0_0_25px_rgba(74,107,74,0.4)] border-[var(--c-green)]' : 'border-[#333333]'}`}>
-               {/* Center highlight / pulse */}
-               <div className={`h-4 w-4 rounded-full bg-[#333333] transition-all duration-500 ${isRunning ? 'bg-[var(--c-green)] animate-pulse scale-125' : ''}`} />
+            {/* Inner Border Line */}
+            <div className="absolute inset-[5px] rounded-full border-[1px] border-white/10" />
+
+            {/* Waveform Logo (Exactly as inspo) */}
+            <div className="flex items-center gap-[4px] h-12 mb-2">
+              {[0.4, 0.6, 1.0, 0.7, 0.4].map((h, i) => (
+                <div key={i} className={`w-[4px] rounded-sm bg-white transition-all duration-300 ${isRunning ? 'animate-pulse' : ''}`} style={{ height: `${h * 100}%` }} />
+              ))}
             </div>
 
-            {/* Gauge Ticks (Small dots around the core) */}
-            {[...Array(12)].map((_, i) => (
-              <div 
-                key={i} 
-                className="absolute w-1 h-1 bg-[#B0AE9F] rounded-full"
-                style={{ 
-                  transform: `rotate(${i * 30}deg) translateY(-48px)` 
-                }}
-              />
-            ))}
-          </div>
+            {/* Extract Voice Text (Bold Monospace) */}
+            <span className="text-[18px] font-mono font-black text-white uppercase tracking-tighter mb-4 leading-none">Extract Voice</span>
+            
+            {/* Play Icon (Simple triangle) */}
+            <div className="h-6 w-6 flex items-center justify-center">
+               <Play className="h-6 w-6 text-white fill-current translate-x-0.5" />
+            </div>
+            
+            {/* Radial glow when active */}
+            <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(74,107,74,0.15)_0%,transparent_70%)] transition-opacity duration-700 ${isRunning ? 'opacity-100' : 'opacity-0'}`} />
+          </button>
         </div>
-      </div>
-
-      {/* Action Button - Pill shaped with icon */}
-      <div className="relative z-20">
-        <button
-          onClick={onExtract}
-          disabled={!canExtract || isRunning}
-          className={`group flex flex-col items-center justify-center py-4 px-12 rounded-full border-[1px] border-[#B0AE9F] transition-all duration-500 min-w-[180px] ${
-            canExtract && !isRunning
-              ? "bg-[#DFDDD5] hover:border-[var(--text-main)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.05)]" 
-              : "opacity-40 cursor-not-allowed bg-transparent"
-          }`}
-        >
-          <span className="text-[11px] font-mono font-bold text-[var(--text-main)] uppercase mb-2 tracking-wider">Extract Voice</span>
-          <div className="h-4 w-4 flex items-center justify-center">
-             <Play className={`h-4 w-4 fill-current ${canExtract && !isRunning ? 'text-[var(--text-main)]' : 'text-[var(--text-main)]'}`} />
-          </div>
-        </button>
       </div>
     </div>
   );
