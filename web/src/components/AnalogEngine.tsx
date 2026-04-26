@@ -13,120 +13,124 @@ export function AnalogEngine({ status, onExtract, canExtract }: Props) {
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-80 h-80 flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto">
+      <div className="relative w-full aspect-square flex items-center justify-center">
         {/* Signal Lines (SVG) */}
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 320 320">
-          {/* Reference Line */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
+          {/* Reference Line (Top Left) */}
           <path
-            d="M 40 100 Q 80 100 120 160"
+            d="M 20 120 C 80 120, 100 200, 150 200"
             fill="none"
-            stroke="var(--border-strong)"
+            stroke="var(--text)"
             strokeWidth="1.5"
+            className="opacity-60"
           />
-          <circle cx="40" cy="100" r="4" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="2" />
+          <circle cx="20" cy="120" r="5" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="2.5" />
           
-          {/* Noise Line */}
+          {/* Noise Line (Bottom Left) */}
           <path
-            d="M 40 220 Q 80 220 120 160"
+            d="M 20 280 C 80 280, 100 200, 150 200"
             fill="none"
-            stroke="var(--border-strong)"
+            stroke="var(--text)"
             strokeWidth="1.5"
+            className="opacity-60"
           />
-          <circle cx="40" cy="220" r="4" fill="var(--bg-page)" stroke="var(--accent-red)" strokeWidth="2" />
+          <circle cx="20" cy="280" r="5" fill="var(--bg-page)" stroke="var(--accent-red)" strokeWidth="2.5" />
 
-          {/* Clean Voice Out */}
+          {/* Clean Voice Out (Top Right) */}
           <path
-            d="M 200 160 Q 240 100 280 100"
+            d="M 250 200 C 300 200, 320 120, 380 120"
             fill="none"
-            stroke="var(--border-strong)"
+            stroke="var(--text)"
             strokeWidth="1.5"
+            className="opacity-60"
           />
-          <circle cx="280" cy="100" r="4" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="2" />
+          <circle cx="380" cy="120" r="5" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="2.5" />
 
-          {/* Residue Out */}
+          {/* Residue Out (Bottom Right) */}
           <path
-            d="M 200 160 Q 240 220 280 220"
+            d="M 250 200 C 300 200, 320 280, 380 280"
             fill="none"
-            stroke="var(--border-strong)"
+            stroke="var(--text)"
             strokeWidth="1.5"
+            className="opacity-60"
           />
-          <circle cx="280" cy="220" r="4" fill="var(--bg-page)" stroke="var(--accent-purple)" strokeWidth="2" />
+          <circle cx="380" cy="280" r="5" fill="var(--bg-page)" stroke="var(--accent-purple)" strokeWidth="2.5" />
           
-          {/* Processing Nodes */}
-          <circle cx="120" cy="160" r="3" fill="var(--text)" />
-          <circle cx="200" cy="160" r="3" fill="var(--text)" />
+          {/* Inner Nodes */}
+          <circle cx="150" cy="200" r="4" fill="var(--text)" />
+          <circle cx="250" cy="200" r="4" fill="var(--text)" />
+
+          {/* Dashed outer ring */}
+          <circle cx="200" cy="200" r="95" fill="none" stroke="var(--border)" strokeWidth="1" strokeDasharray="4 4" className="opacity-40" />
         </svg>
 
         {/* Labels */}
-        <div className="absolute left-2 top-[80px] text-[10px] font-bold uppercase">Reference</div>
-        <div className="absolute left-2 top-[225px] text-[10px] font-bold uppercase">Noise</div>
-        <div className="absolute right-2 top-[80px] text-[10px] font-bold uppercase">Clean Voice</div>
-        <div className="absolute right-2 top-[225px] text-[10px] font-bold uppercase">Residue (Noise)</div>
+        <div className="absolute left-0 top-[90px] text-[11px] font-bold uppercase tracking-tight">Reference</div>
+        <div className="absolute left-0 top-[295px] text-[11px] font-bold uppercase tracking-tight">Noise</div>
+        <div className="absolute right-0 top-[90px] text-[11px] font-bold uppercase tracking-tight">Clean Voice</div>
+        <div className="absolute right-0 top-[295px] text-[11px] font-bold uppercase tracking-tight">Residue (Noise)</div>
 
-        {/* Central Core */}
-        <div className="relative z-10 w-44 h-44 rounded-full border-[3px] border-[var(--text)] bg-[var(--bg-card)] flex flex-col items-center justify-center shadow-md">
-           <div className="flex items-end gap-1 mb-2">
+        {/* Central Core Circle (The Button is now INSIDE) */}
+        <motion.button
+          disabled={!canExtract || isRunning}
+          onClick={onExtract}
+          whileHover={canExtract ? { scale: 1.02 } : {}}
+          whileTap={canExtract ? { scale: 0.98 } : {}}
+          className={`relative z-10 w-56 h-56 rounded-full border-[6px] border-[var(--border-strong)] bg-[#2c2c2c] flex flex-col items-center justify-center shadow-xl transition-all ${
+            isRunning ? "border-[var(--accent-green)]" : "border-[var(--border-strong)]"
+          } disabled:opacity-80 group cursor-pointer`}
+        >
+           {/* Logo inside circle */}
+           <div className="flex items-end gap-1 mb-3">
             {[0.4, 0.7, 1, 0.6, 0.3].map((h, i) => (
               <motion.div
                 key={i}
-                animate={isRunning ? { height: [h * 12, h * 24, h * 12] } : { height: h * 16 }}
-                transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.1 }}
-                className="w-1 rounded-full bg-[var(--text)]"
+                animate={isRunning ? { height: [h * 16, h * 32, h * 16] } : { height: h * 20 }}
+                transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.1 }}
+                className="w-1.5 rounded-full bg-white"
               />
             ))}
           </div>
-          <span className="text-[16px] font-bold tracking-[0.2em] uppercase">Vanta</span>
+          <span className="text-[12px] font-bold text-white tracking-[0.4em] uppercase mb-4">Extract Voice</span>
           
-          {/* Animated Progress Ring */}
-          <svg className="absolute inset-0 w-full h-full -rotate-90">
-             <motion.circle
-               cx="88" cy="88" r="82"
-               fill="none"
-               stroke="var(--accent-green)"
-               strokeWidth="6"
-               strokeDasharray="515"
-               initial={{ strokeDashoffset: 515 }}
-               animate={isRunning ? { strokeDashoffset: [515, 0] } : { strokeDashoffset: 515 }}
-               transition={{ duration: 3, repeat: Infinity }}
-               className="opacity-40"
-             />
-          </svg>
-        </div>
+          <div className="h-10 w-10 flex items-center justify-center">
+            {isRunning ? (
+               <div className="h-2 w-10 flex gap-1 items-center justify-center">
+                  <div className="h-full w-1 bg-white animate-pulse" />
+                  <div className="h-full w-1 bg-white animate-pulse [animation-delay:0.2s]" />
+                  <div className="h-full w-1 bg-white animate-pulse [animation-delay:0.4s]" />
+               </div>
+            ) : (
+               <Play className="h-8 w-8 text-white fill-current" />
+            )}
+          </div>
+
+          {/* Radial Progress (Visual only for now) */}
+          {isRunning && (
+            <svg className="absolute inset-0 w-full h-full -rotate-90">
+               <motion.circle
+                 cx="112" cy="112" r="106"
+                 fill="none"
+                 stroke="var(--accent-green)"
+                 strokeWidth="4"
+                 strokeDasharray="665"
+                 initial={{ strokeDashoffset: 665 }}
+                 animate={{ strokeDashoffset: 0 }}
+                 transition={{ duration: 5, repeat: Infinity }}
+               />
+            </svg>
+          )}
+        </motion.button>
       </div>
 
-      {/* Status */}
-      <div className="flex flex-col items-center gap-2 mb-8">
+      {/* Status Bar */}
+      <div className="mt-8 flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-           <div className={`h-2.5 w-2.5 rounded-full ${isRunning ? "bg-[var(--accent-green)] animate-pulse" : "bg-[var(--accent-green)] opacity-50"}`} />
-           <span className="text-[12px] font-bold uppercase tracking-wider">{isRunning ? "Processing" : "Ready"}</span>
+           <div className={`h-3 w-3 rounded-full ${isRunning ? "bg-[var(--accent-green)] animate-pulse" : "bg-[var(--accent-green)]"}`} />
+           <span className="text-[13px] font-bold uppercase tracking-widest">{isRunning ? "Processing" : "Ready"}</span>
         </div>
-        <span className="text-[11px] text-[var(--text-soft)]">{isRunning ? "Isolating target voice..." : "Engine is idle."}</span>
-      </div>
-
-      {/* Action Button */}
-      <button
-        disabled={!canExtract || isRunning}
-        onClick={onExtract}
-        className="industrial-button w-full max-w-[280px] py-4 flex items-center justify-center gap-3 bg-[var(--text)] text-[var(--bg-page)] hover:bg-[#333] transition-all disabled:opacity-30"
-      >
-        <Play className="h-5 w-5 fill-current" />
-        <span className="text-[14px] font-bold uppercase tracking-widest">Extract Voice</span>
-      </button>
-
-      {/* Mode Selector */}
-      <div className="mt-10 w-full max-w-[280px]">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="h-[1px] flex-1 bg-[var(--border)]" />
-          <span className="text-[10px] font-bold text-[var(--text-dim)] uppercase">Mode</span>
-          <div className="h-[1px] flex-1 bg-[var(--border)]" />
-        </div>
-        <div className="inset-panel px-4 py-3 flex items-center justify-between text-[12px] cursor-pointer hover:bg-[var(--bg-hover)]">
-           <span>High Quality (Recommended)</span>
-           <svg className="h-4 w-4 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-           </svg>
-        </div>
+        <span className="text-[11px] text-[var(--text-soft)] uppercase tracking-wider">{isRunning ? "Isolating signal streams..." : "Engine is idle."}</span>
       </div>
     </div>
   );
