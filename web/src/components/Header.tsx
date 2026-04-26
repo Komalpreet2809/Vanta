@@ -12,7 +12,7 @@ export function Header() {
             <div key={i} className="w-[3px] bg-[var(--text-main)] rounded-sm" style={{ height: `${h * 100}%` }} />
           ))}
         </div>
-        <span className="font-mono-heading font-black text-2xl tracking-[0.2em] uppercase">Vanta</span>
+        <span className="font-mono-heading font-black text-3xl uppercase">Vanta</span>
       </div>
 
       <div className="flex items-center gap-3">
