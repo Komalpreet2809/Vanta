@@ -70,13 +70,13 @@ export function VantaApp() {
 
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] divide-x divide-[var(--border-main)] overflow-hidden">
           {/* INPUTS COLUMN */}
-          <section className="p-6 flex flex-col overflow-y-auto">
-            <div className="mb-6">
+          <section className="p-4 flex flex-col overflow-y-auto">
+            <div className="mb-4">
               <h2 className="font-mono-heading text-lg uppercase mb-1">Inputs</h2>
-              <p className="text-sm text-[var(--text-main)]">Provide reference and noise audio.</p>
+              <p className="text-[13px] text-[var(--text-main)]">Provide reference and noise audio.</p>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <AudioCard
                 heading="Reference Audio"
                 source={enrollment}
@@ -100,10 +100,10 @@ export function VantaApp() {
           </section>
 
           {/* ENGINE COLUMN */}
-          <section className="bg-[var(--bg-center)] p-6 flex flex-col overflow-hidden">
-            <div className="text-center mb-4">
+          <section className="bg-[var(--bg-center)] p-4 flex flex-col overflow-hidden">
+            <div className="text-center mb-2">
               <h2 className="font-mono-heading text-lg uppercase mb-1">Vanta Engine</h2>
-              <p className="text-sm text-[var(--text-main)]">Isolates the target voice from noise.</p>
+              <p className="text-[13px] text-[var(--text-main)]">Isolates the target voice from noise.</p>
             </div>
 
             <div className="flex-1 flex flex-col items-center justify-center">
@@ -119,13 +119,13 @@ export function VantaApp() {
           </section>
 
           {/* OUTPUTS COLUMN */}
-          <section className="p-6 flex flex-col overflow-y-auto">
-            <div className="mb-6">
+          <section className="p-4 flex flex-col overflow-y-auto">
+            <div className="mb-4">
               <h2 className="font-mono-heading text-lg uppercase mb-1">Outputs</h2>
-              <p className="text-sm text-[var(--text-main)]">Clean voice and residue (noise).</p>
+              <p className="text-[13px] text-[var(--text-main)]">Clean voice and residue (noise).</p>
             </div>
 
-            <div className="flex flex-col gap-4 flex-1">
+            <div className="flex flex-col gap-3 flex-1">
               <AudioCard
                 heading="Clean Voice"
                 source={result?.extracted ?? null}
@@ -152,9 +152,9 @@ export function VantaApp() {
                 emptyLabel={"Residue will appear here\nafter processing"}
               />
 
-              <div className="card-border p-4 flex items-start gap-3 bg-[var(--bg-app)]">
-                 <Info className="h-5 w-5 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
-                 <p className="text-[13px] text-[var(--text-main)] leading-relaxed">
+              <div className="card-border p-3 flex items-start gap-3 bg-[var(--bg-app)]">
+                 <Info className="h-4 w-4 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
+                 <p className="text-[12px] text-[var(--text-main)] leading-relaxed">
                    Your outputs will be available here<br />once processing is complete.
                  </p>
               </div>
@@ -163,11 +163,11 @@ export function VantaApp() {
           </section>
         </main>
 
-        <footer className="px-6 py-2 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-app)]">
-           <span className="text-xs font-mono font-semibold tracking-wide">VANTA v1.0.0</span>
+        <footer className="px-6 py-1.5 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-app)]">
+           <span className="text-[10px] font-mono font-semibold tracking-wide">VANTA v1.0.0</span>
            <div className="flex items-center gap-2">
-              <div className={`h-2.5 w-2.5 rounded-full ${backend === "online" ? "bg-[var(--c-green)]" : "bg-[var(--c-red)]"}`} />
-              <span className="text-xs font-semibold">{backend === "online" ? "Ready" : "Offline"}</span>
+              <div className={`h-2 w-2 rounded-full ${backend === "online" ? "bg-[var(--c-green)]" : "bg-[var(--c-red)]"}`} />
+              <span className="text-[10px] font-semibold">{backend === "online" ? "Ready" : "Offline"}</span>
            </div>
         </footer>
     </div>
