@@ -16,11 +16,11 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="btn-icon px-4 py-1.5 text-xs font-mono font-medium gap-2">
+        <button className="btn-icon px-4 py-1.5 text-xs font-mono font-bold gap-2">
           <History className="h-3.5 w-3.5" />
           History
         </button>
-        <button className="btn-icon px-4 py-1.5 text-xs font-mono font-medium gap-2">
+        <button className="btn-icon px-4 py-1.5 text-xs font-mono font-bold gap-2">
           <Settings className="h-3.5 w-3.5" />
           Settings
         </button>

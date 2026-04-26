@@ -36,7 +36,7 @@
 
 @layer components {
   .font-mono-heading {
-    @apply font-mono font-medium tracking-wide;
+    @apply font-mono font-bold tracking-wide;
   }
   
   .card-border {
