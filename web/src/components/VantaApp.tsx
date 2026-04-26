@@ -84,11 +84,11 @@ export function VantaApp() {
         {/* INPUTS */}
         <section className="p-10 flex flex-col gap-8 bg-[#e8e6db] overflow-y-auto">
           <div>
-            <h2 className="text-[26px] font-bold uppercase tracking-[0.2em] mb-1">Inputs</h2>
-            <p className="text-[12px] font-bold text-[var(--text-soft)]">Provide reference and noise audio.</p>
+            <h2 className="text-[28px] font-bold uppercase tracking-[0.3em] mb-1">Inputs</h2>
+            <p className="text-[13px] font-bold text-[var(--text-soft)]">Provide reference and noise audio.</p>
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-8">
             <AudioCard
               heading="Reference Audio"
               source={enrollment}
@@ -113,8 +113,8 @@ export function VantaApp() {
         {/* ENGINE */}
         <section className="p-10 flex flex-col bg-[#e2dfd2] overflow-hidden">
           <div className="text-center mb-8">
-            <h2 className="text-[26px] font-bold uppercase tracking-[0.45em] mb-1">Vanta Engine</h2>
-            <p className="text-[12px] font-bold text-[var(--text-soft)]">Isolates the target voice from noise.</p>
+            <h2 className="text-[28px] font-bold uppercase tracking-[0.55em] mb-1">Vanta Engine</h2>
+            <p className="text-[13px] font-bold text-[var(--text-soft)]">Isolates the target voice from noise.</p>
           </div>
 
           <div className="flex-1 flex flex-col items-center justify-center">
@@ -132,11 +132,11 @@ export function VantaApp() {
         {/* OUTPUTS */}
         <section className="p-10 flex flex-col gap-8 bg-[#e8e6db] overflow-y-auto">
           <div>
-            <h2 className="text-[26px] font-bold uppercase tracking-[0.2em] mb-1">Outputs</h2>
-            <p className="text-[12px] font-bold text-[var(--text-soft)]">Clean voice and residue (noise).</p>
+            <h2 className="text-[28px] font-bold uppercase tracking-[0.3em] mb-1">Outputs</h2>
+            <p className="text-[13px] font-bold text-[var(--text-soft)]">Clean voice and residue (noise).</p>
           </div>
 
-          <div className="flex flex-col gap-6 flex-1">
+          <div className="flex flex-col gap-8 flex-1">
             <AudioCard
               heading="Clean Voice"
               source={result?.extracted ?? null}
@@ -166,34 +166,34 @@ export function VantaApp() {
             {!result && (
               <div className="panel flex-1 flex flex-col items-center justify-center p-12 text-center bg-[var(--bg-page)]/20 border-dashed border-2 mt-2">
                  <div className="h-20 w-20 border-2 border-dashed border-[var(--border-strong)] rounded-full flex items-center justify-center mb-8 opacity-40">
-                   <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                   <svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                      <path d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5 5-5M12 4v12" />
                    </svg>
                  </div>
-                 <p className="text-[13px] font-bold text-[var(--text-dim)] uppercase tracking-[0.25em] leading-relaxed">Outputs will appear here<br/>after processing is complete.</p>
+                 <p className="text-[14px] font-bold text-[var(--text-dim)] uppercase tracking-[0.3em] leading-relaxed">Outputs will appear here<br/>after processing is complete.</p>
               </div>
             )}
 
             {result && (
-              <div className="mt-auto panel p-6 border-l-[6px] border-l-[var(--c-green)] bg-[var(--bg-card)] animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="mt-auto panel p-6 border-l-[8px] border-l-[var(--c-green)] bg-[var(--bg-card)] animate-in fade-in slide-in-from-bottom-4 duration-500">
                  <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                       <div className="h-2.5 w-2.5 rounded-full bg-[var(--c-green)] shadow-[0_0_10px_var(--c-green)]" />
-                       <span className="text-[13px] font-bold uppercase tracking-[0.25em]">Extraction Successful</span>
+                       <div className="h-3 w-3 rounded-full bg-[var(--c-green)] shadow-[0_0_12px_var(--c-green)]" />
+                       <span className="text-[14px] font-bold uppercase tracking-[0.3em]">Extraction Successful</span>
                     </div>
                  </div>
-                 <p className="text-[15px] font-bold leading-tight tabular-nums">{message}</p>
+                 <p className="text-[16px] font-bold leading-tight tabular-nums">{message}</p>
               </div>
             )}
           </div>
         </section>
       </main>
 
-      <footer className="px-10 py-3 border-t border-[var(--border-strong)] flex items-center justify-between bg-[#e2dfd2]">
-         <span className="text-[13px] font-bold tracking-[0.25em] uppercase opacity-70">VANTA v1.0.0</span>
-         <div className="flex items-center gap-3">
-            <div className={`h-2.5 w-2.5 rounded-full ${backend === "online" ? "bg-[var(--ok)] shadow-[0_0_10px_var(--ok)]" : "bg-[var(--err)] shadow-[0_0_10px_var(--err)]"}`} />
-            <span className="text-[13px] font-bold uppercase tracking-[0.25em]">{backend === "online" ? "Ready" : "Offline"}</span>
+      <footer className="px-10 py-4 border-t border-[var(--border-strong)] flex items-center justify-between bg-[#e2dfd2] relative z-[1000]">
+         <span className="text-[14px] font-bold tracking-[0.3em] uppercase opacity-80">VANTA v1.0.0</span>
+         <div className="flex items-center gap-4">
+            <div className={`h-3 w-3 rounded-full ${backend === "online" ? "bg-[var(--ok)] shadow-[0_0_10px_var(--ok)]" : "bg-[var(--err)] shadow-[0_0_10px_var(--err)]"}`} />
+            <span className="text-[14px] font-bold uppercase tracking-[0.3em]">{backend === "online" ? "Ready" : "Offline"}</span>
          </div>
       </footer>
     </div>
