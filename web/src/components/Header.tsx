@@ -1,6 +1,6 @@
 "use client";
 
-import { History, Moon, Settings, Sun } from "lucide-react";
+import { History, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function Header() {
@@ -47,10 +47,7 @@ export function Header() {
           <History className="h-4 w-4" />
           <span>History</span>
         </button>
-        <button className="btn-icon h-10 px-4 flex items-center gap-2 font-mono-heading text-[11px] uppercase tracking-wider">
-          <Settings className="h-4 w-4" />
-          <span>Settings</span>
-        </button>
+
         <button 
           onClick={toggleDark}
           className="btn-icon h-10 w-10 flex items-center justify-center"
