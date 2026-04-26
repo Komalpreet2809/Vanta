@@ -36,9 +36,9 @@ export function Header() {
   return (
     <header className="px-6 py-4 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-4">
-          <img src="/logo.png" alt="Vanta Logo" className="h-10 w-auto" />
-          <span className="font-mono-heading font-black text-[28px] uppercase tracking-[0.3em] text-[var(--c-green)] leading-none">VANTA</span>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="Vanta Logo" className="h-16 w-auto mix-blend-multiply opacity-90" />
+          <span className="font-mono-heading font-black text-[28px] uppercase tracking-[0.3em] text-[var(--c-green)] leading-none -ml-2">VANTA</span>
         </div>
       </div>
 
