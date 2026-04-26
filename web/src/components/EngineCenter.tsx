@@ -37,11 +37,11 @@ export function EngineCenter({
       <div className="relative w-full aspect-[1.5/1] flex items-center justify-center">
         <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
           
-          {/* LEFT CURLY BRACE { - Floating with gaps (Starts at 40, Ends at 230) */}
+          {/* LEFT CURLY BRACE { - Floating with gaps at both ends */}
           <g>
-            {/* Top Curve */}
+            {/* Top Curve - Starts at 70 (Gap from node at 30), Ends at 210 (Gap from orb) */}
             <path
-              d="M 40 110 C 140 110, 140 220, 230 220"
+              d="M 70 110 C 150 110, 150 220, 210 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
@@ -49,7 +49,7 @@ export function EngineCenter({
             />
             {/* Bottom Curve */}
             <path
-              d="M 40 330 C 140 330, 140 220, 230 220"
+              d="M 70 330 C 150 330, 150 220, 210 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
@@ -57,11 +57,11 @@ export function EngineCenter({
             />
           </g>
 
-          {/* RIGHT CURLY BRACE } - Floating with gaps (Starts at 760, Ends at 570) */}
+          {/* RIGHT CURLY BRACE } - Floating with gaps at both ends */}
           <g>
-            {/* Top Curve */}
+            {/* Top Curve - Starts at 730 (Gap from node at 770), Ends at 590 (Gap from orb) */}
             <path
-              d="M 760 110 C 660 110, 660 220, 570 220"
+              d="M 730 110 C 650 110, 650 220, 590 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
@@ -69,7 +69,7 @@ export function EngineCenter({
             />
             {/* Bottom Curve */}
             <path
-              d="M 760 330 C 660 330, 660 220, 570 220"
+              d="M 730 330 C 650 330, 650 220, 590 220"
               fill="none"
               stroke="#222222"
               strokeWidth="1.5"
@@ -77,27 +77,27 @@ export function EngineCenter({
             />
           </g>
 
-          {/* Node Indicators (Floating at x=40 and x=760) */}
+          {/* Node Indicators (Floating at x=30 and x=770) */}
           {/* Reference */}
-          <g transform="translate(40, 110)">
+          <g transform="translate(30, 110)">
             <circle r="6" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3" fill="#4A6B4A" />
             <text x="10" y="-12" className="text-[10px] font-bold fill-[#1a1a1a] tracking-tight">REFERENCE</text>
           </g>
           {/* Noise */}
-          <g transform="translate(40, 330)">
+          <g transform="translate(30, 330)">
             <circle r="6" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3" fill="#B54545" />
             <text x="10" y="22" className="text-[10px] font-bold fill-[#1a1a1a] tracking-tight">NOISE</text>
           </g>
           {/* Clean Voice */}
-          <g transform="translate(760, 110)">
+          <g transform="translate(770, 110)">
             <circle r="6" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3" fill="#4A6B4A" />
             <text x="-70" y="-12" className="text-[10px] font-bold fill-[#1a1a1a] tracking-tight text-right">CLEAN VOICE</text>
           </g>
           {/* Residue (Noise) */}
-          <g transform="translate(760, 330)">
+          <g transform="translate(770, 330)">
             <circle r="6" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3" fill="#745296" />
             <text x="-95" y="22" className="text-[10px] font-bold fill-[#1a1a1a] tracking-tight text-right">RESIDUE (NOISE)</text>
@@ -172,6 +172,7 @@ export function EngineCenter({
     </div>
   );
 }
+
 
 
 
