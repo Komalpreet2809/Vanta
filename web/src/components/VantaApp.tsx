@@ -66,7 +66,7 @@ export function VantaApp() {
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] overflow-hidden">
           {/* INPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
-            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center bg-black/2 dark:bg-white/2">
+            <div className="p-4 h-14 flex items-center">
               <h2 className="font-mono-heading font-black text-[15px] uppercase tracking-[0.1em] opacity-90">Inputs</h2>
             </div>
             
@@ -96,7 +96,7 @@ export function VantaApp() {
               </div>
             </div>
 
-            <div className="p-4 border-t border-[var(--border-main)]/10 h-32 flex items-start overflow-hidden">
+            <div className="p-4 h-32 flex items-start overflow-hidden">
               <TipsCard />
             </div>
           </section>
@@ -112,7 +112,7 @@ export function VantaApp() {
 
           {/* OUTPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
-            <div className="p-4 border-b border-[var(--border-main)]/10 h-14 flex items-center bg-black/2 dark:bg-white/2">
+            <div className="p-4 h-14 flex items-center">
               <h2 className="font-mono-heading font-black text-[15px] uppercase tracking-[0.1em] opacity-90">Outputs</h2>
             </div>
 
@@ -150,7 +150,7 @@ export function VantaApp() {
               </div>
             </div>
 
-            <div className="p-4 border-t border-[var(--border-main)]/10 h-32 flex items-start overflow-hidden">
+            <div className="p-4 h-32 flex items-start overflow-hidden">
                <div className="card-border p-3 flex items-start gap-3 bg-[var(--bg-app)] shadow-sm w-full">
                   <Info className="h-4 w-4 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
                   <p className="text-[11px] text-[var(--text-main)] leading-relaxed font-medium">
