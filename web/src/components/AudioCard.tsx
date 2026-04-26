@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioLines, Download, FileAudio, MoreHorizontal, Music, Pause, Play, Upload, X } from "lucide-react";
+import { AudioLines, Download, FileAudio, MoreHorizontal, Music, Pause, Play, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
@@ -173,23 +173,11 @@ export function AudioCard({
             onFile ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/5" : ""
           } ${isDragging ? "bg-black/5 dark:bg-white/5" : "bg-transparent"}`}
         >
-          <div className="flex flex-col items-center justify-between h-full py-4 relative overflow-hidden">
-            <div className="flex flex-col items-center gap-4">
-              <Upload className="h-8 w-8 stroke-[1.2] text-[var(--text-main)] opacity-70" />
-              <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium">
-                Drag & drop an audio file here<br />
-                or click to browse
-              </div>
-            </div>
-            
-            {/* Static Waveform Visual at bottom (Matches Reference) */}
-            <div className="w-full px-4 h-12 flex items-center justify-center gap-[2px] opacity-20 mt-4">
-              {Array.from({ length: 60 }).map((_, i) => (
-                <div 
-                  key={i} 
-                  className="w-[1.5px] bg-[var(--text-main)] rounded-full"
-                  style={{ height: `${20 + Math.random() * 80}%` }}
-                />
+          <div className="flex flex-col items-center gap-3">
+            <FileAudio className="h-7 w-7 stroke-[1.5] text-[var(--text-main)]" />
+            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium">
+              {(emptyLabel ?? (onFile ? "Drag & drop an audio file here\nor click to browse" : "No signal loaded")).split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
               ))}
             </div>
           </div>
