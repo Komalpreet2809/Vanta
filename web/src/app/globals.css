@@ -1,38 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  /* Cream / paper palette */
-  --bg-page: #efeae0;
-  --bg-panel: #e8e2d6;
-  --bg-card: #e8e2d6;
-  --bg-input: #ebe5d9;
-  --bg-deep: #1a1a1a;
-  --bg-elevated: #f3eee4;
-
-  /* Borders */
-  --border: #d4ccbb;
-  --border-strong: #b9b09c;
-  --border-faint: #ddd5c3;
-
+  /* High Fidelity Analog Paper Palette */
+  --bg-page: #e2dfd2;
+  --bg-card: #dcd9ca;
+  --bg-hover: #d2cfc0;
+  
+  /* Industrial Borders */
+  --border: #c8c5b5;
+  --border-strong: #9a988d;
+  
   /* Text */
   --text: #1a1a1a;
-  --text-soft: #4a4a4a;
+  --text-soft: #3d3d3d;
   --text-dim: #6e6a5e;
-  --text-faint: #9b9483;
 
-  /* Audio channel colors */
+  /* Brand Accents */
   --c-green: #3d5a3d;
-  --c-green-soft: #5b7a5b;
   --c-red: #b84a3d;
-  --c-red-soft: #c66659;
   --c-purple: #6e548a;
-  --c-purple-soft: #8771a3;
-
-  /* Engine */
-  --engine: #1a1a1a;
-  --engine-ring: #d4ccbb;
-
-  /* Status */
+  
+  /* Engine Specifics */
+  --engine: #2a2a2a;
+  
+  /* Status Colors */
   --ok: #3d5a3d;
   --err: #b84a3d;
   --warn: #b8943d;
@@ -41,47 +32,46 @@
 @theme inline {
   --color-background: var(--bg-page);
   --color-foreground: var(--text);
-  --font-sans: var(--font-sans);
+  --font-sans: 'JetBrains Mono', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
-html,
-body {
+@layer base {
+  body {
+    @apply bg-[var(--bg-page)] text-[var(--text)] font-mono antialiased;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply border border-[var(--border-strong)] bg-[var(--bg-card)] rounded-sm;
+  }
+
+  .inset-panel {
+    @apply border border-[var(--border-strong)] bg-[var(--bg-page)] shadow-inner rounded-sm;
+  }
+
+  .industrial-button {
+    @apply border border-[var(--border-strong)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] active:translate-y-[1px] active:shadow-inner transition-all rounded-sm font-bold uppercase tracking-widest text-[var(--text)];
+  }
+}
+
+/* Custom Inset Shadow for hardware look */
+.shadow-inner {
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
   background: var(--bg-page);
-  color: var(--text);
-  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
 }
-
-::selection {
-  background: var(--engine);
-  color: var(--bg-page);
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
 }
-
-/* Wavesurfer container */
-.wf {
-  width: 100%;
-  height: 36px;
-}
-
-/* Dotted column dividers between INPUTS / ENGINE / OUTPUTS */
-.col-divider {
-  border-left: 1px dashed var(--border-strong);
-}
-
-/* ─── Animations ─────────────────────────────────────────────────────── */
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(61, 90, 61, 0.4); }
-  70% { box-shadow: 0 0 0 12px rgba(61, 90, 61, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(61, 90, 61, 0); }
-}
-.pulse-ring {
-  animation: pulse-ring 2s ease-out infinite;
-}
-
-@keyframes engine-spin {
-  to { transform: rotate(360deg); }
-}
-.engine-spinning {
-  animation: engine-spin 4s linear infinite;
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
 }
