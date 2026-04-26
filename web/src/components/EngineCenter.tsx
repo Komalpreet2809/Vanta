@@ -98,27 +98,27 @@ export function EngineCenter({
           <button
             disabled={!canExtract || isRunning}
             onClick={onExtract}
-            className={`group relative h-[210px] w-[210px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[5px] border-[#333333] shadow-[0_0_50px_rgba(0,0,0,0.15)] overflow-hidden disabled:opacity-90 active:scale-95`}
+            className={`group relative h-[260px] w-[260px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[6px] border-[#333333] shadow-[0_0_60px_rgba(0,0,0,0.2)] overflow-hidden disabled:opacity-90 active:scale-95`}
           >
             {/* Green Progress/Status Ring (Industrial heavy) */}
-            <div className={`absolute inset-[-5px] rounded-full border-[5px] border-transparent border-t-[var(--c-green)] transition-all duration-1000 ${isRunning ? 'animate-spin' : 'opacity-40'}`} />
+            <div className={`absolute inset-[-6px] rounded-full border-[6px] border-transparent border-t-[var(--c-green)] transition-all duration-1000 ${isRunning ? 'animate-spin' : 'opacity-40'}`} />
             
             {/* Inner Border Line */}
-            <div className="absolute inset-[5px] rounded-full border-[1px] border-white/10" />
+            <div className="absolute inset-[6px] rounded-full border-[1px] border-white/10" />
 
             {/* Waveform Logo (Exactly as inspo) */}
-            <div className="flex items-center gap-[4px] h-12 mb-2">
+            <div className="flex items-center gap-[5px] h-16 mb-4">
               {[0.4, 0.6, 1.0, 0.7, 0.4].map((h, i) => (
-                <div key={i} className={`w-[4px] rounded-sm bg-white transition-all duration-300 ${isRunning ? 'animate-pulse' : ''}`} style={{ height: `${h * 100}%` }} />
+                <div key={i} className={`w-[5px] rounded-sm bg-white transition-all duration-300 ${isRunning ? 'animate-pulse' : ''}`} style={{ height: `${h * 100}%` }} />
               ))}
             </div>
 
             {/* Extract Voice Text (Bold Monospace) */}
-            <span className="text-[18px] font-mono font-black text-white uppercase tracking-tighter mb-4 leading-none">Extract Voice</span>
+            <span className="text-[22px] font-mono font-black text-white uppercase tracking-tighter mb-6 leading-none">Extract Voice</span>
             
             {/* Play Icon (Simple triangle) */}
-            <div className="h-6 w-6 flex items-center justify-center">
-               <Play className="h-6 w-6 text-white fill-current translate-x-0.5" />
+            <div className="h-8 w-8 flex items-center justify-center">
+               <Play className="h-8 w-8 text-white fill-current translate-x-0.5" />
             </div>
             
             {/* Radial glow when active */}
