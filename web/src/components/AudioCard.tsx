@@ -17,10 +17,10 @@ type Props = {
 };
 
 const COLOR: Record<Variant, { wave: string; progress: string }> = {
-  charcoal: { wave: "#444444", progress: "#222222" },
-  red: { wave: "#b84a3d", progress: "#8e3528" },
-  green: { wave: "#3d5a3d", progress: "#2c4429" },
-  purple: { wave: "#6e548a", progress: "#523f68" },
+  charcoal: { wave: "#555555", progress: "#111111" },
+  red: { wave: "#B54545", progress: "#8A2A2A" },
+  green: { wave: "#4A6B4A", progress: "#2B3D2B" },
+  purple: { wave: "#745296", progress: "#4B3263" },
 };
 
 export function AudioCard({
@@ -53,10 +53,10 @@ export function AudioCard({
       waveColor: colors.wave,
       progressColor: colors.progress,
       cursorColor: "transparent",
-      barWidth: 1.5,
-      barGap: 1.5,
+      barWidth: 2,
+      barGap: 2,
       barRadius: 0,
-      height: 32,
+      height: 24,
       normalize: true,
       interact: true,
     });
@@ -79,62 +79,61 @@ export function AudioCard({
     };
   }, [source, variant]);
 
-  const filename = filenameOverride ?? (source instanceof File ? source.name : "audio.wav");
+  const filename = filenameOverride ?? (source instanceof File ? source.name : "audio.mp3");
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div className="flex flex-col gap-3">
-      <h3 className="font-bold text-[11px] tracking-[0.2em] uppercase text-[var(--text-soft)]">
+    <div className="flex flex-col gap-2">
+      <h3 className="font-mono-heading text-sm uppercase">
         {heading}
       </h3>
 
       {source ? (
-        <div className="panel p-4 bg-[var(--bg-card)] flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <div className="h-10 w-10 flex items-center justify-center rounded-sm border border-[var(--border-strong)] bg-[var(--bg-page)] shadow-inner">
-              <Music className="h-4 w-4 opacity-60" />
+        <div className="card-border p-3 flex flex-col gap-3">
+          {/* File Info Row */}
+          <div className="flex items-center gap-3">
+            <div className="btn-icon h-10 w-10 shrink-0">
+              <Music className="h-4 w-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="truncate text-[13px] font-bold text-[var(--text)]">{filename}</div>
-              <div className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">
+              <div className="truncate text-sm font-semibold">{filename}</div>
+              <div className="text-xs font-mono text-[var(--text-muted)] mt-0.5">
                 {sizeStr} • {formatTime(duration)}
               </div>
             </div>
-            <div className="flex gap-2">
-              {onDownload && (
-                <button onClick={onDownload} className="industrial-button h-10 w-10 flex items-center justify-center bg-[var(--bg-page)]">
-                  <Download className="h-4 w-4" />
-                </button>
-              )}
-              {onClear && (
-                <button onClick={onClear} className="industrial-button h-10 w-10 flex items-center justify-center bg-[var(--bg-page)]">
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
+            {onClear && (
+              <button onClick={onClear} className="btn-icon h-10 w-10 shrink-0">
+                <X className="h-5 w-5 stroke-[1.5]" />
+              </button>
+            )}
+            {onDownload && (
+              <button onClick={onDownload} className="btn-icon h-10 w-10 shrink-0">
+                <Download className="h-5 w-5 stroke-[1.5]" />
+              </button>
+            )}
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* Waveform Row */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => wsRef.current?.playPause()}
               disabled={!ready}
-              className="industrial-button h-10 w-10 flex items-center justify-center bg-[var(--bg-page)] shadow-inner"
+              className="btn-icon h-10 w-10 shrink-0 disabled:opacity-50"
             >
-              {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 fill-current ml-0.5" />}
+              {playing ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current translate-x-[1px]" />}
             </button>
-            <div className="flex-1 min-w-0">
-              <div ref={containerRef} className="h-8" />
+            <div className="flex-1 relative">
+              <div ref={containerRef} className="w-full" />
+              <div className="flex justify-between text-[10px] font-mono text-[var(--text-muted)] mt-1">
+                <span>{formatTime(time)}</span>
+                <span>{formatTime(duration)}</span>
+              </div>
             </div>
-          </div>
-
-          <div className="flex justify-between text-[11px] font-bold tabular-nums text-[var(--text-dim)]">
-            <span>{formatTime(time)}</span>
-            <span>{formatTime(duration)}</span>
           </div>
         </div>
       ) : (
-        <div className="panel p-8 border-dashed flex flex-col items-center justify-center text-center gap-3 bg-[var(--bg-page)]/20">
-          <span className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-[0.2em]">
+        <div className="card-border border-dashed p-6 flex items-center justify-center text-center">
+          <span className="text-sm text-[var(--text-muted)]">
             {emptyLabel ?? "No signal loaded"}
           </span>
         </div>

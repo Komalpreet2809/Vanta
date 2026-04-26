@@ -4,24 +4,24 @@ import { History, Settings } from "lucide-react";
 
 export function Header() {
   return (
-    <header className="px-10 py-6 border-b border-[var(--border-strong)] flex items-center justify-between bg-[var(--bg-card)]/50">
-      <div className="flex items-center gap-4">
-        {/* Waveform Bars Logo from Inspo */}
-        <div className="flex items-end gap-1 mb-1">
-          {[0.3, 0.6, 1, 0.7, 0.4].map((h, i) => (
-            <div key={i} className="w-1.5 bg-[var(--text)]" style={{ height: h * 24 }} />
+    <header className="px-6 py-4 flex items-center justify-between border-b border-[var(--border-main)]">
+      <div className="flex items-center gap-3">
+        {/* Waveform Logo */}
+        <div className="flex items-center gap-[2px] h-6 mr-1">
+          {[0.3, 0.5, 0.8, 1, 0.7, 0.4, 0.6].map((h, i) => (
+            <div key={i} className="w-[1.5px] bg-[var(--text-main)]" style={{ height: `${h * 100}%` }} />
           ))}
         </div>
-        <span className="text-[30px] font-bold tracking-[0.55em] uppercase text-[var(--text)]">Vanta</span>
+        <span className="font-mono-heading text-xl tracking-[0.2em] uppercase">Vanta</span>
       </div>
 
-      <div className="flex items-center gap-4">
-        <button className="industrial-button px-6 py-2.5 text-[11px] font-bold uppercase flex items-center gap-2 bg-[var(--bg-page)]/80 shadow-inner">
-          <History className="h-4 w-4" />
+      <div className="flex items-center gap-3">
+        <button className="btn-icon px-4 py-1.5 text-xs font-mono font-medium gap-2">
+          <History className="h-3.5 w-3.5" />
           History
         </button>
-        <button className="industrial-button px-6 py-2.5 text-[11px] font-bold uppercase flex items-center gap-2 bg-[var(--bg-page)]/80 shadow-inner">
-          <Settings className="h-4 w-4" />
+        <button className="btn-icon px-4 py-1.5 text-xs font-mono font-medium gap-2">
+          <Settings className="h-3.5 w-3.5" />
           Settings
         </button>
       </div>

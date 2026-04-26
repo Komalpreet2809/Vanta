@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import { Play } from "lucide-react";
 
 type Props = {
@@ -23,121 +22,101 @@ export function EngineCenter({
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl mx-auto px-4">
-      <div className="relative w-full aspect-square flex items-center justify-center">
-        {/* Signal Lines (SVG) - Refined S-Curves */}
-        <svg className="absolute inset-0 w-full h-full p-4" viewBox="0 0 400 400">
-          {/* Reference Line (Top Left) - Cubic S-Curve */}
+    <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl mx-auto py-8">
+      {/* SVG Diagram Container */}
+      <div className="relative w-[500px] h-[400px]">
+        {/* Signal Lines (SVG) */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 500 400">
+          {/* Reference Line */}
           <path
-            d="M 50 110 C 140 110, 100 200, 175 200"
+            d="M 60 120 L 110 120 Q 120 120 120 130 L 120 190 Q 120 200 130 200 L 150 200"
             fill="none"
-            stroke="#1a1a1a"
-            strokeWidth="1.2"
-            className="opacity-80"
+            stroke="var(--border-main)"
+            strokeWidth="1.5"
           />
-          <circle cx="50" cy="110" r="6" fill="var(--bg-page)" stroke="var(--c-green)" strokeWidth="3" />
-          <text x="35" y="92" className="text-[11px] font-bold fill-[var(--text)] uppercase tracking-tight">Reference</text>
+          {/* Reference Dot */}
+          <circle cx="60" cy="120" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="60" cy="120" r="3" fill="var(--c-green)" />
+          <text x="50" y="105" className="text-xs font-semibold fill-[var(--text-main)]">Reference</text>
           
-          {/* Noise Line (Bottom Left) - Cubic S-Curve */}
+          {/* Noise Line */}
           <path
-            d="M 50 290 C 140 290, 100 200, 175 200"
+            d="M 60 280 L 110 280 Q 120 280 120 270 L 120 210 Q 120 200 130 200 L 150 200"
             fill="none"
-            stroke="#1a1a1a"
-            strokeWidth="1.2"
-            className="opacity-80"
+            stroke="var(--border-main)"
+            strokeWidth="1.5"
           />
-          <circle cx="50" cy="290" r="6" fill="var(--bg-page)" stroke="var(--c-red)" strokeWidth="3" />
-          <text x="35" y="318" className="text-[11px] font-bold fill-[var(--text)] uppercase tracking-tight">Noise</text>
+          {/* Noise Dot */}
+          <circle cx="60" cy="280" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="60" cy="280" r="3" fill="var(--c-red)" />
+          <text x="50" y="305" className="text-xs font-semibold fill-[var(--text-main)]">Noise</text>
 
-          {/* Clean Voice Out (Top Right) - Cubic S-Curve */}
-          <path
-            d="M 225 200 C 300 200, 260 110, 350 110"
-            fill="none"
-            stroke="#1a1a1a"
-            strokeWidth="1.2"
-            className="opacity-80"
-          />
-          <circle cx="350" cy="110" r="6" fill="var(--bg-page)" stroke="var(--c-green)" strokeWidth="3" />
-          <text x="325" y="92" className="text-[11px] font-bold fill-[var(--text)] uppercase tracking-tight">Clean Voice</text>
+          {/* Left Join Node */}
+          <circle cx="150" cy="200" r="5" fill="var(--border-main)" />
+          <circle cx="150" cy="200" r="2.5" fill="var(--bg-app)" />
 
-          {/* Residue Out (Bottom Right) - Cubic S-Curve */}
+          {/* Clean Voice Line */}
           <path
-            d="M 225 200 C 300 200, 260 290, 350 290"
+            d="M 350 200 L 370 200 Q 380 200 380 190 L 380 130 Q 380 120 390 120 L 440 120"
             fill="none"
-            stroke="#1a1a1a"
-            strokeWidth="1.2"
-            className="opacity-80"
+            stroke="var(--border-main)"
+            strokeWidth="1.5"
           />
-          <circle cx="350" cy="290" r="6" fill="var(--bg-page)" stroke="var(--c-purple)" strokeWidth="3" />
-          <text x="310" y="318" className="text-[11px] font-bold fill-[var(--text)] uppercase tracking-tight">Residue (Noise)</text>
-          
-          {/* Intersection Nodes */}
-          <circle cx="175" cy="200" r="4" fill="#1a1a1a" />
-          <circle cx="225" cy="200" r="4" fill="#1a1a1a" />
+          {/* Clean Voice Dot */}
+          <circle cx="440" cy="120" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="440" cy="120" r="3" fill="var(--c-green)" />
+          <text x="410" y="105" className="text-xs font-semibold fill-[var(--text-main)]">Clean Voice</text>
+
+          {/* Residue Line */}
+          <path
+            d="M 350 200 L 370 200 Q 380 200 380 210 L 380 270 Q 380 280 390 280 L 440 280"
+            fill="none"
+            stroke="var(--border-main)"
+            strokeWidth="1.5"
+          />
+          {/* Residue Dot */}
+          <circle cx="440" cy="280" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="440" cy="280" r="3" fill="var(--c-purple)" />
+          <text x="400" y="305" className="text-xs font-semibold fill-[var(--text-main)]">Residue (Noise)</text>
+
+          {/* Right Join Node */}
+          <circle cx="350" cy="200" r="5" fill="var(--border-main)" />
+          <circle cx="350" cy="200" r="2.5" fill="var(--bg-app)" />
 
           {/* Dashed outer ring */}
-          <circle cx="200" cy="200" r="115" fill="none" stroke="#9a988d" strokeWidth="0.8" strokeDasharray="4 6" className="opacity-60" />
+          <circle cx="250" cy="200" r="100" fill="none" stroke="var(--border-dashed)" strokeWidth="1" strokeDasharray="4 4" />
         </svg>
 
-        {/* Central Core Circle - LARGE ORB with Deep Soft Shadow */}
-        <motion.button
-          disabled={!canExtract || isRunning}
-          onClick={onExtract}
-          whileHover={canExtract ? { scale: 1.01 } : {}}
-          whileTap={canExtract ? { scale: 0.99 } : {}}
-          className={`relative z-10 w-64 h-64 rounded-full border-[8px] border-[var(--border-strong)] bg-[#2a2a2a] flex flex-col items-center justify-center shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)] transition-all ${
-            isRunning ? "border-[var(--c-green)]" : "border-[var(--border-strong)]"
-          } disabled:opacity-90 group cursor-pointer`}
-        >
-           {/* Inspo-matching Waveform Logo */}
-           <div className="flex items-end gap-[3px] mb-6 h-10">
-            {[0.4, 0.7, 1, 0.8, 0.5, 0.9, 0.6, 0.3].map((h, i) => (
-              <motion.div
-                key={i}
-                animate={isRunning ? { height: [h * 24, h * 44, h * 24] } : { height: h * 30 }}
-                transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.05 }}
-                className="w-1.5 rounded-full bg-white opacity-95"
-              />
-            ))}
-          </div>
+        {/* Central Core Circle */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] h-[160px] rounded-full border-4 border-[var(--bg-app)] flex items-center justify-center bg-[var(--c-dark-green)] shadow-sm">
+          <button
+            disabled={!canExtract || isRunning}
+            onClick={onExtract}
+            className="w-[140px] h-[140px] rounded-full border-[3px] border-[var(--bg-app)] bg-[var(--c-charcoal)] flex flex-col items-center justify-center disabled:opacity-90 transition-transform active:scale-95"
+          >
+             {/* Waveform Logo */}
+             <div className="flex items-end gap-[3px] mb-3 h-6">
+              {[0.4, 0.7, 1, 0.8, 0.5].map((h, i) => (
+                <div key={i} className={`w-[2px] rounded-full bg-white transition-all ${isRunning ? 'animate-pulse' : ''}`} style={{ height: `${h * 100}%` }} />
+              ))}
+            </div>
 
-          <span className="text-[15px] font-bold text-white tracking-[0.5em] uppercase mb-6">Extract Voice</span>
-          
-          <div className="h-10 w-10 flex items-center justify-center">
-            {isRunning ? (
-               <div className="flex gap-1.5 items-center justify-center h-5">
-                  <motion.div animate={{ height: [4, 20, 4] }} transition={{ repeat: Infinity, duration: 0.4 }} className="w-1.5 bg-white" />
-                  <motion.div animate={{ height: [4, 20, 4] }} transition={{ repeat: Infinity, duration: 0.4, delay: 0.1 }} className="w-1.5 bg-white" />
-                  <motion.div animate={{ height: [4, 20, 4] }} transition={{ repeat: Infinity, duration: 0.4, delay: 0.2 }} className="w-1.5 bg-white" />
-               </div>
-            ) : (
-               <Play className="h-10 w-10 text-white fill-current translate-x-0.5 opacity-95" />
-            )}
-          </div>
-
-          {/* High-fidelity Progress Ring */}
-          <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
-             <motion.circle
-               cx="128" cy="128" r="121"
-               fill="none"
-               stroke="var(--c-green)"
-               strokeWidth="5"
-               strokeDasharray="760"
-               initial={{ strokeDashoffset: 760 }}
-               animate={isRunning ? { strokeDashoffset: 0 } : { strokeDashoffset: 760 }}
-               transition={{ duration: 5, ease: "linear", repeat: Infinity }}
-             />
-          </svg>
-        </motion.button>
+            <span className="text-[11px] font-mono font-medium text-white tracking-widest uppercase mb-2">Extract Voice</span>
+            
+            <div className="h-6 w-6 flex items-center justify-center">
+               <Play className="h-5 w-5 text-white fill-current translate-x-0.5" />
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Status Indicator */}
-      <div className="mt-14 flex flex-col items-center gap-2">
-        <div className="flex items-center gap-3">
-           <div className={`h-3 w-3 rounded-full ${isRunning ? "bg-[var(--c-green)] animate-pulse shadow-[0_0_12px_var(--c-green)]" : "bg-[var(--c-green)] shadow-[0_0_10px_var(--c-green)]"}`} />
-           <span className="text-[18px] font-bold uppercase tracking-[0.3em]">{isRunning ? "Processing" : "Ready"}</span>
+      <div className="flex flex-col items-center gap-1 -mt-4">
+        <div className="flex items-center gap-2">
+           <div className={`h-3 w-3 rounded-full ${isRunning ? "bg-yellow-500" : "bg-[var(--c-green)]"}`} />
+           <span className="text-base font-bold">{isRunning ? "Processing" : "Ready"}</span>
         </div>
-        <span className="text-[13px] text-[var(--text-soft)] uppercase tracking-[0.2em] font-bold opacity-50">{isRunning ? "Isolating signal streams..." : "Engine is idle."}</span>
+        <span className="text-[13px] text-[var(--text-muted)]">{isRunning ? "Isolating signal streams..." : "Engine is idle."}</span>
       </div>
     </div>
   );
