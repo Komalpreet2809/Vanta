@@ -22,107 +22,103 @@ export function EngineCenter({
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl mx-auto">
-      {/* SVG Diagram Container */}
-      <div className="relative w-[540px] h-[400px] flex items-center justify-center">
-        {/* Signal Lines (SVG) */}
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 540 400">
-          {/* Large Dashed Outer Circle */}
-          <circle cx="270" cy="200" r="160" fill="none" stroke="var(--border-main)" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
+    <div className="flex flex-col items-center justify-center w-full h-full max-w-6xl mx-auto px-4">
+      {/* SVG Diagram Container - Ultra-wide layout to accommodate 260px circle */}
+      <div className="relative w-full aspect-[3/1] flex items-center justify-center">
+        {/* The Signal Diagram SVG */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid meet">
+          {/* Faint Outer Ring */}
+          <circle cx="600" cy="200" r="240" fill="none" stroke="var(--border-main)" strokeWidth="1" strokeDasharray="4 4" opacity="0.1" />
           
-          {/* Signal Paths - Curved into side junctions */}
+          {/* LEFT SIGNAL ARM - Pushed to the absolute extremes */}
           <g>
-            {/* Left Junction Point */}
-            <circle cx="180" cy="200" r="5" fill="var(--text-main)" />
+            {/* Junction Dot at x=100 (Center is 600, Circle radius is 130) */}
+            <circle cx="100" cy="200" r="6" fill="var(--text-main)" />
             
-            {/* Reference to Junction */}
+            {/* Curved Arms pointing to Input Column */}
             <path
-              d="M 60 120 Q 150 120 150 160 L 150 180 Q 150 200 180 200"
+              d="M 20 80 Q 100 80 100 120 L 100 170 Q 100 200 100 200"
               fill="none"
               stroke="var(--border-main)"
-              strokeWidth="1.5"
+              strokeWidth="2"
             />
-            {/* Noise to Junction */}
             <path
-              d="M 60 280 Q 150 280 150 240 L 150 220 Q 150 200 180 200"
+              d="M 20 320 Q 100 320 100 280 L 100 230 Q 100 200 100 200"
               fill="none"
               stroke="var(--border-main)"
-              strokeWidth="1.5"
+              strokeWidth="2"
             />
+            {/* Long Join Line to the Hero Circle (Edge at 600 - 130 = 470) */}
+            <path d="M 100 200 L 460 200" stroke="var(--border-main)" strokeWidth="2" />
           </g>
 
+          {/* RIGHT SIGNAL ARM - Pushed to the absolute extremes */}
           <g>
-            {/* Right Junction Point */}
-            <circle cx="360" cy="200" r="5" fill="var(--text-main)" />
+            {/* Junction Dot at x=1100 */}
+            <circle cx="1100" cy="200" r="6" fill="var(--text-main)" />
             
-            {/* Junction to Clean */}
+            {/* Curved Arms pointing to Output Column */}
             <path
-              d="M 360 200 Q 390 200 390 180 L 390 160 Q 390 120 480 120"
+              d="M 1100 200 Q 1100 200 1100 170 L 1100 120 Q 1100 80 1180 80"
               fill="none"
               stroke="var(--border-main)"
-              strokeWidth="1.5"
+              strokeWidth="2"
             />
-            {/* Junction to Residue */}
             <path
-              d="M 360 200 Q 390 200 390 220 L 390 240 Q 390 280 480 280"
+              d="M 1100 200 Q 1100 200 1100 230 L 1100 280 Q 1100 320 1180 320"
               fill="none"
               stroke="var(--border-main)"
-              strokeWidth="1.5"
+              strokeWidth="2"
             />
+            {/* Long Join Line from the Hero Circle (Edge at 600 + 130 = 730) */}
+            <path d="M 740 200 L 1100 200" stroke="var(--border-main)" strokeWidth="2" />
           </g>
 
-          {/* Source/Sink Nodes */}
+          {/* End-point Dots */}
           {/* Reference */}
-          <circle cx="60" cy="120" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="60" cy="120" r="5" fill="#4A6B4A" />
-          <text x="35" y="100" className="text-[12px] font-bold fill-[var(--text-main)]">Reference</text>
+          <circle cx="20" cy="80" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="2" />
+          <circle cx="20" cy="80" r="5" fill="#4A6B4A" />
+          <text x="5" y="55" className="text-[16px] font-black fill-[var(--text-main)]">Reference</text>
           
           {/* Noise */}
-          <circle cx="60" cy="280" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="60" cy="280" r="5" fill="#B54545" />
-          <text x="45" y="305" className="text-[12px] font-bold fill-[var(--text-main)]">Noise</text>
+          <circle cx="20" cy="320" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="2" />
+          <circle cx="20" cy="320" r="5" fill="#B54545" />
+          <text x="5" y="350" className="text-[16px] font-black fill-[var(--text-main)]">Noise</text>
 
           {/* Clean Voice */}
-          <circle cx="480" cy="120" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="480" cy="120" r="5" fill="#4A6B4A" />
-          <text x="445" y="100" className="text-[12px] font-bold fill-[var(--text-main)]">Clean Voice</text>
+          <circle cx="1180" cy="80" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="2" />
+          <circle cx="1180" cy="80" r="5" fill="#4A6B4A" />
+          <text x="1100" y="55" className="text-[16px] font-black fill-[var(--text-main)]">Clean Voice</text>
 
-          {/* Residue (Noise) */}
-          <circle cx="480" cy="280" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="480" cy="280" r="5" fill="#745296" />
-          <text x="420" y="305" className="text-[12px] font-bold fill-[var(--text-main)]">Residue (Noise)</text>
+          {/* Residue */}
+          <circle cx="1180" cy="320" r="10" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="2" />
+          <circle cx="1180" cy="320" r="5" fill="#745296" />
+          <text x="1060" y="350" className="text-[16px] font-black fill-[var(--text-main)]">Residue (Noise)</text>
         </svg>
 
-        {/* Central Core Circle (THE HERO COMPONENT) */}
+        {/* Central Hero Circle - Exactly as requested */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <button
             disabled={!canExtract || isRunning}
             onClick={onExtract}
-            className={`group relative h-[260px] w-[260px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[6px] border-[#333333] shadow-[0_0_60px_rgba(0,0,0,0.2)] overflow-hidden disabled:opacity-90 active:scale-95`}
+            className={`group relative h-[260px] w-[260px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[6px] border-[#333333] shadow-[0_0_60px_rgba(0,0,0,0.3)] overflow-hidden disabled:opacity-90 active:scale-95`}
           >
-            {/* Green Progress/Status Ring (Industrial heavy) */}
+            {/* Status Arc */}
             <div className={`absolute inset-[-6px] rounded-full border-[6px] border-transparent border-t-[var(--c-green)] transition-all duration-1000 ${isRunning ? 'animate-spin' : 'opacity-40'}`} />
             
-            {/* Inner Border Line */}
             <div className="absolute inset-[6px] rounded-full border-[1px] border-white/10" />
 
-            {/* Waveform Logo (Exactly as inspo) */}
             <div className="flex items-center gap-[5px] h-16 mb-4">
               {[0.4, 0.6, 1.0, 0.7, 0.4].map((h, i) => (
                 <div key={i} className={`w-[5px] rounded-sm bg-white transition-all duration-300 ${isRunning ? 'animate-pulse' : ''}`} style={{ height: `${h * 100}%` }} />
               ))}
             </div>
 
-            {/* Extract Voice Text (Bold Monospace) */}
             <span className="text-[22px] font-mono font-black text-white uppercase tracking-tighter mb-6 leading-none">Extract Voice</span>
             
-            {/* Play Icon (Simple triangle) */}
             <div className="h-8 w-8 flex items-center justify-center">
                <Play className="h-8 w-8 text-white fill-current translate-x-0.5" />
             </div>
-            
-            {/* Radial glow when active */}
-            <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(74,107,74,0.15)_0%,transparent_70%)] transition-opacity duration-700 ${isRunning ? 'opacity-100' : 'opacity-0'}`} />
           </button>
         </div>
       </div>
