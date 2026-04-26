@@ -91,7 +91,7 @@ export function AudioCard({
   return (
     <div className={`card-border p-3 flex flex-col gap-3 bg-[var(--bg-app)] ${className}`}>
       <div className="pb-2 border-b border-[var(--border-main)]/50">
-        <h3 className="font-mono-heading text-[14px] font-black tracking-wide uppercase">
+        <h3 className="font-mono-heading text-[13px] font-black tracking-tight uppercase opacity-80">
           {heading}
         </h3>
       </div>
@@ -104,8 +104,8 @@ export function AudioCard({
               <Music className="h-4 w-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="truncate text-[13px] font-bold">{filename}</div>
-              <div className="text-[11px] font-mono font-bold text-[var(--text-muted)] mt-0.5">
+              <div className="truncate text-[12px] font-bold">{filename}</div>
+              <div className="text-[10px] font-mono font-bold text-[var(--text-muted)] mt-0.5">
                 {sizeStr} • {formatTime(duration)}
               </div>
             </div>
@@ -132,7 +132,7 @@ export function AudioCard({
             </button>
             <div className="flex-1 relative">
               <div ref={containerRef} className="w-full" />
-              <div className="flex justify-between text-[9px] font-mono font-bold text-[var(--text-muted)] mt-1">
+              <div className="flex justify-between text-[10px] font-mono font-bold text-[var(--text-muted)] mt-1">
                 <span>{formatTime(time)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
@@ -165,7 +165,7 @@ export function AudioCard({
         >
           <div className="flex flex-col items-center gap-3">
             <FileAudio className="h-7 w-7 stroke-[1.5] text-[var(--text-main)]" />
-            <div className="text-[13px] text-[var(--text-main)] leading-relaxed text-center">
+            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium">
               {(emptyLabel ?? (onFile ? "Drag & drop an audio file here\nor click to browse" : "No signal loaded")).split('\n').map((line, i) => (
                 <div key={i}>{line}</div>
               ))}
