@@ -89,7 +89,7 @@ export function AudioCard({
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div className={`rounded-[6px] p-5 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
+    <div className={`card-border p-5 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
       <div className="flex items-center justify-between pb-1">
         <div className="flex items-center gap-2.5">
           <div className="h-8 w-8 rounded-full border border-[var(--border-card)] flex items-center justify-center bg-black/5 dark:bg-white/5">
@@ -169,7 +169,7 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`flex-1 border border-dashed border-[var(--border-dashed)] rounded-[6px] flex items-center justify-center transition-all ${
+          className={`flex-1 border-2 border-dashed border-[var(--text-main)] rounded-none flex items-center justify-center transition-all ${
             onFile ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/5" : ""
           } ${isDragging ? "bg-black/5 dark:bg-white/5" : "bg-transparent"}`}
         >

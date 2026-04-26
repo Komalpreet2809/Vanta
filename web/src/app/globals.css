@@ -64,11 +64,11 @@
   }
   
   .card-border {
-    @apply border border-[var(--border-card)] rounded-[6px];
+    @apply border-2 border-[var(--text-main)] rounded-none shadow-[4px_4px_0_var(--text-main)] transition-all;
   }
   
   .btn-icon {
-    @apply flex items-center justify-center border border-[var(--border-card)] rounded-[6px] bg-[var(--bg-btn)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-[var(--text-main)];
+    @apply flex items-center justify-center border-2 border-[var(--text-main)] rounded-none bg-[var(--bg-btn)] text-[var(--text-main)] shadow-[2px_2px_0_var(--text-main)] hover:-translate-y-[1px] hover:shadow-[3px_3px_0_var(--text-main)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all cursor-pointer;
   }
 }
 

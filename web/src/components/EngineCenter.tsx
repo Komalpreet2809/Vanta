@@ -102,14 +102,14 @@ export function EngineCenter({
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="relative h-[320px] w-[320px] rounded-full border-[10px] border-[#D9D7CE] shadow-lg flex items-center justify-center bg-[#EFEDE6]">
             {/* Dark Progress Ring Segment */}
-            <div className="absolute inset-[-10px] rounded-full border-[10px] border-transparent border-t-[#6B7B5B] rotate-[45deg]" />
+            <div className="absolute inset-[-10px] rounded-full border-[10px] border-transparent border-t-[var(--c-green)] rotate-[45deg]" />
             
             <motion.button
               disabled={!canExtract || isRunning}
               onClick={onExtract}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className="relative h-[260px] w-[260px] rounded-full bg-[var(--bg-card)] shadow-inner flex flex-col items-center justify-center"
+              className="relative h-[260px] w-[260px] rounded-full bg-[var(--bg-card)] border-[3px] border-[var(--text-main)] shadow-[6px_6px_0_var(--text-main)] flex flex-col items-center justify-center transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--text-main)] active:shadow-none active:translate-x-[6px] active:translate-y-[6px]"
             >
               {/* Waveform Icon (Green bars in reference) */}
               <div className="flex items-center gap-[4px] h-10 mb-4">
@@ -118,7 +118,7 @@ export function EngineCenter({
                     key={i}
                     animate={isRunning ? { height: ["40%", "100%", "40%"] } : { height: `${h * 100}%` }}
                     transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.1 }}
-                    className="w-[4px] rounded-full bg-[#6B7B5B]"
+                    className="w-[4px] rounded-full bg-[var(--c-green)]"
                   />
                 ))}
               </div>
@@ -138,7 +138,7 @@ export function EngineCenter({
           </div>
           
           {/* Subtle Glow behind the orb */}
-          <div className="absolute -inset-10 bg-[#6B7B5B]/5 rounded-full blur-3xl -z-10" />
+          <div className="absolute -inset-10 bg-[var(--c-green)]/10 rounded-full blur-3xl -z-10" />
         </div>
       </div>
 
