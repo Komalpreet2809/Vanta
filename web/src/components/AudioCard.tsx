@@ -4,7 +4,7 @@ import { Download, FileAudio, Music, Pause, Play, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
-type Variant = "charcoal" | "red" | "green" | "purple";
+type Variant = "charcoal" | "red" | "green" | "purple" | "brown";
 
 type Props = {
   heading: string;
