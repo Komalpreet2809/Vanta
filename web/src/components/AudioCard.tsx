@@ -87,48 +87,48 @@ export function AudioCard({
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div className="card-border p-4 flex flex-col gap-4 bg-[var(--bg-app)]">
-      <h3 className="font-mono-heading text-[13px] tracking-wide uppercase">
+    <div className="card-border p-3 flex flex-col gap-3 bg-[var(--bg-app)]">
+      <h3 className="font-mono-heading text-[12px] tracking-wide uppercase">
         {heading}
       </h3>
 
       {source ? (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {/* File Info Row */}
-          <div className="flex items-center gap-3">
-            <div className="btn-icon h-10 w-10 shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="btn-icon h-9 w-9 shrink-0">
               <Music className="h-4 w-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="truncate text-sm font-bold">{filename}</div>
-              <div className="text-xs font-mono font-bold text-[var(--text-muted)] mt-0.5">
+              <div className="truncate text-[13px] font-bold">{filename}</div>
+              <div className="text-[11px] font-mono font-bold text-[var(--text-muted)] mt-0.5">
                 {sizeStr} • {formatTime(duration)}
               </div>
             </div>
             {onClear && (
-              <button onClick={onClear} className="btn-icon h-10 w-10 shrink-0">
-                <X className="h-5 w-5 stroke-[1.5]" />
+              <button onClick={onClear} className="btn-icon h-9 w-9 shrink-0">
+                <X className="h-4 w-4 stroke-[1.5]" />
               </button>
             )}
             {onDownload && (
-              <button onClick={onDownload} className="btn-icon h-10 w-10 shrink-0">
-                <Download className="h-5 w-5 stroke-[1.5]" />
+              <button onClick={onDownload} className="btn-icon h-9 w-9 shrink-0">
+                <Download className="h-4 w-4 stroke-[1.5]" />
               </button>
             )}
           </div>
 
           {/* Waveform Row */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => wsRef.current?.playPause()}
               disabled={!ready}
-              className="btn-icon h-10 w-10 shrink-0 disabled:opacity-50"
+              className="btn-icon h-9 w-9 shrink-0 disabled:opacity-50"
             >
-              {playing ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current translate-x-[1px]" />}
+              {playing ? <Pause className="h-3.5 w-3.5 fill-current" /> : <Play className="h-3.5 w-3.5 fill-current translate-x-[1px]" />}
             </button>
             <div className="flex-1 relative">
               <div ref={containerRef} className="w-full" />
-              <div className="flex justify-between text-[10px] font-mono font-bold text-[var(--text-muted)] mt-1">
+              <div className="flex justify-between text-[9px] font-mono font-bold text-[var(--text-muted)] mt-1">
                 <span>{formatTime(time)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
@@ -155,13 +155,13 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`border border-dashed border-[var(--border-main)] rounded-md p-6 flex flex-col items-center justify-center text-center transition-colors min-h-[140px] ${
+          className={`border border-dashed border-[var(--border-main)] rounded-md p-4 flex flex-col items-center justify-center text-center transition-colors min-h-[110px] ${
             onFile ? "cursor-pointer hover:bg-black/5" : ""
           } ${isDragging ? "bg-black/5" : "bg-transparent"}`}
         >
-          <div className="flex flex-col items-center gap-3">
-            <FileAudio className="h-6 w-6 stroke-[1.5] text-[var(--text-main)]" />
-            <div className="text-[13px] text-[var(--text-main)] leading-relaxed text-center">
+          <div className="flex flex-col items-center gap-2">
+            <FileAudio className="h-5 w-5 stroke-[1.5] text-[var(--text-main)]" />
+            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center">
               {(emptyLabel ?? (onFile ? "Drag & drop an audio file here\nor click to browse" : "No signal loaded")).split('\n').map((line, i) => (
                 <div key={i}>{line}</div>
               ))}

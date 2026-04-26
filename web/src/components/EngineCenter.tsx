@@ -22,93 +22,59 @@ export function EngineCenter({
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl mx-auto py-8">
+    <div className="flex flex-col items-center justify-center w-full h-full max-w-lg mx-auto">
       {/* SVG Diagram Container */}
-      <div className="relative w-[500px] h-[400px]">
-        {/* Signal Lines (SVG) */}
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 500 400">
-          {/* Reference Line */}
-          <path
-            d="M 60 120 L 110 120 Q 120 120 120 130 L 120 190 Q 120 200 130 200 L 150 200"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-          />
-          {/* Reference Dot */}
-          <circle cx="60" cy="120" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="60" cy="120" r="3" fill="var(--c-brown)" />
-          <text x="50" y="105" className="text-xs font-bold fill-[var(--text-main)]">Reference</text>
+      <div className="relative w-full h-[300px] mb-4">
+        <svg viewBox="0 0 500 300" className="w-full h-full">
+          {/* Signal paths simplified */}
+          <path d="M 60 80 L 250 150" stroke="var(--border-main)" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+          <path d="M 60 220 L 250 150" stroke="var(--border-main)" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+          <path d="M 250 150 L 440 80" stroke="var(--border-main)" strokeWidth="1.5" fill="none" />
+          <path d="M 250 150 L 440 220" stroke="var(--border-main)" strokeWidth="1.5" fill="none" />
           
-          {/* Noise Line */}
-          <path
-            d="M 60 280 L 110 280 Q 120 280 120 270 L 120 210 Q 120 200 130 200 L 150 200"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-          />
-          {/* Noise Dot */}
-          <circle cx="60" cy="280" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="60" cy="280" r="3" fill="var(--c-red)" />
-          <text x="50" y="305" className="text-xs font-bold fill-[var(--text-main)]">Noise</text>
+          {/* Dots */}
+          <circle cx="60" cy="80" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="60" cy="80" r="3" fill="var(--c-brown)" />
+          <text x="50" y="65" className="text-[11px] font-bold fill-[var(--text-main)]">Reference</text>
 
-          {/* Left Join Node */}
-          <circle cx="150" cy="200" r="5" fill="var(--border-main)" />
-          <circle cx="150" cy="200" r="2.5" fill="var(--bg-app)" />
+          <circle cx="60" cy="220" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="60" cy="220" r="3" fill="var(--c-red)" />
+          <text x="50" y="245" className="text-[11px] font-bold fill-[var(--text-main)]">Noisy Audio</text>
 
-          {/* Clean Voice Line */}
-          <path
-            d="M 350 200 L 370 200 Q 380 200 380 190 L 380 130 Q 380 120 390 120 L 440 120"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-          />
-          {/* Clean Voice Dot */}
-          <circle cx="440" cy="120" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="440" cy="120" r="3" fill="var(--c-green)" />
-          <text x="410" y="105" className="text-xs font-bold fill-[var(--text-main)]">Clean Voice</text>
+          <circle cx="440" cy="80" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="440" cy="80" r="3" fill={hasOutput ? "var(--c-green)" : "var(--border-main)"} />
+          <text x="415" y="65" className="text-[11px] font-bold fill-[var(--text-main)]">Clean</text>
 
-          {/* Residue Line */}
-          <path
-            d="M 350 200 L 370 200 Q 380 200 380 210 L 380 270 Q 380 280 390 280 L 440 280"
-            fill="none"
-            stroke="var(--border-main)"
-            strokeWidth="1.5"
-          />
-          {/* Residue Dot */}
-          <circle cx="440" cy="280" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
-          <circle cx="440" cy="280" r="3" fill="var(--c-purple)" />
-          <text x="400" y="305" className="text-xs font-bold fill-[var(--text-main)]">Residue (Noise)</text>
-
-          {/* Right Join Node */}
-          <circle cx="350" cy="200" r="5" fill="var(--border-main)" />
-          <circle cx="350" cy="200" r="2.5" fill="var(--bg-app)" />
-
-          {/* Dashed outer ring */}
-          <circle cx="250" cy="200" r="100" fill="none" stroke="var(--border-dashed)" strokeWidth="1" strokeDasharray="4 4" />
+          <circle cx="440" cy="220" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
+          <circle cx="440" cy="220" r="3" fill={hasOutput ? "var(--c-purple)" : "var(--border-main)"} />
+          <text x="415" y="245" className="text-[11px] font-bold fill-[var(--text-main)]">Residue</text>
         </svg>
 
-        {/* Central Core Circle */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] h-[160px] rounded-full border-4 border-[var(--bg-app)] flex items-center justify-center bg-[var(--c-dark-green)] shadow-sm">
-          <button
-            disabled={!canExtract || isRunning}
-            onClick={onExtract}
-            className="w-[140px] h-[140px] rounded-full border-[3px] border-[var(--bg-app)] bg-[var(--c-charcoal)] flex flex-col items-center justify-center disabled:opacity-90 transition-transform active:scale-95"
-          >
-             {/* Waveform Logo */}
-             <div className="flex items-end gap-[3px] mb-3 h-6">
-              {[0.4, 0.7, 1, 0.8, 0.5].map((h, i) => (
-                <div key={i} className={`w-[2px] rounded-full bg-white transition-all ${isRunning ? 'animate-pulse' : ''}`} style={{ height: `${h * 100}%` }} />
-              ))}
+        {/* Central Orb */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className={`relative h-[120px] w-[120px] rounded-full border-[1.5px] border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-center)] transition-all duration-700 ${canExtract && !isRunning ? 'border-[var(--c-green)] shadow-[0_0_20px_rgba(74,107,74,0.1)]' : ''}`}>
+             <div className={`h-[100px] w-[100px] rounded-full border-[1.5px] border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-center)] transition-all duration-700 ${isRunning ? 'border-[var(--c-green)]' : ''}`}>
+               <div className={`h-16 w-16 rounded-full transition-all duration-1000 flex items-center justify-center ${isRunning ? 'bg-[var(--c-dark-green)]' : 'bg-[#1E1E1E]'}`}>
+                 <div className="h-8 w-8 rounded-full bg-white/10" />
+               </div>
             </div>
-
-            <span className="text-[11px] font-mono font-bold text-white uppercase mb-2">Extract Voice</span>
-            
-            <div className="h-6 w-6 flex items-center justify-center">
-               <Play className="h-5 w-5 text-white fill-current translate-x-0.5" />
-            </div>
-          </button>
+          </div>
         </div>
       </div>
+
+      {/* Action Button */}
+      <button
+        onClick={onExtract}
+        disabled={!canExtract || isRunning}
+        className={`group flex flex-col items-center justify-center py-4 px-8 rounded-full border-[1.5px] transition-all duration-500 min-w-[140px] ${
+          canExtract && !isRunning
+            ? "border-[var(--c-green)] bg-[var(--bg-center)] hover:shadow-[0_0_20px_rgba(74,107,74,0.2)]" 
+            : "border-[var(--border-main)] opacity-50 cursor-not-allowed"
+        }`}
+      >
+        <span className="text-[11px] font-mono font-bold text-[var(--text-main)] uppercase mb-1">Extract Voice</span>
+        <Play className={`h-4 w-4 fill-current ${canExtract && !isRunning ? 'text-[var(--c-green)]' : 'text-[var(--text-main)]'}`} />
+      </button>
     </div>
   );
 }
