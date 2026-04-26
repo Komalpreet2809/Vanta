@@ -38,16 +38,14 @@ export function DropZone({ onFile }: Props) {
         };
         input.click();
       }}
-      className={`panel p-8 border-dashed flex flex-col items-center justify-center text-center gap-3 cursor-pointer transition-all ${
-        active ? "bg-[var(--bg-page)] scale-[1.01] border-[var(--text)]" : "bg-[var(--bg-page)]/20 hover:bg-[var(--bg-page)]/40"
+      className={`card-border border-dashed p-4 flex items-center justify-center gap-4 cursor-pointer transition-colors ${
+        active ? "bg-black/5" : "bg-[var(--bg-app)] hover:bg-black/5"
       }`}
     >
-      <div className="h-10 w-10 flex items-center justify-center rounded-full border border-dashed border-[var(--border)] opacity-40">
-        <Upload className="h-5 w-5" />
-      </div>
-      <span className="text-[11px] font-bold text-[var(--text-soft)] uppercase tracking-widest leading-relaxed">
+      <Upload className="h-5 w-5 stroke-[1.5] text-[var(--text-main)]" />
+      <div className="text-sm text-[var(--text-main)] leading-tight text-left">
         Drag & drop audio files here<br />or click to browse
-      </span>
+      </div>
     </div>
   );
 }

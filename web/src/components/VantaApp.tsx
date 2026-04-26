@@ -5,9 +5,9 @@ import { AudioCard } from "./AudioCard";
 import { DropZone } from "./DropZone";
 import { EngineCenter } from "./EngineCenter";
 import { Header } from "./Header";
-import { StatusBar } from "./StatusBar";
 import { TipsCard } from "./TipsCard";
 import { extract, health, type ExtractMeta } from "../lib/api";
+import { Download } from "lucide-react";
 
 type Result = {
   extracted: Blob;
@@ -23,9 +23,7 @@ export function VantaApp() {
   const [result, setResult] = useState<Result | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
-  const [backend, setBackend] = useState<"checking" | "online" | "offline">(
-    "checking",
-  );
+  const [backend, setBackend] = useState<"checking" | "online" | "offline">("checking");
 
   useEffect(() => {
     let cancelled = false;
@@ -77,125 +75,115 @@ export function VantaApp() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-page)] font-mono selection:bg-[#1a1a1a] selection:text-[#efeae0] overflow-hidden">
-      <Header />
+    <div className="min-h-screen bg-[var(--bg-app)] flex items-center justify-center p-8">
+      {/* Main Container Outline */}
+      <div className="w-full max-w-[1400px] h-[85vh] min-h-[700px] border border-[var(--border-main)] rounded-sm flex flex-col bg-[var(--bg-app)] shadow-sm overflow-hidden">
+        
+        <Header />
 
-      <main className="flex-1 grid grid-cols-[1fr_1.2fr_1fr] divide-x divide-[var(--border-strong)] overflow-hidden">
-        {/* INPUTS */}
-        <section className="p-10 flex flex-col gap-8 bg-[#e8e6db] overflow-y-auto">
-          <div>
-            <h2 className="text-[28px] font-bold uppercase tracking-[0.3em] mb-1">Inputs</h2>
-            <p className="text-[13px] font-bold text-[var(--text-soft)]">Provide reference and noise audio.</p>
-          </div>
+        <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] divide-x divide-[var(--border-main)] overflow-hidden">
+          {/* INPUTS COLUMN */}
+          <section className="p-6 flex flex-col overflow-y-auto">
+            <div className="mb-6">
+              <h2 className="font-mono-heading text-lg uppercase tracking-widest mb-1">Inputs</h2>
+              <p className="text-sm text-[var(--text-main)]">Provide reference and noise audio.</p>
+            </div>
 
-          <div className="flex flex-col gap-8">
-            <AudioCard
-              heading="Reference Audio"
-              source={enrollment}
-              variant="charcoal"
-              onClear={() => setEnrollment(null)}
-              emptyLabel="No reference audio loaded"
-            />
+            <div className="flex flex-col gap-4">
+              <AudioCard
+                heading="Reference Audio"
+                source={enrollment}
+                variant="charcoal"
+                onClear={() => setEnrollment(null)}
+                emptyLabel="No reference audio loaded"
+              />
 
-            <AudioCard
-              heading="Noise Audio"
-              source={mixture}
-              variant="red"
-              onClear={() => setMixture(null)}
-              emptyLabel="No noisy recording loaded"
-            />
+              <AudioCard
+                heading="Noise Audio"
+                source={mixture}
+                variant="red"
+                onClear={() => setMixture(null)}
+                emptyLabel="No noisy recording loaded"
+              />
 
-            <DropZone onFile={handleDrop} />
-            <TipsCard />
-          </div>
-        </section>
+              <DropZone onFile={handleDrop} />
+              <TipsCard />
+            </div>
+          </section>
 
-        {/* ENGINE */}
-        <section className="p-10 flex flex-col bg-[#e2dfd2] overflow-hidden">
-          <div className="text-center mb-8">
-            <h2 className="text-[28px] font-bold uppercase tracking-[0.55em] mb-1">Vanta Engine</h2>
-            <p className="text-[13px] font-bold text-[var(--text-soft)]">Isolates the target voice from noise.</p>
-          </div>
+          {/* ENGINE COLUMN */}
+          <section className="bg-[var(--bg-center)] p-6 flex flex-col overflow-hidden">
+            <div className="text-center mb-4">
+              <h2 className="font-mono-heading text-lg uppercase tracking-widest mb-1">Vanta Engine</h2>
+              <p className="text-sm text-[var(--text-main)]">Isolates the target voice from noise.</p>
+            </div>
 
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <EngineCenter
-              canExtract={!!canRun}
-              status={status}
-              hasReference={!!enrollment}
-              hasNoise={!!mixture}
-              hasOutput={!!result}
-              onExtract={run}
-            />
-          </div>
-        </section>
+            <div className="flex-1 flex flex-col items-center justify-center">
+              <EngineCenter
+                canExtract={!!canRun}
+                status={status}
+                hasReference={!!enrollment}
+                hasNoise={!!mixture}
+                hasOutput={!!result}
+                onExtract={run}
+              />
+            </div>
+          </section>
 
-        {/* OUTPUTS */}
-        <section className="p-10 flex flex-col gap-8 bg-[#e8e6db] overflow-y-auto">
-          <div>
-            <h2 className="text-[28px] font-bold uppercase tracking-[0.3em] mb-1">Outputs</h2>
-            <p className="text-[13px] font-bold text-[var(--text-soft)]">Clean voice and residue (noise).</p>
-          </div>
+          {/* OUTPUTS COLUMN */}
+          <section className="p-6 flex flex-col overflow-y-auto">
+            <div className="mb-6">
+              <h2 className="font-mono-heading text-lg uppercase tracking-widest mb-1">Outputs</h2>
+              <p className="text-sm text-[var(--text-main)]">Clean voice and residue (noise).</p>
+            </div>
 
-          <div className="flex flex-col gap-8 flex-1">
-            <AudioCard
-              heading="Clean Voice"
-              source={result?.extracted ?? null}
-              filenameOverride="Extracted_Voice.wav"
-              variant="green"
-              onDownload={
-                result
-                  ? () => download(result.extracted, "vanta_extracted.wav")
-                  : undefined
-              }
-              emptyLabel="—"
-            />
+            <div className="flex flex-col gap-4 flex-1">
+              <AudioCard
+                heading="Clean Voice"
+                source={result?.extracted ?? null}
+                filenameOverride="Extracted_Voice.mp3"
+                variant="green"
+                onDownload={
+                  result
+                    ? () => download(result.extracted, "vanta_extracted.mp3")
+                    : undefined
+                }
+                emptyLabel="—"
+              />
 
-            <AudioCard
-              heading="Residue (Noise)"
-              source={result?.residue ?? null}
-              filenameOverride="Residue_Noise.wav"
-              variant="purple"
-              onDownload={
-                result
-                  ? () => download(result.residue, "vanta_residue.wav")
-                  : undefined
-              }
-              emptyLabel="—"
-            />
+              <AudioCard
+                heading="Residue (Noise)"
+                source={result?.residue ?? null}
+                filenameOverride="Residue_Noise.mp3"
+                variant="purple"
+                onDownload={
+                  result
+                    ? () => download(result.residue, "vanta_residue.mp3")
+                    : undefined
+                }
+                emptyLabel="—"
+              />
 
-            {!result && (
-              <div className="panel flex-1 flex flex-col items-center justify-center p-12 text-center bg-[var(--bg-page)]/20 border-dashed border-2 mt-2">
-                 <div className="h-20 w-20 border-2 border-dashed border-[var(--border-strong)] rounded-full flex items-center justify-center mb-8 opacity-40">
-                   <svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                     <path d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5 5-5M12 4v12" />
-                   </svg>
-                 </div>
-                 <p className="text-[14px] font-bold text-[var(--text-dim)] uppercase tracking-[0.3em] leading-relaxed">Outputs will appear here<br/>after processing is complete.</p>
-              </div>
-            )}
+              {!result && (
+                <div className="card-border border-dashed p-8 flex flex-col items-center justify-center text-center mt-2 flex-1 min-h-[120px]">
+                   <Download className="h-5 w-5 stroke-[1.5] text-[var(--text-main)] mb-3" />
+                   <p className="text-sm text-[var(--text-main)] leading-relaxed">
+                     Outputs will appear here<br />after processing is complete.
+                   </p>
+                </div>
+              )}
+            </div>
+          </section>
+        </main>
 
-            {result && (
-              <div className="mt-auto panel p-6 border-l-[8px] border-l-[var(--c-green)] bg-[var(--bg-card)] animate-in fade-in slide-in-from-bottom-4 duration-500">
-                 <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                       <div className="h-3 w-3 rounded-full bg-[var(--c-green)] shadow-[0_0_12px_var(--c-green)]" />
-                       <span className="text-[14px] font-bold uppercase tracking-[0.3em]">Extraction Successful</span>
-                    </div>
-                 </div>
-                 <p className="text-[16px] font-bold leading-tight tabular-nums">{message}</p>
-              </div>
-            )}
-          </div>
-        </section>
-      </main>
-
-      <footer className="px-10 py-4 border-t border-[var(--border-strong)] flex items-center justify-between bg-[#e2dfd2] relative z-[1000]">
-         <span className="text-[14px] font-bold tracking-[0.3em] uppercase opacity-80">VANTA v1.0.0</span>
-         <div className="flex items-center gap-4">
-            <div className={`h-3 w-3 rounded-full ${backend === "online" ? "bg-[var(--ok)] shadow-[0_0_10px_var(--ok)]" : "bg-[var(--err)] shadow-[0_0_10px_var(--err)]"}`} />
-            <span className="text-[14px] font-bold uppercase tracking-[0.3em]">{backend === "online" ? "Ready" : "Offline"}</span>
-         </div>
-      </footer>
+        <footer className="px-6 py-2 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-app)]">
+           <span className="text-xs font-mono font-semibold tracking-wide">VANTA v1.0.0</span>
+           <div className="flex items-center gap-2">
+              <div className={`h-2.5 w-2.5 rounded-full ${backend === "online" ? "bg-[var(--c-green)]" : "bg-[var(--c-red)]"}`} />
+              <span className="text-xs font-semibold">{backend === "online" ? "Ready" : "Offline"}</span>
+           </div>
+        </footer>
+      </div>
     </div>
   );
 }
