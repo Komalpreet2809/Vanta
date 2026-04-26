@@ -1,12 +1,16 @@
 "use client";
 
-import { Cpu } from "lucide-react";
+import { Cpu, History as HistoryIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { ControlRack } from "./ControlRack";
 import { FileUploadSlot } from "./FileUploadSlot";
 import type { Quality } from "./QualityDropdown";
 import { WaveformRow } from "./WaveformRow";
+import { MultiStageProgress } from "./MultiStageProgress";
+import { HistorySidebar, type HistoryItem } from "./HistorySidebar";
 import { extract, health, type ExtractMeta } from "../lib/api";
+
+type Stage = "decoding" | "extracting" | "matching" | "encoding";
 
 type Result = {
   extracted: Blob;
@@ -27,6 +31,11 @@ export function VantaApp() {
     "checking",
   );
   const [device, setDevice] = useState<string | undefined>();
+  
+  // New States
+  const [stage, setStage] = useState<Stage>("decoding");
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,13 +54,43 @@ export function VantaApp() {
   const run = useCallback(async () => {
     if (!mixture || !enrollment) return;
     setStatus("running");
+    setStage("decoding");
     setMessage("");
     setResult(null);
+
     try {
       const t0 = performance.now();
-      const r = await extract(mixture, enrollment);
+      
+      // We start extraction early but pace the UI updates
+      const extractPromise = extract(mixture, enrollment);
+      
+      // Phase 1: Decoding (simulated 800ms)
+      await new Promise(r => setTimeout(r, 800));
+      setStage("extracting");
+      
+      // Phase 2: Extraction (simulated 1.5s)
+      await new Promise(r => setTimeout(r, 1500));
+      setStage("matching");
+      
+      // Phase 3: Matching
+      const r = await extractPromise;
+      
+      // Phase 4: Encoding (simulated 600ms)
+      setStage("encoding");
+      await new Promise(r => setTimeout(r, 600));
+
       const ms = Math.round(performance.now() - t0);
       setResult(r);
+      
+      // Add to history
+      const newItem: HistoryItem = {
+        id: Math.random().toString(36).substring(7),
+        timestamp: Date.now(),
+        filename: mixture.name,
+        result: r
+      };
+      setHistory(prev => [newItem, ...prev]);
+      
       setMessage(`Extracted in ${ms} ms`);
       setStatus("idle");
     } catch (e) {
@@ -97,7 +136,21 @@ export function VantaApp() {
               Isolate any target speaker from complex noisy environments with high-fidelity neural extraction.
             </p>
           </div>
-          <StatusPill backend={backend} label={accelerationLabel} />
+          <div className="flex flex-col items-end gap-3">
+            <StatusPill backend={backend} label={accelerationLabel} />
+            <button
+              onClick={() => setIsHistoryOpen(true)}
+              className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--bg-input)] px-4 py-2 text-[12px] font-bold text-[var(--text-soft)] hover:bg-[var(--bg-card)] hover:text-[var(--text)] transition-all"
+            >
+              <HistoryIcon className="h-4 w-4" />
+              HISTORY
+              {history.length > 0 && (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)] text-[10px] text-[var(--bg-main)]">
+                  {history.length}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Upload slots */}
@@ -136,15 +189,19 @@ export function VantaApp() {
           </div>
         )}
 
-        {/* Controls */}
+        {/* Controls / Progress */}
         <div className="mt-4">
-          <ControlRack
-            canExtract={!!canRun}
-            status={status}
-            onExtract={run}
-            quality={quality}
-            onQualityChange={setQuality}
-          />
+          {status === "running" ? (
+            <MultiStageProgress currentStage={stage} />
+          ) : (
+            <ControlRack
+              canExtract={!!canRun}
+              status={status}
+              onExtract={run}
+              quality={quality}
+              onQualityChange={setQuality}
+            />
+          )}
         </div>
 
         {/* Output */}
@@ -184,6 +241,17 @@ export function VantaApp() {
           </p>
         )}
       </div>
+
+      <HistorySidebar
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        items={history}
+        onSelect={(item) => {
+          setResult(item.result);
+          setIsHistoryOpen(false);
+        }}
+        onDelete={(id) => setHistory((prev) => prev.filter((i) => i.id !== id))}
+      />
     </main>
   );
 }

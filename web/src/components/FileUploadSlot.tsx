@@ -99,9 +99,9 @@ export function FileUploadSlot({
         onClick={() => !file && inputRef.current?.click()}
         role="button"
         tabIndex={0}
-        className={`rounded-lg border bg-[var(--bg-input)] px-4 py-3 transition-colors ${
+        className={`rounded-lg border bg-[var(--bg-input)] px-4 py-3 transition-all duration-200 ${
           dragOver
-            ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+            ? "border-[var(--accent)] bg-[var(--bg-card)] scale-[1.02] shadow-lg shadow-[var(--accent)]/20"
             : "border-[var(--border)]"
         } ${!file ? "cursor-pointer hover:border-[var(--border-strong)]" : ""}`}
       >
