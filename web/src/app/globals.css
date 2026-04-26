@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  /* Subtle layered industrial palette */
-  --bg-app: #D4D1C7; /* Slightly deeper base */
-  --bg-header: #E2E0D8; /* Lighter top bar */
-  --bg-footer: #E2E0D8; /* Matching bottom bar */
-  --bg-card: #DCD9D0; /* Original clean beige for cards */
-  --bg-btn: #DCD9D0;
+  /* Refined Industrial Light Mode (Matches Reference Image) */
+  --bg-app: #EDEBE3; 
+  --bg-header: #EDEBE3; 
+  --bg-footer: #EDEBE3; 
+  --bg-card: #F5F3EF; 
+  --bg-btn: #F5F3EF;
   
-  --border-main: #222222;
-  --border-card: #B0AE9F;
-  --border-dashed: #999999;
+  --border-main: #D1CEC4;
+  --border-card: #E1DFD7;
+  --border-dashed: #C4C1B8;
   
-  --text-main: #1A1A1A;
-  --text-muted: #666666;
+  --text-main: #333330;
+  --text-muted: #888880;
   
-  --c-green: #4A6B4A;
-  --c-red: #B54545;
-  --c-purple: #745296;
-  --c-brown: #A68A64;
-  --c-dark-green: #2B3D2B;
-  --c-charcoal: #222222;
+  --c-green: #6B7B5B;
+  --c-red: #D16D6D;
+  --c-purple: #9284B1;
+  --c-brown: #9E896A;
+  --c-dark-green: #4A5A3B;
+  --c-charcoal: #2A2A28;
 }
 
 .dark {
-  --bg-app: #0A0A0A; /* Deeper base */
-  --bg-header: #141414; /* Slightly lighter header */
+  --bg-app: #0A0A0A; 
+  --bg-header: #141414; 
   --bg-footer: #141414;
-  --bg-card: #1A1B1E; /* Distinct cards */
+  --bg-card: #1A1B1E; 
   --bg-btn: #25262B;
   
   --border-main: #333333;
@@ -64,11 +64,11 @@
   }
   
   .card-border {
-    @apply rounded-[6px] shadow-sm;
+    @apply border border-[var(--border-card)] rounded-[6px];
   }
   
   .btn-icon {
-    @apply flex items-center justify-center rounded-[6px] bg-[var(--bg-btn)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-[var(--text-main)];
+    @apply flex items-center justify-center border border-[var(--border-card)] rounded-[6px] bg-[var(--bg-btn)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-[var(--text-main)];
   }
 }
 

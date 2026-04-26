@@ -159,9 +159,9 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`h-full bg-black/5 dark:bg-white/5 rounded-[6px] flex items-center justify-center transition-all min-h-[120px] ${
-            onFile ? "cursor-pointer hover:bg-black/10 dark:hover:bg-white/10" : ""
-          } ${isDragging ? "bg-black/10 dark:bg-white/10" : ""}`}
+          className={`h-full border border-dashed border-[var(--border-dashed)] rounded-[6px] flex items-center justify-center transition-all min-h-[120px] ${
+            onFile ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/5" : ""
+          } ${isDragging ? "bg-black/5 dark:bg-white/5" : "bg-transparent"}`}
         >
           <div className="flex flex-col items-center gap-3">
             <FileAudio className="h-7 w-7 stroke-[1.5] text-[var(--text-main)]" />
