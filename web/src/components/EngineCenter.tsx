@@ -98,69 +98,59 @@ export function EngineCenter({
           </g>
         </svg>
 
-        {/* Central Hero Circle */}
+        {/* Central Hero Circle - Redesigned for Reference Image */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <motion.button
-            disabled={!canExtract || isRunning}
-            onClick={onExtract}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`group relative h-[280px] w-[280px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] shadow-[0_30px_70px_rgba(0,0,0,0.6)] overflow-hidden disabled:opacity-90`}
-          >
-            {/* Outer Subtle Ring - Cleaned up */}
-            <div className="absolute inset-[8px] rounded-full" />
+          <div className="relative h-[320px] w-[320px] rounded-full border-[10px] border-[#D9D7CE] shadow-lg flex items-center justify-center bg-[#EFEDE6]">
+            {/* Dark Progress Ring Segment */}
+            <div className="absolute inset-[-10px] rounded-full border-[10px] border-transparent border-t-[#6B7B5B] rotate-[45deg]" />
             
-            {/* Waveform Icon */}
-            <div className="flex items-center gap-[6px] h-14 mb-5">
-              {[0.4, 0.7, 1.0, 0.8, 0.5, 0.8, 1.0, 0.7, 0.4].map((h, i) => (
-                <motion.div
-                  key={i}
-                  animate={isRunning ? { height: ["40%", "100%", "40%"] } : { height: `${h * 100}%` }}
-                  transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.1 }}
-                  className="w-[5px] rounded-full bg-white"
-                />
-              ))}
-            </div>
+            <motion.button
+              disabled={!canExtract || isRunning}
+              onClick={onExtract}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              className="relative h-[260px] w-[260px] rounded-full bg-[var(--bg-card)] shadow-inner flex flex-col items-center justify-center"
+            >
+              {/* Waveform Icon (Green bars in reference) */}
+              <div className="flex items-center gap-[4px] h-10 mb-4">
+                {[0.4, 0.7, 1.0, 0.8, 0.5, 0.8, 1.0, 0.7, 0.4].map((h, i) => (
+                  <motion.div
+                    key={i}
+                    animate={isRunning ? { height: ["40%", "100%", "40%"] } : { height: `${h * 100}%` }}
+                    transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.1 }}
+                    className="w-[4px] rounded-full bg-[#6B7B5B]"
+                  />
+                ))}
+              </div>
 
-            {/* Main Text */}
-            <span className="text-[24px] font-bold text-white uppercase tracking-[0.15em] mb-6 leading-none">
-              Extract Voice
-            </span>
-            
-            {/* Play Button Icon */}
-            <div className="h-10 w-10 flex items-center justify-center">
-               <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-                 <path d="M8 5v14l11-7z" />
-               </svg>
-            </div>
-
-            {/* Running Status Indicator */}
-            {isRunning && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="absolute inset-0 bg-black/30 flex items-center justify-center"
-              >
-                <div className="w-full h-full border-[6px] border-transparent border-t-white/40 rounded-full animate-spin" />
-              </motion.div>
-            )}
-          </motion.button>
+              {/* Main Text */}
+              <span className="text-[20px] font-bold text-[#333330] uppercase tracking-[0.1em] mb-4">
+                Extract Voice
+              </span>
+              
+              {/* Play Button Icon (Small triangle) */}
+              <div className="mt-2">
+                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#333330">
+                   <path d="M8 5v14l11-7z" />
+                 </svg>
+              </div>
+            </motion.button>
+          </div>
           
           {/* Subtle Glow behind the orb */}
-          <div className="absolute -inset-10 bg-black/10 rounded-full blur-3xl -z-10" />
+          <div className="absolute -inset-10 bg-[#6B7B5B]/5 rounded-full blur-3xl -z-10" />
         </div>
-      </div>
-
-      {/* Status indicator below the diagram - inspired by the small "Ready" dot in the image */}
-      <div className="mt-12 flex flex-col items-center gap-2">
+...
+      {/* Status indicator - Matches reference exactly */}
+      <div className="mt-12 flex flex-col items-center gap-1">
          <div className="flex items-center gap-2">
-            <div className={`h-2.5 w-2.5 rounded-full ${isRunning ? 'bg-amber-500 animate-pulse' : 'bg-[#4A6B4A]'}`} />
-            <span className="text-[13px] font-bold uppercase tracking-widest text-[#1a1a1a]">
-              {isRunning ? 'Processing...' : 'Ready'}
+            <div className={`h-2.5 w-2.5 rounded-full ${isRunning ? 'bg-amber-500 animate-pulse' : 'bg-[#C4C1B8]'}`} />
+            <span className="text-[14px] font-bold uppercase tracking-widest text-[#333330] opacity-80">
+              {isRunning ? 'Processing' : 'Idle'}
             </span>
          </div>
-         <p className="text-[11px] font-medium text-[#666666] tracking-tight">
-           {isRunning ? 'Engine is active.' : 'Engine is idle.'}
+         <p className="text-[12px] font-medium text-[#888880] tracking-tight">
+           {isRunning ? 'Engine is active.' : 'Engine is ready.'}
          </p>
       </div>
     </div>
