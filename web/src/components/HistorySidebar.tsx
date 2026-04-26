@@ -2,6 +2,7 @@
 
 import { History, X, Play, Clock, Download } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import type { ExtractMeta } from "../lib/api";
 
 export type HistoryItem = {
   id: string;
@@ -10,10 +11,7 @@ export type HistoryItem = {
   result: {
     extracted: Blob;
     residue: Blob;
-    meta: {
-      outputSeconds: number;
-      sampleRate: number;
-    };
+    meta: ExtractMeta;
   };
 };
 
