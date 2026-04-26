@@ -108,16 +108,6 @@ export function EngineCenter({
             </div>
           </button>
         </div>
-      </div>
-
-      {/* Status Indicator */}
-      <div className="flex flex-col items-center gap-1 -mt-4">
-        <div className="flex items-center gap-2">
-           <div className={`h-3 w-3 rounded-full ${isRunning ? "bg-yellow-500" : "bg-[var(--c-green)]"}`} />
-           <span className="text-base font-bold">{isRunning ? "Processing" : "Ready"}</span>
-        </div>
-        <span className="text-[13px] text-[var(--text-muted)]">{isRunning ? "Isolating signal streams..." : "Engine is idle."}</span>
-      </div>
     </div>
   );
 }
