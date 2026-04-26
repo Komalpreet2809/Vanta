@@ -84,8 +84,8 @@ export function VantaApp() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] pt-16 pb-24 px-8 font-mono selection:bg-[var(--gold)] selection:text-[var(--bg-main)]">
-      <main className="max-w-[1200px] mx-auto flex flex-col gap-6">
+    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] px-8 pt-16 font-mono selection:bg-[var(--gold)] selection:text-[var(--bg-main)]">
+      <main className="max-w-[1200px] mx-auto flex flex-col gap-6 pb-24">
         {/* Header: title + particle wave */}
         <DescriptionCard />
 
@@ -110,31 +110,73 @@ export function VantaApp() {
         </div>
 
         {/* Waveform panels */}
-        <div className="bg-[var(--bg-panel)] rounded border border-[var(--border-color)] px-6 py-4 flex flex-col gap-6">
-          <WaveformRow
-            label="REFERENCE"
-            source={enrollment}
-            onPlayingChange={setRefPlaying}
-          />
-          <div className="h-[1px] w-full bg-[var(--border-color)]" />
-          <WaveformRow
-            label="INPUT MIXTURE"
-            source={mixture}
-            onPlayingChange={setMixPlaying}
-          />
-        </div>
+        {(enrollment || mixture) && (
+          <div className="bg-[var(--bg-panel)] rounded border border-[var(--border-color)] px-6 py-4 flex flex-col gap-6">
+            <WaveformRow
+              label="REFERENCE"
+              source={enrollment}
+              onPlayingChange={setRefPlaying}
+            />
+            <div className="h-[1px] w-full bg-[var(--border-color)]" />
+            <WaveformRow
+              label="INPUT MIXTURE"
+              source={mixture}
+              onPlayingChange={setMixPlaying}
+            />
+          </div>
+        )}
 
         {/* Control rack */}
         <ControlRack
           canExtract={!!canRun}
           status={status}
           onExtract={run}
-          focus={focus}
-          noiseSuppression={noiseSuppression}
-          voiceClarity={voiceClarity}
-          outputBlob={result?.extracted ?? null}
-          qualityScore={qualityScore}
         />
+
+        {/* Output Section */}
+        {result && (
+          <div className="mt-8 flex flex-col gap-6 pt-8 border-t border-[var(--border-color)]">
+            <div className="flex items-center justify-between font-mono text-[11px] tracking-[0.15em] text-[var(--text-dim)]">
+              <span>OUTPUT</span>
+              <span>5.00s • 16000 Hz</span>
+            </div>
+            
+            <div className="flex flex-col gap-6">
+              <WaveformRow
+                label="EXTRACTED VOICE"
+                source={result.extracted}
+                onPlayingChange={() => {}}
+              />
+              <div className="h-[1px] w-full bg-[var(--border-color)] opacity-50" />
+              <WaveformRow
+                label="RESIDUE (WHAT VANTA REMOVED)"
+                source={result.residue}
+                onPlayingChange={() => {}}
+              />
+            </div>
+
+            <div className="flex items-center gap-4 mt-2">
+              <button
+                type="button"
+                onClick={() => download(result.extracted, "extracted.wav")}
+                className="h-[40px] px-6 rounded border border-[var(--border-color)] font-mono text-[11px] tracking-widest text-[var(--text-main)] hover:bg-[var(--bg-panel)] transition-colors uppercase"
+              >
+                Download Extracted
+              </button>
+              <button
+                type="button"
+                onClick={() => download(result.residue, "residue.wav")}
+                className="h-[40px] px-6 rounded border border-[var(--border-color)] font-mono text-[11px] tracking-widest text-[var(--text-main)] hover:bg-[var(--bg-panel)] transition-colors uppercase"
+              >
+                Download Residue
+              </button>
+            </div>
+
+            <div className="font-mono text-[10px] tracking-widest text-[var(--text-dim)] mt-4">
+              vanta — conv-tasnet with ecapa-tdnn speaker conditioning
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
