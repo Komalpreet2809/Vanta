@@ -13,124 +13,121 @@ export function AnalogEngine({ status, onExtract, canExtract }: Props) {
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto">
+    <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl mx-auto px-4">
       <div className="relative w-full aspect-square flex items-center justify-center">
         {/* Signal Lines (SVG) */}
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
+        <svg className="absolute inset-0 w-full h-full p-4" viewBox="0 0 400 400">
           {/* Reference Line (Top Left) */}
           <path
-            d="M 20 120 C 80 120, 100 200, 150 200"
+            d="M 50 110 C 120 110, 140 200, 175 200"
             fill="none"
-            stroke="var(--text)"
+            stroke="#444"
             strokeWidth="1.5"
-            className="opacity-60"
+            className="opacity-80"
           />
-          <circle cx="20" cy="120" r="5" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="2.5" />
+          <circle cx="50" cy="110" r="6" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="3" />
+          <text x="35" y="95" className="text-[11px] font-bold fill-[var(--text)] uppercase">Reference</text>
           
           {/* Noise Line (Bottom Left) */}
           <path
-            d="M 20 280 C 80 280, 100 200, 150 200"
+            d="M 50 290 C 120 290, 140 200, 175 200"
             fill="none"
-            stroke="var(--text)"
+            stroke="#444"
             strokeWidth="1.5"
-            className="opacity-60"
+            className="opacity-80"
           />
-          <circle cx="20" cy="280" r="5" fill="var(--bg-page)" stroke="var(--accent-red)" strokeWidth="2.5" />
+          <circle cx="50" cy="290" r="6" fill="var(--bg-page)" stroke="var(--accent-red)" strokeWidth="3" />
+          <text x="35" y="315" className="text-[11px] font-bold fill-[var(--text)] uppercase">Noise</text>
 
           {/* Clean Voice Out (Top Right) */}
           <path
-            d="M 250 200 C 300 200, 320 120, 380 120"
+            d="M 225 200 C 260 200, 280 110, 350 110"
             fill="none"
-            stroke="var(--text)"
+            stroke="#444"
             strokeWidth="1.5"
-            className="opacity-60"
+            className="opacity-80"
           />
-          <circle cx="380" cy="120" r="5" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="2.5" />
+          <circle cx="350" cy="110" r="6" fill="var(--bg-page)" stroke="var(--accent-green)" strokeWidth="3" />
+          <text x="325" y="95" className="text-[11px] font-bold fill-[var(--text)] uppercase">Clean Voice</text>
 
           {/* Residue Out (Bottom Right) */}
           <path
-            d="M 250 200 C 300 200, 320 280, 380 280"
+            d="M 225 200 C 260 200, 280 290, 350 290"
             fill="none"
-            stroke="var(--text)"
+            stroke="#444"
             strokeWidth="1.5"
-            className="opacity-60"
+            className="opacity-80"
           />
-          <circle cx="380" cy="280" r="5" fill="var(--bg-page)" stroke="var(--accent-purple)" strokeWidth="2.5" />
+          <circle cx="350" cy="290" r="6" fill="var(--bg-page)" stroke="var(--accent-purple)" strokeWidth="3" />
+          <text x="310" y="315" className="text-[11px] font-bold fill-[var(--text)] uppercase">Residue (Noise)</text>
           
-          {/* Inner Nodes */}
-          <circle cx="150" cy="200" r="4" fill="var(--text)" />
-          <circle cx="250" cy="200" r="4" fill="var(--text)" />
+          {/* Intersection Nodes */}
+          <circle cx="175" cy="200" r="4.5" fill="#222" />
+          <circle cx="225" cy="200" r="4.5" fill="#222" />
 
           {/* Dashed outer ring */}
-          <circle cx="200" cy="200" r="95" fill="none" stroke="var(--border)" strokeWidth="1" strokeDasharray="4 4" className="opacity-40" />
+          <circle cx="200" cy="200" r="115" fill="none" stroke="var(--border)" strokeWidth="1" strokeDasharray="5 5" className="opacity-60" />
         </svg>
 
-        {/* Labels */}
-        <div className="absolute left-0 top-[90px] text-[11px] font-bold uppercase tracking-tight">Reference</div>
-        <div className="absolute left-0 top-[295px] text-[11px] font-bold uppercase tracking-tight">Noise</div>
-        <div className="absolute right-0 top-[90px] text-[11px] font-bold uppercase tracking-tight">Clean Voice</div>
-        <div className="absolute right-0 top-[295px] text-[11px] font-bold uppercase tracking-tight">Residue (Noise)</div>
-
-        {/* Central Core Circle (The Button is now INSIDE) */}
+        {/* Central Core Circle - MUCH BIGGER */}
         <motion.button
           disabled={!canExtract || isRunning}
           onClick={onExtract}
-          whileHover={canExtract ? { scale: 1.02 } : {}}
-          whileTap={canExtract ? { scale: 0.98 } : {}}
-          className={`relative z-10 w-56 h-56 rounded-full border-[6px] border-[var(--border-strong)] bg-[#2c2c2c] flex flex-col items-center justify-center shadow-xl transition-all ${
+          whileHover={canExtract ? { scale: 1.01 } : {}}
+          whileTap={canExtract ? { scale: 0.99 } : {}}
+          className={`relative z-10 w-64 h-64 rounded-full border-[8px] border-[var(--border-strong)] bg-[#2a2a2a] flex flex-col items-center justify-center shadow-2xl transition-all ${
             isRunning ? "border-[var(--accent-green)]" : "border-[var(--border-strong)]"
-          } disabled:opacity-80 group cursor-pointer`}
+          } disabled:opacity-90 group cursor-pointer`}
         >
-           {/* Logo inside circle */}
-           <div className="flex items-end gap-1 mb-3">
-            {[0.4, 0.7, 1, 0.6, 0.3].map((h, i) => (
+           {/* Waveform Logo inside */}
+           <div className="flex items-end gap-1.5 mb-5 h-8">
+            {[0.4, 0.8, 1, 0.7, 0.3, 0.6, 0.9, 0.5].map((h, i) => (
               <motion.div
                 key={i}
-                animate={isRunning ? { height: [h * 16, h * 32, h * 16] } : { height: h * 20 }}
-                transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.1 }}
-                className="w-1.5 rounded-full bg-white"
+                animate={isRunning ? { height: [h * 24, h * 40, h * 24] } : { height: h * 28 }}
+                transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.05 }}
+                className="w-[3px] rounded-full bg-white"
               />
             ))}
           </div>
-          <span className="text-[12px] font-bold text-white tracking-[0.4em] uppercase mb-4">Extract Voice</span>
+
+          <span className="text-[14px] font-bold text-white tracking-[0.4em] uppercase mb-5">Extract Voice</span>
           
-          <div className="h-10 w-10 flex items-center justify-center">
+          <div className="h-12 w-12 flex items-center justify-center">
             {isRunning ? (
-               <div className="h-2 w-10 flex gap-1 items-center justify-center">
-                  <div className="h-full w-1 bg-white animate-pulse" />
-                  <div className="h-full w-1 bg-white animate-pulse [animation-delay:0.2s]" />
-                  <div className="h-full w-1 bg-white animate-pulse [animation-delay:0.4s]" />
+               <div className="flex gap-1.5 items-center justify-center h-4">
+                  <motion.div animate={{ height: [4, 16, 4] }} transition={{ repeat: Infinity, duration: 0.6 }} className="w-1 bg-white" />
+                  <motion.div animate={{ height: [4, 16, 4] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-1 bg-white" />
+                  <motion.div animate={{ height: [4, 16, 4] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} className="w-1 bg-white" />
                </div>
             ) : (
-               <Play className="h-8 w-8 text-white fill-current" />
+               <Play className="h-10 w-10 text-white fill-current translate-x-0.5" />
             )}
           </div>
 
-          {/* Radial Progress (Visual only for now) */}
-          {isRunning && (
-            <svg className="absolute inset-0 w-full h-full -rotate-90">
-               <motion.circle
-                 cx="112" cy="112" r="106"
-                 fill="none"
-                 stroke="var(--accent-green)"
-                 strokeWidth="4"
-                 strokeDasharray="665"
-                 initial={{ strokeDashoffset: 665 }}
-                 animate={{ strokeDashoffset: 0 }}
-                 transition={{ duration: 5, repeat: Infinity }}
-               />
-            </svg>
-          )}
+          {/* High-fidelity Progress Ring */}
+          <svg className="absolute inset-0 w-full h-full -rotate-90">
+             <motion.circle
+               cx="128" cy="128" r="120"
+               fill="none"
+               stroke="var(--accent-green)"
+               strokeWidth="5"
+               strokeDasharray="754"
+               initial={{ strokeDashoffset: 754 }}
+               animate={isRunning ? { strokeDashoffset: 0 } : { strokeDashoffset: 754 }}
+               transition={{ duration: 5, ease: "linear", repeat: Infinity }}
+             />
+          </svg>
         </motion.button>
       </div>
 
       {/* Status Bar */}
-      <div className="mt-8 flex flex-col items-center gap-2">
-        <div className="flex items-center gap-2">
-           <div className={`h-3 w-3 rounded-full ${isRunning ? "bg-[var(--accent-green)] animate-pulse" : "bg-[var(--accent-green)]"}`} />
-           <span className="text-[13px] font-bold uppercase tracking-widest">{isRunning ? "Processing" : "Ready"}</span>
+      <div className="mt-10 flex flex-col items-center gap-2">
+        <div className="flex items-center gap-2.5">
+           <div className={`h-3.5 w-3.5 rounded-full ${isRunning ? "bg-[var(--accent-green)] animate-pulse" : "bg-[var(--accent-green)]"}`} />
+           <span className="text-[15px] font-bold uppercase tracking-[0.2em]">{isRunning ? "Processing" : "Ready"}</span>
         </div>
-        <span className="text-[11px] text-[var(--text-soft)] uppercase tracking-wider">{isRunning ? "Isolating signal streams..." : "Engine is idle."}</span>
+        <span className="text-[12px] text-[var(--text-soft)] uppercase tracking-widest opacity-60">{isRunning ? "Isolating signal streams..." : "Engine is idle."}</span>
       </div>
     </div>
   );
