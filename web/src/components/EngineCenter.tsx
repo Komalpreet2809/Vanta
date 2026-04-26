@@ -5,18 +5,12 @@ import { motion } from "motion/react";
 type Props = {
   canExtract: boolean;
   status: "idle" | "running" | "error";
-  hasReference: boolean;
-  hasNoise: boolean;
-  hasOutput: boolean;
   onExtract: () => void;
 };
 
 export function EngineCenter({
   canExtract,
   status,
-  hasReference,
-  hasNoise,
-  hasOutput,
   onExtract,
 }: Props) {
   const isRunning = status === "running";

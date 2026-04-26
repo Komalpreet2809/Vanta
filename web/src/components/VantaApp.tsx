@@ -6,7 +6,7 @@ import { EngineCenter } from "./EngineCenter";
 import { Header } from "./Header";
 import { TipsCard } from "./TipsCard";
 import { extract, health, type ExtractMeta } from "../lib/api";
-import { Download, Info } from "lucide-react";
+import { Info } from "lucide-react";
 
 type Result = {
   extracted: Blob;
@@ -21,7 +21,6 @@ export function VantaApp() {
   const [mixture, setMixture] = useState<File | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [status, setStatus] = useState<Status>("idle");
-  const [message, setMessage] = useState("");
   const [backend, setBackend] = useState<"checking" | "online" | "offline">("checking");
 
   useEffect(() => {
@@ -40,18 +39,14 @@ export function VantaApp() {
   const run = useCallback(async () => {
     if (!mixture || !enrollment) return;
     setStatus("running");
-    setMessage("");
     setResult(null);
     try {
-      const t0 = performance.now();
       const r = await extract(mixture, enrollment);
-      const ms = Math.round(performance.now() - t0);
       setResult(r);
-      setMessage(`Completed in ${(ms / 1000).toFixed(2)}s`);
       setStatus("idle");
     } catch (e) {
+      console.error(e);
       setStatus("error");
-      setMessage(e instanceof Error ? e.message : String(e));
     }
   }, [mixture, enrollment]);
 
@@ -111,9 +106,6 @@ export function VantaApp() {
              <EngineCenter
                 canExtract={!!canRun}
                 status={status}
-                hasReference={!!enrollment}
-                hasNoise={!!mixture}
-                hasOutput={!!result}
                 onExtract={run}
               />
           </section>
