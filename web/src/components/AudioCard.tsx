@@ -175,7 +175,7 @@ export function AudioCard({
         >
           <div className="flex flex-col items-center gap-3">
             <Upload className="h-7 w-7 stroke-[1.5] text-[var(--text-main)] opacity-70" />
-            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium px-4">
+            <div className="text-[11px] text-[var(--text-main)] leading-relaxed text-center opacity-50 font-medium px-4">
               {onFile ? (
                 <>
                   drag and drop an audio file here<br />
