@@ -15,6 +15,7 @@ type Props = {
   onDownload?: () => void;
   onFile?: (file: File) => void;
   emptyLabel?: string;
+  className?: string;
 };
 
 const COLOR: Record<Variant, { wave: string; progress: string }> = {
@@ -34,6 +35,7 @@ export function AudioCard({
   onDownload,
   onFile,
   emptyLabel,
+  className = "",
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WaveSurfer | null>(null);
@@ -87,7 +89,7 @@ export function AudioCard({
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div className="card-border p-3 flex flex-col gap-3 bg-[var(--bg-app)]">
+    <div className={`card-border p-3 flex flex-col gap-3 bg-[var(--bg-app)] ${className}`}>
       <h3 className="font-mono-heading text-[12px] tracking-wide uppercase">
         {heading}
       </h3>
