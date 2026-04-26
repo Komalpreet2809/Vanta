@@ -1,11 +1,12 @@
 "use client";
 
-import { History as HistoryIcon, Settings } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { FileUploadSlot } from "./FileUploadSlot";
-import { WaveformRow } from "./WaveformRow";
-import { AnalogEngine } from "./AnalogEngine";
-import { HistorySidebar, type HistoryItem } from "./HistorySidebar";
+import { AudioCard } from "./AudioCard";
+import { DropZone } from "./DropZone";
+import { EngineCenter } from "./EngineCenter";
+import { Header } from "./Header";
+import { StatusBar } from "./StatusBar";
+import { TipsCard } from "./TipsCard";
 import { extract, health, type ExtractMeta } from "../lib/api";
 
 type Result = {
@@ -25,18 +26,12 @@ export function VantaApp() {
   const [backend, setBackend] = useState<"checking" | "online" | "offline">(
     "checking",
   );
-  const [device, setDevice] = useState<string | undefined>();
-  
-  // New States
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     health().then((h) => {
       if (cancelled) return;
       setBackend(h.ok ? "online" : "offline");
-      setDevice(h.device);
     });
     return () => {
       cancelled = true;
@@ -50,23 +45,12 @@ export function VantaApp() {
     setStatus("running");
     setMessage("");
     setResult(null);
-
     try {
       const t0 = performance.now();
       const r = await extract(mixture, enrollment);
       const ms = Math.round(performance.now() - t0);
-      
       setResult(r);
-      
-      const newItem: HistoryItem = {
-        id: Math.random().toString(36).substring(7),
-        timestamp: Date.now(),
-        filename: mixture.name,
-        result: r
-      };
-      setHistory(prev => [newItem, ...prev]);
-      
-      setMessage(`Operation complete in ${(ms/1000).toFixed(2)}s`);
+      setMessage(`Completed in ${(ms / 1000).toFixed(2)}s`);
       setStatus("idle");
     } catch (e) {
       setStatus("error");
@@ -83,199 +67,139 @@ export function VantaApp() {
     URL.revokeObjectURL(url);
   }, []);
 
+  // Drop zone fills whichever input slot is empty (reference first, then noise);
+  // if both filled, the new file replaces noise.
+  const handleDrop = useCallback(
+    (f: File) => {
+      if (!enrollment) setEnrollment(f);
+      else if (!mixture) setMixture(f);
+      else setMixture(f);
+    },
+    [enrollment, mixture],
+  );
+
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-page)] font-mono selection:bg-[var(--text)] selection:text-[var(--bg-page)]">
-      {/* Top Header */}
-      <header className="px-10 py-6 border-b border-[var(--border-strong)] flex items-center justify-between bg-[var(--bg-card)]">
-        <div className="flex items-center gap-4">
-           {/* Refined Industrial Wave Logo */}
-           <div className="flex items-end gap-1 mb-1">
-            {[0.3, 0.6, 1, 0.7, 0.4].map((h, i) => (
-              <div key={i} className="w-1.5 bg-[var(--text)]" style={{ height: h * 24 }} />
-            ))}
-          </div>
-          <span className="text-[28px] font-bold tracking-[0.5em] uppercase">Vanta</span>
-        </div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
 
-        <div className="flex items-center gap-4">
-           <button onClick={() => setIsHistoryOpen(true)} className="industrial-button px-6 py-2.5 text-[11px] font-bold uppercase flex items-center gap-2 bg-[var(--bg-page)]">
-             <HistoryIcon className="h-4 w-4" />
-             History
-           </button>
-           <button className="industrial-button px-6 py-2.5 text-[11px] font-bold uppercase flex items-center gap-2 bg-[var(--bg-page)]">
-             <Settings className="h-4 w-4" />
-             Settings
-           </button>
-        </div>
-      </header>
-
-      {/* Main Grid */}
-      <main className="flex-1 grid grid-cols-[1fr_1.2fr_1fr] divide-x divide-[var(--border-strong)]">
-        
-        {/* Left Column: INPUTS */}
-        <section className="p-10 flex flex-col gap-8 bg-[#e8e6db]">
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr_1fr] gap-0">
+        {/* INPUTS */}
+        <section className="px-8 py-8 flex flex-col gap-5">
           <div>
-            <h2 className="text-[24px] font-bold uppercase tracking-widest mb-1">Inputs</h2>
-            <p className="text-[12px] text-[var(--text-soft)] font-medium">Provide reference and noise audio.</p>
+            <h2 className="font-bold text-[15px] tracking-[0.16em] uppercase text-[var(--text)]">
+              Inputs
+            </h2>
+            <p className="text-[12px] text-[var(--text-soft)] mt-1">
+              Provide reference and noise audio.
+            </p>
           </div>
 
-          <div className="flex flex-col gap-6">
-             <FileUploadSlot
-               slot="REF"
-               label="Reference Audio"
-               file={enrollment}
-               onFile={setEnrollment}
-             />
-             {enrollment && (
-               <WaveformRow label="Reference" source={enrollment} color="var(--accent-charcoal)" />
-             )}
+          <AudioCard
+            heading="Reference Audio"
+            source={enrollment}
+            variant="green"
+            onClear={() => setEnrollment(null)}
+            emptyLabel="No reference audio loaded"
+          />
 
-             <FileUploadSlot
-               slot="MIX"
-               label="Noise Audio"
-               file={mixture}
-               onFile={setMixture}
-             />
-             {mixture && (
-               <WaveformRow label="Mixture" source={mixture} color="var(--accent-red)" />
-             )}
+          <AudioCard
+            heading="Noise Audio"
+            source={mixture}
+            variant="red"
+            onClear={() => setMixture(null)}
+            emptyLabel="No noisy recording loaded"
+          />
 
-            {/* Drag & Drop Placeholder at bottom */}
-            <div className="panel p-8 mt-2 border-dashed flex flex-col items-center justify-center text-center gap-3 bg-[var(--bg-page)]/20">
-               <svg className="h-8 w-8 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0l-4 4m4-4v12" />
-               </svg>
-               <span className="text-[11px] font-bold text-[var(--text-soft)] uppercase tracking-widest leading-relaxed">Drag & drop audio files here<br/>or click to browse</span>
-            </div>
-
-            {/* Tips Box */}
-            <div className="panel p-6 bg-[var(--bg-card)]">
-               <div className="flex items-center gap-2 mb-4">
-                  <div className="h-5 w-5 flex items-center justify-center">
-                    <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                  </div>
-                  <span className="text-[12px] font-bold uppercase tracking-widest">Tips</span>
-               </div>
-               <ul className="space-y-3 text-[11px] font-bold text-[var(--text-soft)] uppercase tracking-wide">
-                 <li>• Supports WAV, MP3, M4A</li>
-                 <li>• Recommended: 5–30 seconds</li>
-               </ul>
-            </div>
-          </div>
+          <DropZone onFile={handleDrop} />
+          <TipsCard />
         </section>
 
-        {/* Middle Column: ENGINE */}
-        <section className="p-10 flex flex-col bg-[#e2dfd2]">
-          <div className="text-center mb-8">
-            <h2 className="text-[24px] font-bold uppercase tracking-[0.5em] mb-1">Vanta Engine</h2>
-            <p className="text-[12px] font-medium text-[var(--text-soft)]">Isolates the target voice from noise.</p>
-          </div>
-
-          <div className="flex-1 flex flex-col items-center justify-center">
-             <AnalogEngine status={status} onExtract={run} canExtract={canRun} />
-          </div>
-
-          {/* Mode Selector */}
-          <div className="mt-auto w-full max-w-[340px] mx-auto pb-6">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="h-[1px] flex-1 bg-[var(--border)]" />
-              <span className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-[0.3em]">Mode</span>
-              <div className="h-[1px] flex-1 bg-[var(--border)]" />
-            </div>
-            <div className="inset-panel px-6 py-4 flex items-center justify-between text-[13px] cursor-pointer hover:bg-[var(--bg-hover)]">
-               <span className="font-bold uppercase tracking-wider">High Quality (Recommended)</span>
-               <svg className="h-5 w-5 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-               </svg>
-            </div>
-          </div>
+        {/* ENGINE */}
+        <section className="px-8 py-8 col-divider lg:flex lg:flex-col lg:items-center lg:justify-center">
+          <EngineCenter
+            canExtract={!!canRun}
+            status={status}
+            hasReference={!!enrollment}
+            hasNoise={!!mixture}
+            hasOutput={!!result}
+            onExtract={run}
+          />
+          {message ? (
+            <p
+              className={`mt-3 text-[11px] ${
+                status === "error"
+                  ? "text-[var(--err)]"
+                  : "text-[var(--text-dim)]"
+              }`}
+            >
+              {message}
+            </p>
+          ) : null}
         </section>
 
-        {/* Right Column: OUTPUTS */}
-        <section className="p-10 flex flex-col gap-8 bg-[#e8e6db]">
+        {/* OUTPUTS */}
+        <section className="px-8 py-8 col-divider flex flex-col gap-5">
           <div>
-            <h2 className="text-[24px] font-bold uppercase tracking-widest mb-1">Outputs</h2>
-            <p className="text-[12px] font-medium text-[var(--text-soft)]">Clean voice and residue (noise).</p>
+            <h2 className="font-bold text-[15px] tracking-[0.16em] uppercase text-[var(--text)]">
+              Outputs
+            </h2>
+            <p className="text-[12px] text-[var(--text-soft)] mt-1">
+              Clean voice and residue (noise).
+            </p>
           </div>
 
-          <div className="flex flex-col gap-6 flex-1">
-            {!result ? (
-              <div className="panel flex-1 flex flex-col items-center justify-center p-12 text-center bg-[var(--bg-page)]/10 border-dashed border-2">
-                 <div className="h-16 w-16 border border-dashed border-[var(--border)] rounded-full flex items-center justify-center mb-6 opacity-30">
-                   <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5 5-5M12 4v12" />
-                   </svg>
-                 </div>
-                 <p className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-[0.2em] leading-relaxed">Outputs will appear here<br/>after processing is complete.</p>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-8 animate-in fade-in duration-500">
-                <div className="flex flex-col gap-3">
-                   <div className="panel px-6 py-5 bg-[var(--bg-card)]">
-                      <div className="flex items-center justify-between mb-4">
-                         <span className="text-[12px] font-bold uppercase tracking-widest">Clean Voice</span>
-                         <div className="h-2 w-2 rounded-full bg-[var(--accent-green)] shadow-[0_0_8px_var(--accent-green)]" />
-                      </div>
-                      <WaveformRow label="Clean" source={result.extracted} color="var(--accent-green)" onDownload={() => download(result.extracted, "vanta_clean.wav")} />
-                   </div>
-                </div>
+          <AudioCard
+            heading="Clean Voice"
+            source={result?.extracted ?? null}
+            filenameOverride="Extracted_Voice.wav"
+            variant="green"
+            onDownload={
+              result
+                ? () => download(result.extracted, "vanta_extracted.wav")
+                : undefined
+            }
+            emptyLabel="—"
+          />
 
-                <div className="flex flex-col gap-3">
-                   <div className="panel px-6 py-5 bg-[var(--bg-card)]">
-                      <div className="flex items-center justify-between mb-4">
-                         <span className="text-[12px] font-bold uppercase tracking-widest">Residue (Noise)</span>
-                         <div className="h-2 w-2 rounded-full bg-[var(--accent-purple)] shadow-[0_0_8px_var(--accent-purple)]" />
-                      </div>
-                      <WaveformRow label="Residue" source={result.residue} color="var(--accent-purple)" onDownload={() => download(result.residue, "vanta_residue.wav")} />
-                   </div>
-                </div>
+          <AudioCard
+            heading="Residue (Noise)"
+            source={result?.residue ?? null}
+            filenameOverride="Residue_Noise.wav"
+            variant="purple"
+            onDownload={
+              result
+                ? () => download(result.residue, "vanta_residue.wav")
+                : undefined
+            }
+            emptyLabel="—"
+          />
 
-                <div className="mt-auto panel p-6 border-l-[6px] border-l-[var(--accent-green)] bg-[var(--bg-card)]">
-                   <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                         <div className="h-2.5 w-2.5 rounded-full bg-[var(--accent-green)] shadow-[0_0_10px_var(--accent-green)]" />
-                         <span className="text-[13px] font-bold uppercase tracking-[0.2em]">Processing Successful</span>
-                      </div>
-                   </div>
-                   <p className="text-[14px] font-bold leading-tight">{message}</p>
-                </div>
+          {!result && (
+            <div className="rounded-md border border-dashed border-[var(--border-strong)] bg-[var(--bg-elevated)]/50 px-4 py-5 mt-auto">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-sm border border-[var(--border-strong)] bg-[var(--bg-elevated)]">
+                  <svg
+                    className="h-3.5 w-3.5 text-[var(--text-soft)]"
+                    viewBox="0 0 14 14"
+                    fill="currentColor"
+                  >
+                    <path d="M7 1v8m0 0L3.5 5.5M7 9l3.5-3.5M2 12h10v1H2z" />
+                  </svg>
+                </span>
+                <span className="text-[12px] text-[var(--text-soft)] leading-tight">
+                  Outputs will appear here
+                  <br />
+                  <span className="text-[var(--text-dim)]">
+                    after processing is complete.
+                  </span>
+                </span>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="px-10 py-3 border-t border-[var(--border-strong)] flex items-center justify-between bg-[#e2dfd2]">
-         <span className="text-[12px] font-bold tracking-[0.2em] uppercase opacity-70">VANTA v1.0.0</span>
-         <div className="flex items-center gap-3">
-            <div className="h-2 w-2 rounded-full bg-[var(--accent-green)] shadow-[0_0_8px_var(--accent-green)]" />
-            <span className="text-[12px] font-bold uppercase tracking-[0.2em]">Ready</span>
-         </div>
-      </footer>
-
-      {/* Footer */}
-      <footer className="px-10 py-4 border-t border-[var(--border-strong)] flex items-center justify-between bg-[var(--bg-card)]/50">
-         <span className="text-[10px] font-bold tracking-wider opacity-60">VANTA v1.0.0</span>
-         <div className="flex items-center gap-2">
-            <div className={`h-2 w-2 rounded-full ${backend === "online" ? "bg-[var(--accent-green)]" : "bg-[var(--accent-red)]"}`} />
-            <span className="text-[10px] font-bold uppercase tracking-widest">{backend === "online" ? "System Ready" : "System Offline"}</span>
-         </div>
-      </footer>
-
-      <HistorySidebar
-        isOpen={isHistoryOpen}
-        onClose={() => setIsHistoryOpen(false)}
-        items={history}
-        onSelect={(item) => {
-          setResult(item.result);
-          setIsHistoryOpen(false);
-        }}
-        onDelete={(id) => setHistory((prev) => prev.filter((i) => i.id !== id))}
-      />
+      <StatusBar backend={backend} />
     </div>
   );
 }
-

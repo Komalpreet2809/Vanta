@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # App code + model checkpoint (large file — tracked via Git LFS).
 COPY . .
 
-ENV VANTA_CHECKPOINT=checkpoints/best.pt
+ENV VANTA_BACKEND=sepformer
 ENV VANTA_REPEATS=2
 # Permissive CORS so the Vercel frontend (or a curl test) can hit the API.
 ENV VANTA_ALLOWED_ORIGINS=*

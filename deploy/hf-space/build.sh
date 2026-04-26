@@ -31,6 +31,7 @@ cp vanta/models/audio_encoder.py "$HERE/vanta/models/"
 cp vanta/models/separator.py "$HERE/vanta/models/"
 cp vanta/models/speaker_encoder.py "$HERE/vanta/models/"
 cp vanta/models/vanta.py "$HERE/vanta/models/"
+cp vanta/models/sepformer_tse.py "$HERE/vanta/models/"
 
 echo "[build] copying server..."
 cp server.py "$HERE/"
