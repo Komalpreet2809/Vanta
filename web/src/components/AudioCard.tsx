@@ -155,7 +155,7 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`border border-dashed border-[var(--border-main)] rounded-md p-8 flex flex-col items-center justify-center text-center transition-colors min-h-[160px] ${
+          className={`border border-dashed border-[var(--border-main)] rounded-md p-4 flex flex-col items-center justify-center text-center transition-colors flex-1 min-h-[120px] ${
             onFile ? "cursor-pointer hover:bg-black/5" : ""
           } ${isDragging ? "bg-black/5" : "bg-transparent"}`}
         >
