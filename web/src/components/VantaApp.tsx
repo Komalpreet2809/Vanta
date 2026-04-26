@@ -63,7 +63,7 @@ export function VantaApp() {
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden">
         <Header />
 
-        <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] overflow-hidden">
+        <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] overflow-hidden px-8 gap-4">
           {/* INPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
             <div className="p-4 h-14 flex items-center">
