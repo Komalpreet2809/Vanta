@@ -155,13 +155,13 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`border border-dashed border-[var(--border-main)] rounded-md p-4 flex flex-col items-center justify-center text-center transition-colors min-h-[110px] ${
+          className={`border border-dashed border-[var(--border-main)] rounded-md p-8 flex flex-col items-center justify-center text-center transition-colors min-h-[160px] ${
             onFile ? "cursor-pointer hover:bg-black/5" : ""
           } ${isDragging ? "bg-black/5" : "bg-transparent"}`}
         >
-          <div className="flex flex-col items-center gap-2">
-            <FileAudio className="h-5 w-5 stroke-[1.5] text-[var(--text-main)]" />
-            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center">
+          <div className="flex flex-col items-center gap-3">
+            <FileAudio className="h-7 w-7 stroke-[1.5] text-[var(--text-main)]" />
+            <div className="text-[13px] text-[var(--text-main)] leading-relaxed text-center">
               {(emptyLabel ?? (onFile ? "Drag & drop an audio file here\nor click to browse" : "No signal loaded")).split('\n').map((line, i) => (
                 <div key={i}>{line}</div>
               ))}

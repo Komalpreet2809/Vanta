@@ -71,12 +71,12 @@ export function VantaApp() {
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] divide-x divide-[var(--border-main)] overflow-hidden">
           {/* INPUTS COLUMN */}
           <section className="p-4 flex flex-col overflow-y-auto">
-            <div className="mb-6">
+            <div className="mb-8">
               <h2 className="font-mono-heading font-black text-lg uppercase mb-1">Inputs</h2>
               <p className="text-[13px] text-[var(--text-main)]">Provide reference and noise audio.</p>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-6">
               <AudioCard
                 heading="Reference Audio"
                 source={enrollment}
@@ -120,12 +120,12 @@ export function VantaApp() {
 
           {/* OUTPUTS COLUMN */}
           <section className="p-4 flex flex-col overflow-y-auto">
-            <div className="mb-6">
+            <div className="mb-8">
               <h2 className="font-mono-heading font-black text-lg uppercase mb-1">Outputs</h2>
               <p className="text-[13px] text-[var(--text-main)]">Clean voice and residue (noise).</p>
             </div>
 
-            <div className="flex flex-col gap-3 flex-1">
+            <div className="flex flex-col gap-6 flex-1">
               <AudioCard
                 heading="Clean Voice"
                 source={result?.extracted ?? null}
