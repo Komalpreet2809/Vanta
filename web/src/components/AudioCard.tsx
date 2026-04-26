@@ -147,7 +147,7 @@ export function AudioCard({
             if (!onFile) return;
             const input = document.createElement("input");
             input.type = "file";
-            input.accept = "audio/*,.mp3,.wav,.m4a,.flac,.ogg,.aac";
+            input.accept = "audio/*,video/*,.mp3,.wav,.m4a,.mp4,.flac,.ogg,.aac";
             input.onchange = (e) => {
               const f = (e.target as HTMLInputElement).files?.[0];
               if (f) onFile(f);
