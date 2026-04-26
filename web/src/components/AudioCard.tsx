@@ -91,7 +91,7 @@ export function AudioCard({
   return (
     <div className={`card-border p-3 flex flex-col gap-3 bg-[var(--bg-app)] ${className}`}>
       <div className="pb-2 border-b border-[var(--border-main)]/50">
-        <h3 className="font-mono-heading text-[12px] tracking-wide uppercase">
+        <h3 className="font-mono-heading text-[14px] font-black tracking-wide uppercase">
           {heading}
         </h3>
       </div>
