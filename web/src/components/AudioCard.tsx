@@ -159,18 +159,14 @@ export function AudioCard({
             onFile ? "cursor-pointer hover:bg-black/5" : ""
           } ${isDragging ? "bg-black/5" : "bg-transparent"}`}
         >
-          {onFile ? (
-            <div className="flex flex-col items-center gap-3">
-              <FileAudio className="h-6 w-6 stroke-[1.5] text-[var(--text-main)]" />
-              <div className="text-[13px] text-[var(--text-main)] leading-relaxed text-center">
-                Drag & drop an audio file here<br />or click to browse
-              </div>
+          <div className="flex flex-col items-center gap-3">
+            <FileAudio className="h-6 w-6 stroke-[1.5] text-[var(--text-main)]" />
+            <div className="text-[13px] text-[var(--text-main)] leading-relaxed text-center">
+              {(emptyLabel ?? (onFile ? "Drag & drop an audio file here\nor click to browse" : "No signal loaded")).split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
             </div>
-          ) : (
-            <span className="text-[13px] text-[var(--text-muted)]">
-              {emptyLabel ?? "No signal loaded"}
-            </span>
-          )}
+          </div>
         </div>
       )}
     </div>

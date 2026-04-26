@@ -6,7 +6,7 @@ import { EngineCenter } from "./EngineCenter";
 import { Header } from "./Header";
 import { TipsCard } from "./TipsCard";
 import { extract, health, type ExtractMeta } from "../lib/api";
-import { Download } from "lucide-react";
+import { Download, Info } from "lucide-react";
 
 type Result = {
   extracted: Blob;
@@ -136,7 +136,7 @@ export function VantaApp() {
                     ? () => download(result.extracted, "vanta_extracted.mp3")
                     : undefined
                 }
-                emptyLabel="—"
+                emptyLabel={"Clean voice will appear here\nafter processing"}
               />
 
               <AudioCard
@@ -149,8 +149,15 @@ export function VantaApp() {
                     ? () => download(result.residue, "vanta_residue.mp3")
                     : undefined
                 }
-                emptyLabel="—"
+                emptyLabel={"Residue will appear here\nafter processing"}
               />
+
+              <div className="card-border p-4 flex items-start gap-3 bg-[var(--bg-app)]">
+                 <Info className="h-5 w-5 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
+                 <p className="text-[13px] text-[var(--text-main)] leading-relaxed">
+                   Your outputs will be available here<br />once processing is complete.
+                 </p>
+              </div>
 
             </div>
           </section>
