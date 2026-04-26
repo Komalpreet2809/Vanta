@@ -99,8 +99,8 @@ export function AudioCard({
               <Music className="h-4 w-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="truncate text-sm font-semibold">{filename}</div>
-              <div className="text-xs font-mono text-[var(--text-muted)] mt-0.5">
+              <div className="truncate text-sm font-bold">{filename}</div>
+              <div className="text-xs font-mono font-bold text-[var(--text-muted)] mt-0.5">
                 {sizeStr} • {formatTime(duration)}
               </div>
             </div>
@@ -127,7 +127,7 @@ export function AudioCard({
             </button>
             <div className="flex-1 relative">
               <div ref={containerRef} className="w-full" />
-              <div className="flex justify-between text-[10px] font-mono text-[var(--text-muted)] mt-1">
+              <div className="flex justify-between text-[10px] font-mono font-bold text-[var(--text-muted)] mt-1">
                 <span>{formatTime(time)}</span>
                 <span>{formatTime(duration)}</span>
               </div>

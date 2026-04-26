@@ -37,7 +37,7 @@ export function EngineCenter({
           {/* Reference Dot */}
           <circle cx="60" cy="120" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
           <circle cx="60" cy="120" r="3" fill="var(--c-green)" />
-          <text x="50" y="105" className="text-xs font-semibold fill-[var(--text-main)]">Reference</text>
+          <text x="50" y="105" className="text-xs font-bold fill-[var(--text-main)]">Reference</text>
           
           {/* Noise Line */}
           <path
@@ -49,7 +49,7 @@ export function EngineCenter({
           {/* Noise Dot */}
           <circle cx="60" cy="280" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
           <circle cx="60" cy="280" r="3" fill="var(--c-red)" />
-          <text x="50" y="305" className="text-xs font-semibold fill-[var(--text-main)]">Noise</text>
+          <text x="50" y="305" className="text-xs font-bold fill-[var(--text-main)]">Noise</text>
 
           {/* Left Join Node */}
           <circle cx="150" cy="200" r="5" fill="var(--border-main)" />
@@ -65,7 +65,7 @@ export function EngineCenter({
           {/* Clean Voice Dot */}
           <circle cx="440" cy="120" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
           <circle cx="440" cy="120" r="3" fill="var(--c-green)" />
-          <text x="410" y="105" className="text-xs font-semibold fill-[var(--text-main)]">Clean Voice</text>
+          <text x="410" y="105" className="text-xs font-bold fill-[var(--text-main)]">Clean Voice</text>
 
           {/* Residue Line */}
           <path
@@ -77,7 +77,7 @@ export function EngineCenter({
           {/* Residue Dot */}
           <circle cx="440" cy="280" r="6" fill="var(--bg-app)" stroke="var(--border-main)" strokeWidth="1.5" />
           <circle cx="440" cy="280" r="3" fill="var(--c-purple)" />
-          <text x="400" y="305" className="text-xs font-semibold fill-[var(--text-main)]">Residue (Noise)</text>
+          <text x="400" y="305" className="text-xs font-bold fill-[var(--text-main)]">Residue (Noise)</text>
 
           {/* Right Join Node */}
           <circle cx="350" cy="200" r="5" fill="var(--border-main)" />
@@ -101,7 +101,7 @@ export function EngineCenter({
               ))}
             </div>
 
-            <span className="text-[11px] font-mono font-medium text-white tracking-widest uppercase mb-2">Extract Voice</span>
+            <span className="text-[11px] font-mono font-bold text-white tracking-widest uppercase mb-2">Extract Voice</span>
             
             <div className="h-6 w-6 flex items-center justify-center">
                <Play className="h-5 w-5 text-white fill-current translate-x-0.5" />
