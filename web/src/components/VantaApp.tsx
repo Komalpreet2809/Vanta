@@ -67,7 +67,7 @@ export function VantaApp() {
           {/* INPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
             <div className="p-4 h-20 flex flex-col justify-center">
-              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-[0.2em] opacity-90 leading-none">Inputs</h2>
+              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-[0.2em] text-[var(--c-green)] leading-none">Inputs</h2>
               <p className="text-[12px] font-medium opacity-80 mt-1.5">Provide reference and noise audio.</p>
             </div>
             
@@ -114,7 +114,7 @@ export function VantaApp() {
           {/* OUTPUTS COLUMN */}
           <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
             <div className="p-4 h-20 flex flex-col justify-center">
-              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-[0.2em] opacity-90 leading-none">Outputs</h2>
+              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-[0.2em] text-[var(--c-green)] leading-none">Outputs</h2>
               <p className="text-[12px] font-medium opacity-80 mt-1.5">Clean voice and residue (noise).</p>
             </div>
 

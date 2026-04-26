@@ -36,13 +36,14 @@ export function Header() {
   return (
     <header className="px-6 py-4 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
-        {/* Waveform Logo */}
-        <div className="flex items-center gap-[3px] h-7 mr-1">
-          {[0.3, 0.5, 0.8, 1, 0.7, 0.4, 0.6].map((h, i) => (
-            <div key={i} className="w-[3px] bg-[var(--text-main)] rounded-sm" style={{ height: `${h * 100}%` }} />
-          ))}
+        <div className="flex items-center gap-1.5 py-1">
+          <div className="w-1.5 h-6 bg-[var(--c-green)] rounded-full opacity-30" />
+          <div className="w-1.5 h-8 bg-[var(--c-green)] rounded-full opacity-60" />
+          <div className="w-1.5 h-5 bg-[var(--c-green)] rounded-full opacity-40" />
+          <div className="w-1.5 h-9 bg-[var(--c-green)] rounded-full opacity-80" />
+          <div className="w-1.5 h-6 bg-[var(--c-green)] rounded-full opacity-50" />
         </div>
-        <span className="font-mono-heading font-black text-3xl uppercase tracking-tight">Vanta</span>
+        <span className="font-mono-heading font-black text-[22px] uppercase tracking-[0.3em] text-[var(--c-green)]">VANTA</span>
       </div>
 
       <div className="flex items-center gap-3">
