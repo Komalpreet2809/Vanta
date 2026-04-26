@@ -4,7 +4,7 @@ import { Lightbulb, MoreHorizontal } from "lucide-react";
 
 export function TipsCard() {
   return (
-    <div className="card-border p-4 bg-[var(--bg-card)] w-full">
+    <div className="card-border p-4 bg-[var(--bg-app)] w-full">
       <div className="flex items-center justify-between pb-1 mb-2">
         <div className="flex items-center gap-2.5 text-[var(--text-main)]">
           <div className="h-8 w-8 rounded-full border border-[var(--border-card)] flex items-center justify-center bg-black/5 dark:bg-white/5">
