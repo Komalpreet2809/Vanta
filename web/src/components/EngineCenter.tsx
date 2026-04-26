@@ -33,26 +33,11 @@ export function EngineCenter({
         </p>
       </div>
 
-      {/* SVG Diagram Container - Fixed aspect ratio to keep diagram proportions stable */}
-      <div className="relative w-full aspect-[1.8/1] flex items-center justify-center max-w-5xl mx-auto">
+      {/* SVG Diagram Container - Set to take full width and a fixed aspect for consistency */}
+      <div className="relative w-full aspect-[1.5/1] flex items-center justify-center">
         <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
           
-          {/* THE CENTRAL ORB (Visuals in SVG for perfect alignment) */}
-          <g>
-            {/* Outer Glow */}
-            <defs>
-              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="15" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-            </defs>
-            {/* Main Orb Body */}
-            <circle cx="400" cy="220" r="140" fill="#222222" stroke="#444444" strokeWidth="1" />
-            {/* Inner Ring */}
-            <circle cx="400" cy="220" r="132" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-          </g>
-
-          {/* LEFT CURLY BRACE { - Ends exactly at x=260 (circumference) */}
+          {/* LEFT CURLY BRACE { */}
           <g>
             {/* Top Curve */}
             <path
@@ -70,9 +55,11 @@ export function EngineCenter({
               strokeWidth="1.5"
               opacity="0.8"
             />
+            {/* The "Tip" connector to the orb */}
+            <path d="M 260 220 L 300 220" stroke="#222222" strokeWidth="1.5" opacity="0.4" />
           </g>
 
-          {/* RIGHT CURLY BRACE } - Ends exactly at x=540 (circumference) */}
+          {/* RIGHT CURLY BRACE } */}
           <g>
             {/* Top Curve */}
             <path
@@ -90,9 +77,11 @@ export function EngineCenter({
               strokeWidth="1.5"
               opacity="0.8"
             />
+            {/* The "Tip" connector to the orb */}
+            <path d="M 540 220 L 500 220" stroke="#222222" strokeWidth="1.5" opacity="0.4" />
           </g>
 
-          {/* Junction Points on the tips (resting on the circumference) */}
+          {/* Junction Points on the tips */}
           <circle cx="260" cy="220" r="4" fill="#222222" />
           <circle cx="540" cy="220" r="4" fill="#222222" />
 
@@ -123,15 +112,18 @@ export function EngineCenter({
           </g>
         </svg>
 
-        {/* INTERACTIVE BUTTON (Transparent overlay to handle clicks and inner visuals) */}
+        {/* Central Hero Circle */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <motion.button
             disabled={!canExtract || isRunning}
             onClick={onExtract}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`group relative h-[300px] w-[300px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-transparent overflow-hidden disabled:opacity-90`}
+            className={`group relative h-[280px] w-[280px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[1px] border-[#444444] shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden disabled:opacity-90`}
           >
+            {/* Outer Subtle Ring */}
+            <div className="absolute inset-[8px] rounded-full border-[1px] border-white/5" />
+            
             {/* Waveform Icon */}
             <div className="flex items-center gap-[6px] h-14 mb-5">
               {[0.4, 0.7, 1.0, 0.8, 0.5, 0.8, 1.0, 0.7, 0.4].map((h, i) => (
@@ -167,6 +159,9 @@ export function EngineCenter({
               </motion.div>
             )}
           </motion.button>
+          
+          {/* Subtle Glow behind the orb */}
+          <div className="absolute -inset-10 bg-black/10 rounded-full blur-3xl -z-10" />
         </div>
       </div>
 
@@ -185,6 +180,7 @@ export function EngineCenter({
     </div>
   );
 }
+
 
 
 
