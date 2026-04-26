@@ -152,14 +152,6 @@ export function VantaApp() {
                 emptyLabel="—"
               />
 
-              {!result && (
-                <div className="card-border border-dashed p-8 flex flex-col items-center justify-center text-center mt-2 flex-1 min-h-[120px]">
-                   <Download className="h-5 w-5 stroke-[1.5] text-[var(--text-main)] mb-3" />
-                   <p className="text-sm text-[var(--text-main)] leading-relaxed">
-                     Outputs will appear here<br />after processing is complete.
-                   </p>
-                </div>
-              )}
             </div>
           </section>
         </main>
