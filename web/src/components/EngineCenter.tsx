@@ -36,76 +36,79 @@ export function EngineCenter({
       {/* SVG Diagram Container - Set to take full width and a fixed aspect for consistency */}
       <div className="relative w-full aspect-[1.5/1] flex items-center justify-center">
         <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
-          {/* Dashed Outer Circle */}
-          <circle cx="400" cy="220" r="160" fill="none" stroke="#222222" strokeWidth="1" strokeDasharray="4 4" opacity="0.3" />
-
-          {/* Junction Points on the dashed circle */}
-          <circle cx="240" cy="220" r="5" fill="#222222" />
-          <circle cx="560" cy="220" r="5" fill="#222222" />
-
-          {/* Bracket Arms meeting at junctions (240, 220) and (560, 220) */}
           
-          {/* Reference Arm (Top Left to Junction) */}
-          <path
-            d="M 0 110 Q 240 110 240 220"
-            fill="none"
-            stroke="#222222"
-            strokeWidth="1.2"
-            opacity="0.6"
-          />
-          {/* Noise Arm (Bottom Left to Junction) */}
-          <path
-            d="M 0 330 Q 240 330 240 220"
-            fill="none"
-            stroke="#222222"
-            strokeWidth="1.2"
-            opacity="0.6"
-          />
-          {/* Clean Voice Arm (Junction to Top Right) */}
-          <path
-            d="M 560 220 Q 560 110 800 110"
-            fill="none"
-            stroke="#222222"
-            strokeWidth="1.2"
-            opacity="0.6"
-          />
-          {/* Residue Arm (Junction to Bottom Right) */}
-          <path
-            d="M 560 220 Q 560 330 800 330"
-            fill="none"
-            stroke="#222222"
-            strokeWidth="1.2"
-            opacity="0.6"
-          />
+          {/* LEFT CURLY BRACE { */}
+          <g>
+            {/* Top Curve */}
+            <path
+              d="M 0 110 C 150 110, 150 220, 260 220"
+              fill="none"
+              stroke="#222222"
+              strokeWidth="1.5"
+              opacity="0.8"
+            />
+            {/* Bottom Curve */}
+            <path
+              d="M 0 330 C 150 330, 150 220, 260 220"
+              fill="none"
+              stroke="#222222"
+              strokeWidth="1.5"
+              opacity="0.8"
+            />
+            {/* The "Tip" connector to the orb */}
+            <path d="M 260 220 L 300 220" stroke="#222222" strokeWidth="1.5" opacity="0.4" />
+          </g>
 
-          {/* Junction to Orb connectors */}
-          <path d="M 240 220 L 300 220" stroke="#222222" strokeWidth="1.2" opacity="0.4" />
-          <path d="M 560 220 L 500 220" stroke="#222222" strokeWidth="1.2" opacity="0.4" />
+          {/* RIGHT CURLY BRACE } */}
+          <g>
+            {/* Top Curve */}
+            <path
+              d="M 800 110 C 650 110, 650 220, 540 220"
+              fill="none"
+              stroke="#222222"
+              strokeWidth="1.5"
+              opacity="0.8"
+            />
+            {/* Bottom Curve */}
+            <path
+              d="M 800 330 C 650 330, 650 220, 540 220"
+              fill="none"
+              stroke="#222222"
+              strokeWidth="1.5"
+              opacity="0.8"
+            />
+            {/* The "Tip" connector to the orb */}
+            <path d="M 540 220 L 500 220" stroke="#222222" strokeWidth="1.5" opacity="0.4" />
+          </g>
+
+          {/* Junction Points on the tips */}
+          <circle cx="260" cy="220" r="4" fill="#222222" />
+          <circle cx="540" cy="220" r="4" fill="#222222" />
 
           {/* Node Indicators at the edges with Labels */}
           {/* Reference */}
           <g transform="translate(0, 110)">
             <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3.5" fill="#4A6B4A" />
-            <text x="5" y="-15" className="text-[12px] font-bold fill-[#1a1a1a]">Reference</text>
+            <text x="12" y="-12" className="text-[11px] font-bold fill-[#1a1a1a] tracking-tight">REFERENCE</text>
           </g>
           {/* Noise */}
           <g transform="translate(0, 330)">
             <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3.5" fill="#B54545" />
-            <text x="5" y="25" className="text-[12px] font-bold fill-[#1a1a1a]">Noise</text>
+            <text x="12" y="22" className="text-[11px] font-bold fill-[#1a1a1a] tracking-tight">NOISE</text>
           </g>
           {/* Clean Voice */}
           <g transform="translate(800, 110)">
             <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3.5" fill="#4A6B4A" />
-            <text x="-75" y="-15" className="text-[12px] font-bold fill-[#1a1a1a]">Clean Voice</text>
+            <text x="-80" y="-12" className="text-[11px] font-bold fill-[#1a1a1a] tracking-tight text-right">CLEAN VOICE</text>
           </g>
           {/* Residue (Noise) */}
           <g transform="translate(800, 330)">
             <circle r="7" fill="#DCD9D0" stroke="#222222" strokeWidth="1.2" />
             <circle r="3.5" fill="#745296" />
-            <text x="-95" y="25" className="text-[12px] font-bold fill-[#1a1a1a]">Residue (Noise)</text>
+            <text x="-105" y="22" className="text-[11px] font-bold fill-[#1a1a1a] tracking-tight text-right">RESIDUE (NOISE)</text>
           </g>
         </svg>
 
@@ -177,6 +180,7 @@ export function EngineCenter({
     </div>
   );
 }
+
 
 
 
