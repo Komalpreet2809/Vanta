@@ -65,10 +65,7 @@ export function VantaApp() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-app)] flex items-center justify-center p-8">
-      {/* Main Container Outline */}
-      <div className="w-full max-w-[1400px] h-[85vh] min-h-[700px] border border-[var(--border-main)] rounded-sm flex flex-col bg-[var(--bg-app)] shadow-sm overflow-hidden">
-        
+    <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden">
         <Header />
 
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] divide-x divide-[var(--border-main)] overflow-hidden">
@@ -174,7 +171,6 @@ export function VantaApp() {
               <span className="text-xs font-semibold">{backend === "online" ? "Ready" : "Offline"}</span>
            </div>
         </footer>
-      </div>
     </div>
   );
 }
