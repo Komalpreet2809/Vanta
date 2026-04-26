@@ -74,25 +74,25 @@ export function EngineCenter({
           {/* Node Indicators (Aligned with brace ends at x=70 and x=730) */}
           {/* Reference */}
           <g transform="translate(70, 110)">
-            <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
+            <circle r="6" fill="var(--bg-card)" className="shadow-sm" />
             <circle r="3" fill="var(--c-green)" />
             <text x="10" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">REFERENCE</text>
           </g>
           {/* Noise */}
           <g transform="translate(70, 330)">
-            <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
+            <circle r="6" fill="var(--bg-card)" className="shadow-sm" />
             <circle r="3" fill="var(--c-red)" />
             <text x="10" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">NOISE</text>
           </g>
           {/* Clean Voice */}
           <g transform="translate(730, 110)">
-            <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
+            <circle r="6" fill="var(--bg-card)" className="shadow-sm" />
             <circle r="3" fill="var(--c-green)" />
             <text x="-70" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">CLEAN VOICE</text>
           </g>
           {/* Residue (Noise) */}
           <g transform="translate(730, 330)">
-            <circle r="6" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="1.2" />
+            <circle r="6" fill="var(--bg-card)" className="shadow-sm" />
             <circle r="3" fill="var(--c-purple)" />
             <text x="-95" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">RESIDUE (NOISE)</text>
           </g>
@@ -105,10 +105,10 @@ export function EngineCenter({
             onClick={onExtract}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`group relative h-[280px] w-[280px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] border-[1px] border-[#444444] shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden disabled:opacity-90`}
+            className={`group relative h-[280px] w-[280px] rounded-full flex flex-col items-center justify-center transition-all duration-500 bg-[#222222] shadow-[0_30px_70px_rgba(0,0,0,0.6)] overflow-hidden disabled:opacity-90`}
           >
-            {/* Outer Subtle Ring */}
-            <div className="absolute inset-[8px] rounded-full border-[1px] border-white/5" />
+            {/* Outer Subtle Ring - Cleaned up */}
+            <div className="absolute inset-[8px] rounded-full" />
             
             {/* Waveform Icon */}
             <div className="flex items-center gap-[6px] h-14 mb-5">

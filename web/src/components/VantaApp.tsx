@@ -162,7 +162,7 @@ export function VantaApp() {
           </section>
         </main>
 
-        <footer className="px-6 py-2 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-footer)]">
+        <footer className="px-6 py-2 flex items-center justify-between bg-[var(--bg-footer)]">
            <span className="text-[11px] font-mono font-bold tracking-tight opacity-70">VANTA v1.0.0</span>
            <div className="flex items-center gap-2 opacity-80">
               <div className={`h-2 w-2 rounded-full ${backend === "online" ? "bg-[var(--c-green)]" : "bg-[var(--c-red)]"}`} />
