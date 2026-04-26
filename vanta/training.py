@@ -37,6 +37,11 @@ class TrainConfig:
     # Early stopping: stop after `patience` epochs with no val improvement.
     # Keeps training ~on budget and avoids picking a bad "best" by chance.
     early_stop_patience: int = 5
+    # SpecAugment-style time masking on the *encoded* features (not spectrogram).
+    # Two time masks per sample, each zeroing up to `specaug_max_width` frames.
+    # Applied only during training; off during validation/inference.
+    specaug_num_masks: int = 2
+    specaug_max_width: int = 40  # at stride 8 and 16 kHz, ~20ms per frame
 
 
 def _default_collate(batch: list[dict]) -> dict:

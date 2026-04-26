@@ -13,10 +13,16 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
-from vanta.inference import VantaInference
+from vanta.inference import VantaInference, VantaSepFormerInference
 
+# "trained" -> our from-scratch checkpoint (CHECKPOINT_PATH / VANTA_REPEATS)
+# "sepformer" -> SpeechBrain's pretrained SepFormer + our ECAPA selector
+BACKEND = os.environ.get("VANTA_BACKEND", "trained").lower()
 CHECKPOINT_PATH = Path(os.environ.get("VANTA_CHECKPOINT", "checkpoints/real/best.pt"))
 REPEATS = int(os.environ.get("VANTA_REPEATS", "2"))
+SEPFORMER_SOURCE = os.environ.get(
+    "VANTA_SEPFORMER", "speechbrain/sepformer-libri2mix"
+)
 MAX_UPLOAD_BYTES = int(os.environ.get("VANTA_MAX_UPLOAD_BYTES", 25 * 1024 * 1024))  # 25 MB
 
 app = FastAPI(title="Vanta TSE", version="0.1.0")
@@ -39,22 +45,28 @@ _inference: VantaInference | None = None
 @app.on_event("startup")
 def _load_model() -> None:
     global _inference
-    if not CHECKPOINT_PATH.exists():
-        # Don't crash the server; /health will report degraded and /extract 503s.
-        return
-    _inference = VantaInference(CHECKPOINT_PATH, repeats=REPEATS)
+    if BACKEND == "sepformer":
+        _inference = VantaSepFormerInference(sepformer_source=SEPFORMER_SOURCE)
+    else:
+        if not CHECKPOINT_PATH.exists():
+            # Don't crash the server; /health will report degraded and /extract 503s.
+            return
+        _inference = VantaInference(CHECKPOINT_PATH, repeats=REPEATS)
 
 
 @app.get("/health")
 def health() -> JSONResponse:
     ok = _inference is not None
-    return JSONResponse(
-        {
-            "status": "ok" if ok else "model_not_loaded",
-            "checkpoint": str(CHECKPOINT_PATH),
-            "device": str(_inference.device) if _inference else None,
-        }
-    )
+    info: dict = {
+        "status": "ok" if ok else "model_not_loaded",
+        "backend": BACKEND,
+        "device": str(_inference.device) if _inference else None,
+    }
+    if BACKEND == "sepformer":
+        info["sepformer_source"] = SEPFORMER_SOURCE
+    else:
+        info["checkpoint"] = str(CHECKPOINT_PATH)
+    return JSONResponse(info)
 
 
 @app.post("/extract")

@@ -25,6 +25,36 @@ from vanta.models.separator import Separator
 from vanta.models.speaker_encoder import SpeakerEncoder
 
 
+class SpecAugmentTime(nn.Module):
+    """Zero out random time spans of an encoded feature map during training.
+
+    Inspired by SpecAugment (Park et al., 2019) but operates on Conv-TasNet
+    encoder outputs rather than spectrograms. Forces the separator to rely on
+    the full temporal context instead of memorizing narrow patterns — a direct
+    attack on the overfitting we saw in earlier runs. No-op in eval mode.
+    """
+
+    def __init__(self, num_masks: int = 2, max_width: int = 40):
+        super().__init__()
+        self.num_masks = num_masks
+        self.max_width = max_width
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: (B, C, T'). Only mask in training; leave inference untouched.
+        if not self.training or self.num_masks <= 0 or self.max_width <= 0:
+            return x
+        B, _, T = x.shape
+        out = x.clone()
+        for b in range(B):
+            for _ in range(self.num_masks):
+                width = int(torch.randint(1, self.max_width + 1, (1,)).item())
+                if T - width <= 0:
+                    continue
+                start = int(torch.randint(0, T - width, (1,)).item())
+                out[b, :, start : start + width] = 0
+        return out
+
+
 @dataclass
 class VantaConfig:
     enc_channels: int = 512
@@ -38,6 +68,8 @@ class VantaConfig:
     speaker_dim: int = 192
     freeze_speaker: bool = True
     dropout: float = 0.0
+    specaug_num_masks: int = 0        # 0 disables SpecAugment
+    specaug_max_width: int = 40
 
 
 class Vanta(nn.Module):
@@ -66,6 +98,10 @@ class Vanta(nn.Module):
             speaker_dim=cfg.speaker_dim,
             dropout=cfg.dropout,
         )
+        self.specaug = SpecAugmentTime(
+            num_masks=cfg.specaug_num_masks,
+            max_width=cfg.specaug_max_width,
+        )
         self.speaker_encoder = SpeakerEncoder(freeze=cfg.freeze_speaker)
 
     def embed_speaker(self, enrollment: torch.Tensor) -> torch.Tensor:
@@ -88,6 +124,7 @@ class Vanta(nn.Module):
             speaker_embedding = self.embed_speaker(enrollment)
 
         enc = self.audio_encoder(mixture)                       # (B, N, T')
+        enc = self.specaug(enc)                                 # no-op at inference
         mask = self.separator(enc, speaker_embedding)           # (B, N, T')
         masked = enc * mask
         wav = self.audio_decoder(masked)                        # (B, T_out)

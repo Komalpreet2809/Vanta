@@ -1,4 +1,14 @@
-"""Inference helpers: load a trained Vanta checkpoint and extract a target speaker."""
+"""Inference helpers: load a trained Vanta checkpoint OR a SepFormer-based
+backbone and extract a target speaker.
+
+Two backends, same interface:
+  - VantaInference        : our from-scratch trained checkpoint
+  - VantaSepFormerInference : pretrained SepFormer + our ECAPA selector
+
+Pick at server startup via the VANTA_BACKEND env var. The trained-from-scratch
+model is the project's "training pedigree" piece; the SepFormer backbone
+delivers the audio quality we need for the live demo.
+"""
 
 from __future__ import annotations
 
@@ -139,3 +149,62 @@ def _encode_wav(wav: np.ndarray) -> bytes:
     buf = io.BytesIO()
     sf.write(buf, wav, SAMPLE_RATE, subtype="PCM_16", format="WAV")
     return buf.getvalue()
+
+
+class VantaSepFormerInference:
+    """SepFormer-backbone inference. Same public interface as VantaInference
+    so server.py can swap between them without code changes."""
+
+    def __init__(
+        self,
+        sepformer_source: str = "speechbrain/sepformer-libri2mix",
+        device: str = "auto",
+    ):
+        from vanta.models.sepformer_tse import SepFormerTSE
+
+        if device == "auto":
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = torch.device(device)
+        self.model = SepFormerTSE(
+            sepformer_source=sepformer_source, device=self.device
+        )
+
+    @torch.no_grad()
+    def extract(
+        self, mixture_bytes: bytes, enrollment_bytes: bytes
+    ) -> tuple[bytes, bytes, dict]:
+        mixture = _to_mono_16k(mixture_bytes)
+        enrollment = _to_mono_16k(enrollment_bytes)
+
+        orig_mix_samples = len(mixture)
+        max_samples = int(MAX_MIX_SECONDS * SAMPLE_RATE)
+        if len(mixture) > max_samples:
+            mixture = mixture[:max_samples]
+
+        enrollment = _fit(enrollment, int(ENROLL_SECONDS * SAMPLE_RATE))
+        enrollment = peak_normalize(enrollment, peak=0.95)
+
+        mix_t = torch.from_numpy(mixture).unsqueeze(0).to(self.device)
+        enr_t = torch.from_numpy(enrollment).unsqueeze(0).to(self.device)
+
+        extracted_t, residue_t, model_meta = self.model(mix_t, enr_t)
+        extracted = extracted_t.squeeze(0).cpu().numpy()
+        residue = residue_t.squeeze(0).cpu().numpy()
+
+        # Match the mixture's loudness for natural playback (SepFormer outputs
+        # are typically lower-amplitude than the input).
+        mix_peak = float(np.max(np.abs(mixture[: len(extracted)]))) + 1e-8
+        for arr in (extracted, residue):
+            peak = float(np.max(np.abs(arr))) + 1e-8
+            if peak > 0:
+                arr *= mix_peak * 0.95 / peak
+
+        meta = {
+            "sample_rate": SAMPLE_RATE,
+            "input_seconds": orig_mix_samples / SAMPLE_RATE,
+            "output_seconds": len(extracted) / SAMPLE_RATE,
+            "truncated": orig_mix_samples > max_samples,
+            "backend": "sepformer",
+            **model_meta,
+        }
+        return _encode_wav(extracted), _encode_wav(residue), meta

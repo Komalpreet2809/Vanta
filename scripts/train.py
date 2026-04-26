@@ -40,6 +40,10 @@ def main() -> None:
     p.add_argument("--amp-dtype", choices=["bf16", "fp16"], default="bf16")
     p.add_argument("--repeats", type=int, default=2, help="TCN R (total blocks = R*X=R*8)")
     p.add_argument("--dropout", type=float, default=0.0, help="Dropout1d prob in TCN blocks")
+    p.add_argument("--specaug-masks", type=int, default=0,
+                   help="SpecAugment: number of time masks per sample (0 = off)")
+    p.add_argument("--specaug-width", type=int, default=40,
+                   help="SpecAugment: max mask width in encoded frames")
     p.add_argument("--weight-decay", type=float, default=1e-5)
     p.add_argument("--lr-schedule", choices=["cosine", "constant"], default="cosine")
     p.add_argument("--lr-min", type=float, default=1e-5, help="cosine floor")
@@ -61,7 +65,14 @@ def main() -> None:
         train_ds, val_ds = train_val_split(dataset, args.val_fraction, seed=args.seed)
     print(f"train={len(train_ds)}  val={len(val_ds)}")
 
-    model = Vanta(VantaConfig(repeats=args.repeats, dropout=args.dropout))
+    model = Vanta(
+        VantaConfig(
+            repeats=args.repeats,
+            dropout=args.dropout,
+            specaug_num_masks=args.specaug_masks,
+            specaug_max_width=args.specaug_width,
+        )
+    )
     cfg = TrainConfig(
         lr=args.lr,
         batch_size=args.batch_size,

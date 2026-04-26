@@ -35,6 +35,9 @@ export async function extract(
       inputSeconds: data.input_seconds,
       outputSeconds: data.output_seconds,
       truncated: data.truncated,
+      similarities: data.similarities,
+      selected: data.selected,
+      backend: data.backend,
     },
   };
 }
@@ -55,6 +58,10 @@ export type ExtractMeta = {
   inputSeconds: number;
   outputSeconds: number;
   truncated: boolean;
+  // SepFormer backend extras (undefined for trained-from-scratch backend)
+  similarities?: number[][];
+  selected?: number[];
+  backend?: string;
 };
 
 type ExtractJSON = {
@@ -64,6 +71,9 @@ type ExtractJSON = {
   input_seconds: number;
   output_seconds: number;
   truncated: boolean;
+  similarities?: number[][];
+  selected?: number[];
+  backend?: string;
 };
 
 function b64ToBlob(b64: string, type: string): Blob {
