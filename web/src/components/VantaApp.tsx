@@ -72,7 +72,7 @@ export function VantaApp() {
           {/* INPUTS COLUMN */}
           <section className="p-6 flex flex-col overflow-y-auto">
             <div className="mb-6">
-              <h2 className="font-mono-heading text-lg uppercase tracking-widest mb-1">Inputs</h2>
+              <h2 className="font-mono-heading text-lg uppercase mb-1">Inputs</h2>
               <p className="text-sm text-[var(--text-main)]">Provide reference and noise audio.</p>
             </div>
 
@@ -102,7 +102,7 @@ export function VantaApp() {
           {/* ENGINE COLUMN */}
           <section className="bg-[var(--bg-center)] p-6 flex flex-col overflow-hidden">
             <div className="text-center mb-4">
-              <h2 className="font-mono-heading text-lg uppercase tracking-widest mb-1">Vanta Engine</h2>
+              <h2 className="font-mono-heading text-lg uppercase mb-1">Vanta Engine</h2>
               <p className="text-sm text-[var(--text-main)]">Isolates the target voice from noise.</p>
             </div>
 
@@ -121,7 +121,7 @@ export function VantaApp() {
           {/* OUTPUTS COLUMN */}
           <section className="p-6 flex flex-col overflow-y-auto">
             <div className="mb-6">
-              <h2 className="font-mono-heading text-lg uppercase tracking-widest mb-1">Outputs</h2>
+              <h2 className="font-mono-heading text-lg uppercase mb-1">Outputs</h2>
               <p className="text-sm text-[var(--text-main)]">Clean voice and residue (noise).</p>
             </div>
 

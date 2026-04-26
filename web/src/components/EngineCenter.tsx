@@ -101,7 +101,7 @@ export function EngineCenter({
               ))}
             </div>
 
-            <span className="text-[11px] font-mono font-bold text-white tracking-widest uppercase mb-2">Extract Voice</span>
+            <span className="text-[11px] font-mono font-bold text-white uppercase mb-2">Extract Voice</span>
             
             <div className="h-6 w-6 flex items-center justify-center">
                <Play className="h-5 w-5 text-white fill-current translate-x-0.5" />
