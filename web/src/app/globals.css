@@ -68,7 +68,7 @@
   }
   
   .btn-icon {
-    @apply flex items-center justify-center border border-[var(--border-card)] rounded-[6px] bg-[var(--bg-btn)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-[var(--text-main)];
+    @apply flex items-center justify-center border border-[var(--border-card)] rounded-full bg-[var(--bg-btn)] hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-[var(--text-main)];
   }
 }
 
