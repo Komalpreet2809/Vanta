@@ -341,6 +341,3 @@ export function VantaApp() {
     </div>
   );
 }
-
-
-}
