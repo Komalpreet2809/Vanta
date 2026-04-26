@@ -90,7 +90,7 @@ export function AudioCard({
 
   return (
     <div className={`card-border p-3 flex flex-col gap-3 bg-[var(--bg-app)] ${className}`}>
-      <div className="pb-2 border-b border-[var(--border-main)]/50">
+      <div className="pb-1">
         <h3 className="font-mono-heading text-[13px] font-black tracking-tight uppercase opacity-80">
           {heading}
         </h3>
