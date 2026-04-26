@@ -82,15 +82,19 @@ export function VantaApp() {
     <main className="mx-auto w-full max-w-[920px] px-6 py-10">
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-7">
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-6">
+        <div className="flex items-start justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-[28px] font-semibold text-[var(--text)] leading-tight">
-              Extract target speaker
+            <div className="flex items-center gap-2 mb-2">
+              <span className="font-mono text-[11px] font-bold tracking-[0.3em] text-[var(--ok)] uppercase">
+                Vanta
+              </span>
+              <div className="h-[1px] w-8 bg-[var(--ok)] opacity-30" />
+            </div>
+            <h1 className="text-[32px] font-bold text-[var(--text)] leading-tight tracking-tight">
+              Voice Isolation Engine
             </h1>
-            <p className="text-[13px] text-[var(--text-soft)] mt-1.5 leading-relaxed">
-              Upload a 5-second reference clip of one voice and a messy recording —
-              <br className="hidden sm:block" />
-              the model isolates that voice and returns it without everything else.
+            <p className="text-[14px] text-[var(--text-soft)] mt-2 leading-relaxed opacity-80">
+              Isolate any target speaker from complex noisy environments with high-fidelity neural extraction.
             </p>
           </div>
           <StatusPill backend={backend} label={accelerationLabel} />
