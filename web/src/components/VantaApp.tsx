@@ -89,10 +89,12 @@ export function VantaApp() {
       <header className="px-10 py-6 border-b border-[var(--border-strong)] flex items-center justify-between bg-[var(--bg-card)]">
         <div className="flex items-center gap-4">
            {/* Refined Industrial Wave Logo */}
-           <svg className="h-10 w-10 text-[var(--text)]" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
-             <path d="M4 20h4l4-12 8 24 4-12h12" />
-           </svg>
-          <span className="text-[24px] font-bold tracking-[0.4em] uppercase">Vanta</span>
+           <div className="flex items-end gap-1 mb-1">
+            {[0.3, 0.6, 1, 0.7, 0.4].map((h, i) => (
+              <div key={i} className="w-1.5 bg-[var(--text)]" style={{ height: h * 24 }} />
+            ))}
+          </div>
+          <span className="text-[28px] font-bold tracking-[0.5em] uppercase">Vanta</span>
         </div>
 
         <div className="flex items-center gap-4">
@@ -111,10 +113,10 @@ export function VantaApp() {
       <main className="flex-1 grid grid-cols-[1fr_1.2fr_1fr] divide-x divide-[var(--border-strong)]">
         
         {/* Left Column: INPUTS */}
-        <section className="p-10 flex flex-col gap-8 bg-[var(--bg-page)]">
+        <section className="p-10 flex flex-col gap-8 bg-[#e8e6db]">
           <div>
-            <h2 className="text-[20px] font-bold uppercase tracking-widest mb-1">Inputs</h2>
-            <p className="text-[11px] text-[var(--text-soft)]">Provide reference and noise audio.</p>
+            <h2 className="text-[24px] font-bold uppercase tracking-widest mb-1">Inputs</h2>
+            <p className="text-[12px] text-[var(--text-soft)] font-medium">Provide reference and noise audio.</p>
           </div>
 
           <div className="flex flex-col gap-6">
@@ -139,22 +141,24 @@ export function VantaApp() {
              )}
 
             {/* Drag & Drop Placeholder at bottom */}
-            <div className="panel p-6 mt-2 border-dashed flex flex-col items-center justify-center text-center gap-3">
-               <svg className="h-6 w-6 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="panel p-8 mt-2 border-dashed flex flex-col items-center justify-center text-center gap-3 bg-[var(--bg-page)]/20">
+               <svg className="h-8 w-8 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 8l-4-4m0 0l-4 4m4-4v12" />
                </svg>
-               <span className="text-[10px] text-[var(--text-soft)] uppercase tracking-wide">Drag & drop audio files here<br/>or click to browse</span>
+               <span className="text-[11px] font-bold text-[var(--text-soft)] uppercase tracking-widest leading-relaxed">Drag & drop audio files here<br/>or click to browse</span>
             </div>
 
             {/* Tips Box */}
-            <div className="panel p-5 bg-[var(--bg-card)]">
-               <div className="flex items-center gap-2 mb-3">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                  <span className="text-[11px] font-bold uppercase">Tips</span>
+            <div className="panel p-6 bg-[var(--bg-card)]">
+               <div className="flex items-center gap-2 mb-4">
+                  <div className="h-5 w-5 flex items-center justify-center">
+                    <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  </div>
+                  <span className="text-[12px] font-bold uppercase tracking-widest">Tips</span>
                </div>
-               <ul className="space-y-2 text-[10px] text-[var(--text-soft)]">
+               <ul className="space-y-3 text-[11px] font-bold text-[var(--text-soft)] uppercase tracking-wide">
                  <li>• Supports WAV, MP3, M4A</li>
                  <li>• Recommended: 5–30 seconds</li>
                </ul>
@@ -163,26 +167,26 @@ export function VantaApp() {
         </section>
 
         {/* Middle Column: ENGINE */}
-        <section className="p-10 flex flex-col bg-[var(--bg-card)]/30">
+        <section className="p-10 flex flex-col bg-[#e2dfd2]">
           <div className="text-center mb-8">
-            <h2 className="text-[20px] font-bold uppercase tracking-[0.4em] mb-1">Vanta Engine</h2>
-            <p className="text-[11px] text-[var(--text-soft)]">Isolates the target voice from noise.</p>
+            <h2 className="text-[24px] font-bold uppercase tracking-[0.5em] mb-1">Vanta Engine</h2>
+            <p className="text-[12px] font-medium text-[var(--text-soft)]">Isolates the target voice from noise.</p>
           </div>
 
           <div className="flex-1 flex flex-col items-center justify-center">
              <AnalogEngine status={status} onExtract={run} canExtract={canRun} />
           </div>
 
-          {/* Mode Selector at bottom of middle column */}
-          <div className="mt-auto w-full max-w-[320px] mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-3">
+          {/* Mode Selector */}
+          <div className="mt-auto w-full max-w-[340px] mx-auto pb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
               <div className="h-[1px] flex-1 bg-[var(--border)]" />
-              <span className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-widest">Mode</span>
+              <span className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-[0.3em]">Mode</span>
               <div className="h-[1px] flex-1 bg-[var(--border)]" />
             </div>
-            <div className="inset-panel px-5 py-4 flex items-center justify-between text-[12px] cursor-pointer hover:bg-[var(--bg-hover)]">
-               <span className="font-bold">High Quality (Recommended)</span>
-               <svg className="h-4 w-4 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="inset-panel px-6 py-4 flex items-center justify-between text-[13px] cursor-pointer hover:bg-[var(--bg-hover)]">
+               <span className="font-bold uppercase tracking-wider">High Quality (Recommended)</span>
+               <svg className="h-5 w-5 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                </svg>
             </div>
@@ -190,58 +194,67 @@ export function VantaApp() {
         </section>
 
         {/* Right Column: OUTPUTS */}
-        <section className="p-10 flex flex-col gap-8 bg-[var(--bg-page)]">
+        <section className="p-10 flex flex-col gap-8 bg-[#e8e6db]">
           <div>
-            <h2 className="text-[20px] font-bold uppercase tracking-widest mb-1">Outputs</h2>
-            <p className="text-[11px] text-[var(--text-soft)]">Clean voice and residue (noise).</p>
+            <h2 className="text-[24px] font-bold uppercase tracking-widest mb-1">Outputs</h2>
+            <p className="text-[12px] font-medium text-[var(--text-soft)]">Clean voice and residue (noise).</p>
           </div>
 
           <div className="flex flex-col gap-6 flex-1">
             {!result ? (
-              <div className="panel flex-1 flex flex-col items-center justify-center p-12 text-center bg-transparent border-dashed">
-                 <div className="h-12 w-12 border border-dashed border-[var(--border)] rounded-full flex items-center justify-center mb-4 opacity-30">
-                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="panel flex-1 flex flex-col items-center justify-center p-12 text-center bg-[var(--bg-page)]/10 border-dashed border-2">
+                 <div className="h-16 w-16 border border-dashed border-[var(--border)] rounded-full flex items-center justify-center mb-6 opacity-30">
+                   <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5 5-5M12 4v12" />
                    </svg>
                  </div>
-                 <p className="text-[11px] text-[var(--text-dim)] uppercase tracking-wider">Outputs will appear here<br/>after processing is complete.</p>
+                 <p className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-[0.2em] leading-relaxed">Outputs will appear here<br/>after processing is complete.</p>
               </div>
             ) : (
               <div className="flex flex-col gap-8 animate-in fade-in duration-500">
                 <div className="flex flex-col gap-3">
-                   <div className="panel px-5 py-4 bg-[var(--bg-card)]">
-                      <div className="flex items-center justify-between mb-3">
-                         <span className="text-[11px] font-bold uppercase tracking-wider">Clean Voice</span>
-                         <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent-green)]" />
+                   <div className="panel px-6 py-5 bg-[var(--bg-card)]">
+                      <div className="flex items-center justify-between mb-4">
+                         <span className="text-[12px] font-bold uppercase tracking-widest">Clean Voice</span>
+                         <div className="h-2 w-2 rounded-full bg-[var(--accent-green)] shadow-[0_0_8px_var(--accent-green)]" />
                       </div>
                       <WaveformRow label="Clean" source={result.extracted} color="var(--accent-green)" onDownload={() => download(result.extracted, "vanta_clean.wav")} />
                    </div>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                   <div className="panel px-5 py-4 bg-[var(--bg-card)]">
-                      <div className="flex items-center justify-between mb-3">
-                         <span className="text-[11px] font-bold uppercase tracking-wider">Residue (Noise)</span>
-                         <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent-purple)]" />
+                   <div className="panel px-6 py-5 bg-[var(--bg-card)]">
+                      <div className="flex items-center justify-between mb-4">
+                         <span className="text-[12px] font-bold uppercase tracking-widest">Residue (Noise)</span>
+                         <div className="h-2 w-2 rounded-full bg-[var(--accent-purple)] shadow-[0_0_8px_var(--accent-purple)]" />
                       </div>
                       <WaveformRow label="Residue" source={result.residue} color="var(--accent-purple)" onDownload={() => download(result.residue, "vanta_residue.wav")} />
                    </div>
                 </div>
 
-                <div className="mt-auto panel p-6 border-l-4 border-l-[var(--accent-green)] bg-[var(--bg-card)]">
-                   <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                         <div className="h-2 w-2 rounded-full bg-[var(--accent-green)] shadow-[0_0_8px_var(--accent-green)]" />
-                         <span className="text-[11px] font-bold uppercase tracking-widest">Completed</span>
+                <div className="mt-auto panel p-6 border-l-[6px] border-l-[var(--accent-green)] bg-[var(--bg-card)]">
+                   <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                         <div className="h-2.5 w-2.5 rounded-full bg-[var(--accent-green)] shadow-[0_0_10px_var(--accent-green)]" />
+                         <span className="text-[13px] font-bold uppercase tracking-[0.2em]">Processing Successful</span>
                       </div>
                    </div>
-                   <p className="text-[13px] font-bold leading-tight">{message}</p>
+                   <p className="text-[14px] font-bold leading-tight">{message}</p>
                 </div>
               </div>
             )}
           </div>
         </section>
       </main>
+
+      {/* Footer */}
+      <footer className="px-10 py-3 border-t border-[var(--border-strong)] flex items-center justify-between bg-[#e2dfd2]">
+         <span className="text-[12px] font-bold tracking-[0.2em] uppercase opacity-70">VANTA v1.0.0</span>
+         <div className="flex items-center gap-3">
+            <div className="h-2 w-2 rounded-full bg-[var(--accent-green)] shadow-[0_0_8px_var(--accent-green)]" />
+            <span className="text-[12px] font-bold uppercase tracking-[0.2em]">Ready</span>
+         </div>
+      </footer>
 
       {/* Footer */}
       <footer className="px-10 py-4 border-t border-[var(--border-strong)] flex items-center justify-between bg-[var(--bg-card)]/50">
