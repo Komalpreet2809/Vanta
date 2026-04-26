@@ -2,10 +2,10 @@
 
 :root {
   /* Exact Palette from Image */
-  --bg-app: #E6E4DC; /* Main background for outer and side columns */
-  --bg-center: #DFDDD5; /* Slightly darker center column */
-  --bg-card: #E6E4DC; /* Card background matches outer */
-  --bg-btn: #E6E4DC;
+  --bg-app: #DEDCD1; /* Darker, aged industrial beige */
+  --bg-center: #D6D4C8; /* Slightly deeper for the center section */
+  --bg-card: #DEDCD1;
+  --bg-btn: #DEDCD1;
   
   --border-main: #333333;
   --border-card: #B0AE9F;
