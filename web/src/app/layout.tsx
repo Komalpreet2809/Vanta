@@ -1,30 +1,16 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Crimson_Pro, Bebas_Neue } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-// Body / labels — narrow vintage display
-const bebas = Bebas_Neue({
-  weight: "400",
-  variable: "--font-display",
-  subsets: ["latin"],
-});
-
-// Editorial body copy — feels like the tan-paper note in the reference
-const crimson = Crimson_Pro({
-  variable: "--font-serif",
-  subsets: ["latin"],
-});
-
-// Telemetry / numbers
-const jetbrains = JetBrains_Mono({
-  variable: "--font-mono",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "VANTA — voice isolation engine",
+  title: "Vanta — target speaker extraction",
   description:
-    "Isolate one voice from a noisy recording. Upload a 5-second reference clip of the target speaker and the messy audio — Vanta extracts the voice and returns it clean.",
+    "Upload a 5-second reference clip of one voice and a messy recording — Vanta isolates that voice and returns it without everything else.",
 };
 
 export default function RootLayout({
@@ -33,11 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${bebas.variable} ${crimson.variable} ${jetbrains.variable} h-full antialiased`}
-    >
-      <body className="min-h-full">{children}</body>
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+      <body className="page-bg min-h-full">{children}</body>
     </html>
   );
 }

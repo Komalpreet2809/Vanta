@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { DescriptionCard } from "./DescriptionCard";
-import { FileUploadSlot } from "./FileUploadSlot";
-import { WaveformRow } from "./WaveformRow";
+import { Cpu } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { ControlRack } from "./ControlRack";
-import { health, extract, type ExtractMeta } from "../lib/api";
+import { FileUploadSlot } from "./FileUploadSlot";
+import type { Quality } from "./QualityDropdown";
+import { WaveformRow } from "./WaveformRow";
+import { extract, health, type ExtractMeta } from "../lib/api";
 
 type Result = {
   extracted: Blob;
@@ -21,15 +22,18 @@ export function VantaApp() {
   const [result, setResult] = useState<Result | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
-  const [refPlaying, setRefPlaying] = useState(false);
-  const [mixPlaying, setMixPlaying] = useState(false);
+  const [quality, setQuality] = useState<Quality>("high");
+  const [backend, setBackend] = useState<"checking" | "online" | "offline">(
+    "checking",
+  );
+  const [device, setDevice] = useState<string | undefined>();
 
   useEffect(() => {
     let cancelled = false;
     health().then((h) => {
-      // Intentionally ignoring backend status for the UI to match reference exactly,
-      // which has no engine status indicator.
       if (cancelled) return;
+      setBackend(h.ok ? "online" : "offline");
+      setDevice(h.device);
     });
     return () => {
       cancelled = true;
@@ -44,49 +48,17 @@ export function VantaApp() {
     setMessage("");
     setResult(null);
     try {
-      // Try to call the real API first
       const t0 = performance.now();
       const r = await extract(mixture, enrollment);
       const ms = Math.round(performance.now() - t0);
       setResult(r);
-      setMessage(`extracted in ${ms} ms`);
+      setMessage(`Extracted in ${ms} ms`);
       setStatus("idle");
     } catch (e) {
-      // Fallback: Mock the extraction for UI demonstration purposes
-      console.warn("Backend API unavailable. Mocking extraction result for UI demonstration.");
-      setTimeout(() => {
-        setResult({
-          extracted: mixture, // Mocking with input
-          residue: enrollment, // Mocking with input
-          meta: {
-            sampleRate: 16000,
-            inputSeconds: 5.0,
-            outputSeconds: 5.0,
-            truncated: false,
-          }
-        });
-        setStatus("idle");
-      }, 2000); // 2 second fake processing time
+      setStatus("error");
+      setMessage(e instanceof Error ? e.message : String(e));
     }
   }, [mixture, enrollment]);
-
-  const { focus, noiseSuppression, voiceClarity, qualityScore } = useMemo(() => {
-    if (!result) {
-      return { focus: 0.5, noiseSuppression: 0.7, voiceClarity: 0.8, qualityScore: 0.82 };
-    }
-    const sims = (result.meta.similarities?.[0] ?? []) as number[];
-    if (!sims.length) {
-      return { focus: 0.5, noiseSuppression: 0.5, voiceClarity: 0.5, qualityScore: 0.5 };
-    }
-    const sorted = [...sims].sort((a, b) => b - a);
-    const top = sorted[0];
-    const second = sorted[1] ?? 0;
-    const focus = clamp01(top);
-    const voiceClarity = clamp01((top - second) * 2);
-    const noiseSuppression = clamp01(1 - second);
-    const qualityScore = clamp01(0.4 * focus + 0.6 * voiceClarity);
-    return { focus, noiseSuppression, voiceClarity, qualityScore };
-  }, [result]);
 
   const download = useCallback((blob: Blob, name: string) => {
     const url = URL.createObjectURL(blob);
@@ -97,106 +69,148 @@ export function VantaApp() {
     URL.revokeObjectURL(url);
   }, []);
 
+  const accelerationLabel =
+    backend === "online" && device?.toLowerCase().startsWith("cuda")
+      ? "CUDA Acceleration"
+      : backend === "online"
+        ? `${device?.toUpperCase() ?? "CPU"} Engine`
+        : backend === "offline"
+          ? "Backend Offline"
+          : "Connecting…";
+
   return (
-    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] px-8 pt-16 font-mono selection:bg-[var(--gold)] selection:text-[var(--bg-main)]">
-      <main className="max-w-[1200px] mx-auto flex flex-col gap-6 pb-24">
-        {/* Header: title + particle wave */}
-        <DescriptionCard />
+    <main className="mx-auto w-full max-w-[920px] px-6 py-10">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-7">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-[28px] font-semibold text-[var(--text)] leading-tight">
+              Extract target speaker
+            </h1>
+            <p className="text-[13px] text-[var(--text-soft)] mt-1.5 leading-relaxed">
+              Upload a 5-second reference clip of one voice and a messy recording —
+              <br className="hidden sm:block" />
+              the model isolates that voice and returns it without everything else.
+            </p>
+          </div>
+          <StatusPill backend={backend} label={accelerationLabel} />
+        </div>
 
         {/* Upload slots */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FileUploadSlot
             slot="01"
-            label="REFERENCE VOICE"
+            label="Reference Voice"
             file={enrollment}
             onFile={setEnrollment}
-            defaultFilename="Audio1.mp4"
-            defaultSize="46.2 KB"
           />
           <FileUploadSlot
             slot="02"
-            label="NOISY RECORDING"
+            label="Noisy Recording"
             file={mixture}
             onFile={setMixture}
-            defaultFilename="Audio3.mp4"
-            defaultSize="57.3 KB"
           />
         </div>
 
-        {/* Waveform panels */}
+        {/* Input waveforms */}
         {(enrollment || mixture) && (
-          <div className="bg-[var(--bg-panel)] rounded border border-[var(--border-color)] px-6 py-4 flex flex-col gap-6">
-            <WaveformRow
-              label="REFERENCE"
-              source={enrollment}
-              onPlayingChange={setRefPlaying}
-            />
-            <div className="h-[1px] w-full bg-[var(--border-color)]" />
-            <WaveformRow
-              label="INPUT MIXTURE"
-              source={mixture}
-              onPlayingChange={setMixPlaying}
-            />
+          <div className="mt-4 flex flex-col gap-3">
+            {enrollment && (
+              <WaveformRow
+                label="Reference Voice"
+                source={enrollment}
+                variant="accent"
+              />
+            )}
+            {mixture && (
+              <WaveformRow
+                label="Input Mixture"
+                source={mixture}
+                variant="neutral"
+              />
+            )}
           </div>
         )}
 
-        {/* Control rack */}
-        <ControlRack
-          canExtract={!!canRun}
-          status={status}
-          onExtract={run}
-        />
+        {/* Controls */}
+        <div className="mt-4">
+          <ControlRack
+            canExtract={!!canRun}
+            status={status}
+            onExtract={run}
+            quality={quality}
+            onQualityChange={setQuality}
+          />
+        </div>
 
-        {/* Output Section */}
+        {/* Output */}
         {result && (
-          <div className="mt-8 flex flex-col gap-6 pt-8 border-t border-[var(--border-color)]">
-            <div className="flex items-center justify-between font-mono text-[11px] tracking-[0.15em] text-[var(--text-dim)]">
-              <span>OUTPUT</span>
-              <span>5.00s • 16000 Hz</span>
+          <div className="mt-6 pt-6 border-t border-[var(--border)] flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[13px] text-[var(--text-soft)] font-medium">
+                Output
+              </span>
+              <span className="text-[12px] text-[var(--text-dim)]">
+                {result.meta.outputSeconds.toFixed(2)}s · {result.meta.sampleRate} Hz
+              </span>
             </div>
-            
-            <div className="flex flex-col gap-6">
-              <WaveformRow
-                label="EXTRACTED VOICE"
-                source={result.extracted}
-                onPlayingChange={() => {}}
-              />
-              <div className="h-[1px] w-full bg-[var(--border-color)] opacity-50" />
-              <WaveformRow
-                label="RESIDUE (WHAT VANTA REMOVED)"
-                source={result.residue}
-                onPlayingChange={() => {}}
-              />
-            </div>
-
-            <div className="flex items-center gap-4 mt-2">
-              <button
-                type="button"
-                onClick={() => download(result.extracted, "extracted.wav")}
-                className="h-[40px] px-6 rounded border border-[var(--border-color)] font-mono text-[11px] tracking-widest text-[var(--text-main)] hover:bg-[var(--bg-panel)] transition-colors uppercase"
-              >
-                Download Extracted
-              </button>
-              <button
-                type="button"
-                onClick={() => download(result.residue, "residue.wav")}
-                className="h-[40px] px-6 rounded border border-[var(--border-color)] font-mono text-[11px] tracking-widest text-[var(--text-main)] hover:bg-[var(--bg-panel)] transition-colors uppercase"
-              >
-                Download Residue
-              </button>
-            </div>
-
-            <div className="font-mono text-[10px] tracking-widest text-[var(--text-dim)] mt-4">
-              vanta — conv-tasnet with ecapa-tdnn speaker conditioning
-            </div>
+            <WaveformRow
+              label="Extracted Voice"
+              source={result.extracted}
+              variant="accent"
+              onDownload={() => download(result.extracted, "vanta_extracted.wav")}
+            />
+            <WaveformRow
+              label="Residue (what was removed)"
+              source={result.residue}
+              variant="neutral"
+              onDownload={() => download(result.residue, "vanta_residue.wav")}
+            />
           </div>
         )}
-      </main>
-    </div>
+
+        {/* Status message */}
+        {message && (
+          <p
+            className={`mt-4 text-[12px] ${
+              status === "error" ? "text-[var(--err)]" : "text-[var(--text-dim)]"
+            }`}
+          >
+            {message}
+          </p>
+        )}
+      </div>
+    </main>
   );
 }
 
-function clamp01(x: number): number {
-  if (!Number.isFinite(x)) return 0;
-  return Math.max(0, Math.min(1, x));
+function StatusPill({
+  backend,
+  label,
+}: {
+  backend: "checking" | "online" | "offline";
+  label: string;
+}) {
+  const dotColor =
+    backend === "online"
+      ? "bg-[var(--ok)]"
+      : backend === "offline"
+        ? "bg-[var(--err)]"
+        : "bg-[var(--text-dim)]";
+
+  return (
+    <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-input)] px-3 py-1.5 shrink-0">
+      <span className="relative flex h-2 w-2">
+        <span
+          className={`absolute inset-0 rounded-full ${dotColor} ${
+            backend === "online" ? "pulse-dot" : ""
+          }`}
+        />
+      </span>
+      <Cpu className="h-3.5 w-3.5 text-[var(--text-soft)]" />
+      <span className="text-[12px] text-[var(--text-soft)] whitespace-nowrap">
+        {label}
+      </span>
+    </div>
+  );
 }

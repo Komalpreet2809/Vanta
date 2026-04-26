@@ -1,23 +1,30 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import { File, Play, X } from "lucide-react";
+import { Music, Play, Pause, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
-  slot: string;
-  label: string;
+  slot: string;          // "01" / "02"
+  label: string;         // "Reference Voice"
   file: File | null;
   onFile: (f: File | null) => void;
-  spinning?: boolean;
   defaultFilename?: string;
   defaultSize?: string;
 };
 
-const ACCEPT = "audio/*,video/*,.wav,.mp3,.flac,.ogg,.m4a,.mp4,.webm,.mov,.aac";
+const ACCEPT =
+  "audio/*,video/*,.wav,.mp3,.flac,.ogg,.m4a,.mp4,.webm,.mov,.aac";
 
-export function FileUploadSlot({ slot, label, file, onFile, defaultFilename, defaultSize }: Props) {
+export function FileUploadSlot({
+  slot,
+  label,
+  file,
+  onFile,
+}: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -29,27 +36,59 @@ export function FileUploadSlot({ slot, label, file, onFile, defaultFilename, def
     [onFile],
   );
 
+  // Reset audio state when file changes / clears.
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+      audioRef.current = null;
+    }
+    setPlaying(false);
+  }, [file]);
+
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!file) return;
+    if (!audioRef.current) {
+      const url = URL.createObjectURL(file);
+      const a = new Audio(url);
+      a.addEventListener("ended", () => setPlaying(false));
+      audioRef.current = a;
+    }
+    if (audioRef.current.paused) {
+      audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
+    } else {
+      audioRef.current.pause();
+      setPlaying(false);
+    }
+  };
+
+  const sizeStr = file ? `${(file.size / 1024).toFixed(1)} KB` : "";
+
   return (
-    <div className="bg-[var(--bg-panel-dark)] rounded border border-[var(--border-color)] p-5 flex flex-col gap-5">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="font-mono text-[13px] tracking-widest">
-          <span className="text-[var(--text-dim)]">{slot} </span>
-          <span className="text-[var(--text-main)]">{label}</span>
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
+      {/* header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <span className="text-[15px] text-[var(--accent)] font-medium tabular-nums">
+            {slot}
+          </span>
+          <span className="text-[15px] text-[var(--text)] font-medium">
+            {label}
+          </span>
         </div>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onFile(null);
-          }}
-          className="flex items-center gap-2 font-mono text-[11px] px-3 py-1.5 rounded border border-[var(--border-color)] text-[var(--text-main)] hover:bg-[var(--border-color)] transition-colors"
-        >
-          Clear <X className="h-3.5 w-3.5" />
-        </button>
+        {file ? (
+          <button
+            type="button"
+            onClick={() => onFile(null)}
+            className="text-[12px] text-[var(--text-soft)] hover:text-[var(--text)] px-3 py-1 rounded-md border border-[var(--border)] hover:border-[var(--border-strong)] transition-colors"
+          >
+            Clear
+          </button>
+        ) : null}
       </div>
 
-      {/* Upload Zone */}
+      {/* dropzone / loaded card */}
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -57,33 +96,63 @@ export function FileUploadSlot({ slot, label, file, onFile, defaultFilename, def
         }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
-        onClick={() => inputRef.current?.click()}
-        className={`
-          relative flex items-center justify-between gap-6 px-6 py-5 rounded border border-dashed transition-all cursor-pointer
-          ${dragOver ? "border-[var(--gold)] bg-[var(--gold-dim)]" : "border-[var(--border-color)] hover:border-[var(--text-dim)]"}
-        `}
+        onClick={() => !file && inputRef.current?.click()}
+        role="button"
+        tabIndex={0}
+        className={`rounded-lg border bg-[var(--bg-input)] px-4 py-3 transition-colors ${
+          dragOver
+            ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+            : "border-[var(--border)]"
+        } ${!file ? "cursor-pointer hover:border-[var(--border-strong)]" : ""}`}
       >
-        <div className="flex items-center gap-5">
-          <div className="flex items-center justify-center text-[var(--text-dim)]">
-            <File className="h-7 w-7" strokeWidth={1} />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <span className="text-[13px] text-[var(--text-main)]">
-              {file ? file.name : defaultFilename || "Audio1.mp4"}
-            </span>
-            <div className="flex items-center gap-3 font-mono text-[11px] text-[var(--text-dim)]">
-              <span>{file ? `${(file.size / 1024).toFixed(1)} KB` : defaultSize || "46.2 KB"}</span>
-              <span>•</span>
-              <span>00:05</span>
+        {file ? (
+          <div className="flex items-center gap-3">
+            {/* music icon tile */}
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[var(--accent-soft)] border border-[var(--accent)]/20">
+              <Music className="h-4 w-4 text-[var(--accent)]" />
             </div>
+            {/* filename + meta */}
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-[14px] text-[var(--text)] font-medium">
+                {file.name}
+              </div>
+              <div className="text-[12px] text-[var(--text-dim)]">
+                {sizeStr} • <span className="text-[var(--accent)]">Ready</span>
+              </div>
+            </div>
+            {/* play */}
+            <button
+              type="button"
+              onClick={togglePlay}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-strong)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-[var(--text-soft)] transition-colors"
+              aria-label={playing ? "pause" : "play"}
+            >
+              {playing ? (
+                <Pause className="h-4 w-4" />
+              ) : (
+                <Play className="h-4 w-4 fill-current" />
+              )}
+            </button>
+            {/* close (clear) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onFile(null);
+              }}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] hover:border-[var(--err)] hover:text-[var(--err)] text-[var(--text-dim)] transition-colors"
+              aria-label="clear file"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
-        </div>
-
-        <button className="h-8 w-8 rounded-full flex items-center justify-center border border-[var(--border-color)] bg-[var(--bg-panel)] text-[var(--text-main)] hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all">
-          <Play className="h-3 w-3 fill-current ml-0.5" />
-        </button>
-
+        ) : (
+          <div className="flex h-12 items-center justify-center">
+            <span className="text-[13px] text-[var(--text-dim)]">
+              <span className="text-[var(--text-soft)]">Click</span> or drag and drop a file here
+            </span>
+          </div>
+        )}
         <input
           ref={inputRef}
           type="file"
@@ -95,6 +164,18 @@ export function FileUploadSlot({ slot, label, file, onFile, defaultFilename, def
           }}
         />
       </div>
+
+      {/* "Ready" footer */}
+      {file ? (
+        <div className="flex items-center gap-1.5 mt-3">
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[var(--accent-soft)]">
+            <svg viewBox="0 0 12 12" className="h-3 w-3 text-[var(--accent)]" fill="currentColor">
+              <path d="M5 8.5L2.5 6l-1 1L5 10.5 11 4.5l-1-1z" />
+            </svg>
+          </span>
+          <span className="text-[12px] text-[var(--text-soft)]">Ready</span>
+        </div>
+      ) : null}
     </div>
   );
 }

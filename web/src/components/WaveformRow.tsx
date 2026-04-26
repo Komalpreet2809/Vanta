@@ -1,20 +1,25 @@
 "use client";
 
+import { Download, MoreVertical, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
 type Props = {
   source: Blob | File | string | null;
   label: string;
-  /** Called with `true` while playing, `false` when paused/stopped — drives reel spin. */
+  /** Reference uses the green accent; everything else stays neutral. */
+  variant?: "accent" | "neutral";
   onPlayingChange?: (playing: boolean) => void;
-  /** Compact mode — drops label + time + handle, smaller height. Used inside OUTPUT PREVIEW. */
-  compact?: boolean;
+  onDownload?: () => void;
 };
 
-import { Search } from "lucide-react";
-
-export function WaveformRow({ source, label, onPlayingChange, compact }: Props) {
+export function WaveformRow({
+  source,
+  label,
+  variant = "neutral",
+  onPlayingChange,
+  onDownload,
+}: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WaveSurfer | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -26,16 +31,18 @@ export function WaveformRow({ source, label, onPlayingChange, compact }: Props) 
     if (!containerRef.current) return;
     if (!source) return;
 
+    const accent = variant === "accent" ? "#4ade80" : "#aab1b6";
+    const progress = variant === "accent" ? "#22c55e" : "#e7eaec";
+
     const ws = WaveSurfer.create({
       container: containerRef.current,
-      waveColor: "#333",
-      progressColor: "#777",
-      cursorColor: "#c8b387",
-      cursorWidth: 2,
+      waveColor: accent,
+      progressColor: progress,
+      cursorColor: "transparent",
       barWidth: 2,
       barGap: 2,
       barRadius: 1,
-      height: compact ? 24 : 36,
+      height: 60,
       normalize: true,
       interact: true,
     });
@@ -49,96 +56,111 @@ export function WaveformRow({ source, label, onPlayingChange, compact }: Props) 
     ws.on("ready", () => {
       setReady(true);
       setDuration(ws.getDuration());
-      
-      // Inject custom dots for cursor
-      const wrapper = containerRef.current?.querySelector("div");
-      if (wrapper && wrapper.lastChild) {
-        const cursor = wrapper.lastChild as HTMLElement;
-        if (cursor && cursor.style) {
-          cursor.style.overflow = "visible";
-          cursor.style.zIndex = "10";
-          cursor.innerHTML = `
-            <div style="position:absolute; top:-3px; left:-2px; width:6px; height:6px; border-radius:50%; background:#c8b387;"></div>
-            <div style="position:absolute; bottom:-3px; left:-2px; width:6px; height:6px; border-radius:50%; background:#c8b387;"></div>
-          `;
-        }
-      }
     });
     ws.on("audioprocess", () => setTime(ws.getCurrentTime()));
     ws.on("seeking", () => setTime(ws.getCurrentTime()));
-    ws.on("play", () => { setPlaying(true); onPlayingChange?.(true); });
-    ws.on("pause", () => { setPlaying(false); onPlayingChange?.(false); });
-    ws.on("finish", () => { setPlaying(false); onPlayingChange?.(false); });
+    ws.on("play", () => {
+      setPlaying(true);
+      onPlayingChange?.(true);
+    });
+    ws.on("pause", () => {
+      setPlaying(false);
+      onPlayingChange?.(false);
+    });
+    ws.on("finish", () => {
+      setPlaying(false);
+      onPlayingChange?.(false);
+    });
 
     return () => {
       ws.destroy();
       wsRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [source]);
+  }, [source, variant]);
 
-  if (compact) {
-    return (
-      <div className="flex flex-col gap-3">
-        <div ref={containerRef} className="w-full" />
-        <div className="flex items-center justify-between">
-           <span className="font-mono text-[10px] text-[var(--text-dim)] uppercase tracking-widest">Quality</span>
-           <div className="flex items-center gap-1.5 ml-4">
-             {Array.from({ length: 10 }).map((_, i) => (
-               <div key={i} className={`h-2.5 w-2.5 rounded-sm ${i < 8 ? 'bg-[var(--gold)]' : 'bg-[#222]'}`} />
-             ))}
-           </div>
-           <span className="font-mono text-[10px] text-[var(--text-main)] uppercase tracking-widest ml-auto">82%</span>
-        </div>
-      </div>
-    );
-  }
+  if (!source) return null;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <span className="font-mono text-[12px] tracking-[0.15em] text-[var(--text-dim)]">
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-5 py-4">
+      {/* header: label + actions */}
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-[14px] text-[var(--text)] font-medium">
           {label}
         </span>
-        <button className="flex items-center gap-2 px-3 py-1.5 rounded border border-[var(--border-color)] bg-transparent hover:bg-[var(--border-color)] transition-colors text-[var(--text-main)]">
-          <Search className="h-3.5 w-3.5" />
-          <span className="font-mono text-[11px]">Zoom</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => wsRef.current?.playPause()}
+            disabled={!ready}
+            className="flex items-center gap-1.5 rounded-md border border-[var(--border-strong)] px-3 py-1.5 text-[12px] text-[var(--text-soft)] hover:text-[var(--text)] hover:border-[var(--text-soft)] disabled:opacity-50 transition-colors"
+          >
+            {playing ? (
+              <>
+                <Pause className="h-3.5 w-3.5" />
+                Pause
+              </>
+            ) : (
+              <>
+                <Play className="h-3.5 w-3.5 fill-current" />
+                Play
+              </>
+            )}
+          </button>
+          {onDownload ? (
+            <button
+              type="button"
+              onClick={onDownload}
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-colors"
+              aria-label="download"
+            >
+              <Download className="h-3.5 w-3.5" />
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className="flex h-7 w-7 items-center justify-center rounded-md text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--bg-input)] transition-colors"
+            aria-label="more"
+          >
+            <MoreVertical className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-6">
+      {/* circular play + waveform + duration */}
+      <div className="flex items-center gap-4">
         <button
           type="button"
-          disabled={!ready || !source}
           onClick={() => wsRef.current?.playPause()}
-          className="h-9 w-9 flex items-center justify-center rounded-full bg-[var(--bg-panel-dark)] border border-[var(--border-color)] text-[var(--text-main)] hover:text-[var(--gold)] hover:border-[var(--gold)] transition-all shrink-0"
+          disabled={!ready}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--bg-input)] border border-[var(--border-strong)] text-[var(--text-soft)] hover:text-[var(--text)] hover:border-[var(--text-soft)] disabled:opacity-40 transition-colors"
         >
-          {playing ? <PauseIcon /> : <PlayIcon />}
+          {playing ? (
+            <Pause className="h-3.5 w-3.5" />
+          ) : (
+            <Play className="h-3.5 w-3.5 fill-current ml-0.5" />
+          )}
         </button>
 
-        <div className="font-mono text-[11px] text-[var(--text-dim)] tabular-nums shrink-0">
-          {formatTime(time)} / {formatTime(duration)}
+        <div className="flex-1 min-w-0">
+          <div ref={containerRef} className="wf" />
+          <div className="mt-1 flex items-center justify-between text-[11px] text-[var(--text-dim)] tabular-nums">
+            <span>{formatTime(time)}</span>
+            <span>{formatTime(duration, true)}</span>
+          </div>
         </div>
-
-        <div ref={containerRef} className="flex-1 min-w-0" />
       </div>
     </div>
   );
 }
 
-function PlayIcon() {
-  return <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" className="ml-0.5"><polygon points="2,1 9,5 2,9" /></svg>;
-}
-
-function PauseIcon() {
-  return <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><rect x="2" y="1" width="2" height="8" /><rect x="6" y="1" width="2" height="8" /></svg>;
-}
-
-
-
-function formatTime(seconds: number): string {
-  if (!isFinite(seconds)) return "00:00";
+function formatTime(seconds: number, withCs = false): string {
+  if (!isFinite(seconds)) return withCs ? "00:00.00" : "00:00";
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  if (!withCs) {
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  }
+  const cs = Math.floor((seconds - Math.floor(seconds)) * 100);
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${String(cs).padStart(2, "0")}`;
 }
