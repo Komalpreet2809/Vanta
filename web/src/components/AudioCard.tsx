@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, MoreHorizontal, Music, Pause, Play, Upload, X } from "lucide-react";
+import { AudioLines, Download, FileAudio, MoreHorizontal, Music, Pause, Play, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
@@ -89,19 +89,21 @@ export function AudioCard({
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div className={`card-border p-5 flex flex-col gap-4 bg-[var(--bg-card)] ${className} relative overflow-hidden`}>
+    <div className={`card-border p-3 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
       <div className="flex items-center justify-between pb-1">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full border border-[var(--border-card)] flex items-center justify-center bg-[var(--bg-header)]">
-            <Music className="h-4 w-4 opacity-70" />
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-full border border-[var(--border-card)] flex items-center justify-center bg-black/5 dark:bg-white/5">
+            {heading.toLowerCase().includes("reference") || heading.toLowerCase().includes("clean") ? (
+              <Music className="h-4 w-4 opacity-70" />
+            ) : (
+              <AudioLines className="h-4 w-4 opacity-70" />
+            )}
           </div>
-          <h3 className="font-sans text-[15px] font-bold tracking-tight text-[var(--text-main)]">
+          <h3 className="font-mono-heading text-[13px] font-black tracking-tight uppercase opacity-80">
             {heading}
           </h3>
         </div>
-        <button className="opacity-40 hover:opacity-100 transition-opacity">
-          <MoreHorizontal className="h-5 w-5" />
-        </button>
+        <MoreHorizontal className="h-4 w-4 opacity-40 cursor-pointer hover:opacity-100 transition-opacity" />
       </div>
 
       {source ? (
@@ -167,24 +169,17 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`h-full border border-dashed border-[var(--border-dashed)] rounded-[20px] flex items-center justify-center transition-all min-h-[160px] relative ${
+          className={`h-full border border-dashed border-[var(--border-dashed)] rounded-[6px] flex items-center justify-center transition-all min-h-[120px] ${
             onFile ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/5" : ""
           } ${isDragging ? "bg-black/5 dark:bg-white/5" : "bg-transparent"}`}
         >
-          <div className="flex flex-col items-center gap-4 relative z-10 py-6">
-            <Upload className="h-8 w-8 stroke-[1.5] text-[var(--text-main)] opacity-70" />
-            <div className="text-[13px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium max-w-[180px]">
-               Drag & drop an audio file here or click to browse
-            </div>
-          </div>
-          
-          {/* Subtle Background Waveform (Matches Reference) */}
-          <div className="absolute bottom-4 left-4 right-4 h-10 opacity-10 pointer-events-none">
-            <svg viewBox="0 0 100 20" preserveAspectRatio="none" className="w-full h-full fill-[var(--text-main)]">
-              {Array.from({ length: 40 }).map((_, i) => (
-                <rect key={i} x={i * 2.5} y={10 - (Math.random() * 8)} width="1.5" height={Math.random() * 16} rx="0.75" />
+          <div className="flex flex-col items-center gap-3">
+            <FileAudio className="h-7 w-7 stroke-[1.5] text-[var(--text-main)]" />
+            <div className="text-[12px] text-[var(--text-main)] leading-relaxed text-center opacity-80 font-medium">
+              {(emptyLabel ?? (onFile ? "Drag & drop an audio file here\nor click to browse" : "No signal loaded")).split('\n').map((line, i) => (
+                <div key={i}>{line}</div>
               ))}
-            </svg>
+            </div>
           </div>
         </div>
       )}
