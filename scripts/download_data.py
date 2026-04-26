@@ -54,6 +54,13 @@ DATASETS: dict[str, Dataset] = {
         extract_marker="LibriSpeech/train-clean-100",
         approx_size_mb=6_300,
     ),
+    "librispeech-train-360": Dataset(
+        key="librispeech-train-360",
+        url="https://www.openslr.org/resources/12/train-clean-360.tar.gz",
+        archive_name="train-clean-360.tar.gz",
+        extract_marker="LibriSpeech/train-clean-360",
+        approx_size_mb=23_000,
+    ),
     "musan": Dataset(
         key="musan",
         url="https://www.openslr.org/resources/17/musan.tar.gz",

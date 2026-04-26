@@ -1,16 +1,30 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
+import { JetBrains_Mono, Crimson_Pro, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Body / labels — narrow vintage display
+const bebas = Bebas_Neue({
+  weight: "400",
+  variable: "--font-display",
+  subsets: ["latin"],
+});
+
+// Editorial body copy — feels like the tan-paper note in the reference
+const crimson = Crimson_Pro({
+  variable: "--font-serif",
+  subsets: ["latin"],
+});
+
+// Telemetry / numbers
+const jetbrains = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "VANTA — target speaker extraction",
+  title: "VANTA — voice isolation engine",
   description:
-    "Vanta isolates one specific voice from a messy recording. Upload a 5-second reference clip and the noisy audio.",
+    "Isolate one voice from a noisy recording. Upload a 5-second reference clip of the target speaker and the messy audio — Vanta extracts the voice and returns it clean.",
 };
 
 export default function RootLayout({
@@ -21,9 +35,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistMono.variable} h-full antialiased`}
+      className={`${bebas.variable} ${crimson.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }
