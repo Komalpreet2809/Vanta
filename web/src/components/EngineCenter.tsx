@@ -1,7 +1,7 @@
 "use client";
 
 import { Play } from "lucide-react";
-import { ParticleWave } from "./ParticleWave";
+
 
 type Props = {
   canExtract: boolean;
@@ -90,8 +90,8 @@ export function EngineCenter({
             
             <div className={`h-[100px] w-[100px] rounded-full border-[1.5px] border-[var(--border-main)] flex flex-col items-center justify-center bg-[var(--bg-center)] transition-all duration-700 ${isRunning ? 'border-[var(--c-green)]' : ''}`}>
                <div className={`h-16 w-16 rounded-full transition-all duration-1000 flex items-center justify-center ${isRunning ? 'bg-[var(--c-dark-green)] scale-110 shadow-[0_0_20px_rgba(74,107,74,0.3)]' : 'bg-[#1E1E1E]'}`}>
-                 <div className="h-8 w-8 overflow-hidden rounded-full">
-                    <ParticleWave isActive={isRunning} />
+                 <div className="h-8 w-8 overflow-hidden rounded-full flex items-center justify-center">
+                    <div className={`w-full h-1 bg-white/20 rounded-full transition-all duration-500 ${isRunning ? 'animate-pulse scale-y-150' : ''}`} />
                  </div>
                </div>
             </div>
