@@ -5,7 +5,7 @@ import { Lightbulb } from "lucide-react";
 export function TipsCard() {
   return (
     <div className="card-border p-4 bg-[var(--bg-app)]">
-      <div className="flex items-center gap-2 mb-2 text-[var(--text-main)]">
+      <div className="flex items-center gap-2 pb-2 mb-3 border-b border-[var(--border-main)]/50 text-[var(--text-main)]">
         <Lightbulb className="h-4 w-4 fill-current" />
         <span className="text-sm font-bold uppercase tracking-wide">Tips</span>
       </div>
