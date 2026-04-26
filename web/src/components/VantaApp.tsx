@@ -80,7 +80,7 @@ export function VantaApp() {
               <AudioCard
                 heading="Reference Audio"
                 source={enrollment}
-                variant="charcoal"
+                variant="brown"
                 onClear={() => setEnrollment(null)}
                 onFile={(f) => setEnrollment(f)}
                 emptyLabel="No reference audio loaded"

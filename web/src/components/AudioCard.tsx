@@ -22,6 +22,7 @@ const COLOR: Record<Variant, { wave: string; progress: string }> = {
   red: { wave: "#B54545", progress: "#8A2A2A" },
   green: { wave: "#4A6B4A", progress: "#2B3D2B" },
   purple: { wave: "#745296", progress: "#4B3263" },
+  brown: { wave: "#A68A64", progress: "#7D6448" },
 };
 
 export function AudioCard({
