@@ -34,7 +34,7 @@ export function Header() {
   };
 
   return (
-    <header className="px-6 py-4 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
+    <header className="px-6 py-4 flex items-center justify-between bg-[var(--bg-header)] shadow-sm">
       <div className="flex items-center gap-3">
         {/* Waveform Logo */}
         <div className="flex items-center gap-[3px] h-7 mr-1">
