@@ -55,105 +55,129 @@ export function EngineCenter({
                 </filter>
             </defs>
 
-            {/* Input Fan Network (Left to Center) */}
-            <g opacity="0.3">
-                {[...Array(12)].map((_, i) => (
-                    <g key={`fan-in-${i}`}>
-                        {/* Reference Fan */}
+            {/* Organic Neural Web - Inputs (Left to Center) */}
+            <g opacity="0.4">
+                {[...Array(24)].map((_, i) => {
+                    const jitter = (Math.random() - 0.5) * 80;
+                    const pathD = i % 2 === 0 
+                        ? `M 100 150 C ${180 + i * 2} ${150 + jitter}, ${320 - i * 3} ${300 + jitter/2}, 400 300`
+                        : `M 100 450 C ${180 + i * 2} ${450 + jitter}, ${320 - i * 3} ${300 + jitter/2}, 400 300`;
+                    return (
                         <path 
-                            d={`M 100 150 C ${150 + i * 5} ${150 + (i - 6) * 10}, ${300 - i * 5} 300, 400 300`} 
-                            fill="none" 
-                            stroke="var(--c-node-brown)" 
-                            strokeWidth="0.5" 
-                            strokeDasharray={i % 2 === 0 ? "2 2" : "none"}
+                            key={`organic-in-${i}`}
+                            d={pathD}
+                            fill="none"
+                            stroke={i % 2 === 0 ? "var(--c-node-brown)" : "var(--c-node-red)"}
+                            strokeWidth={Math.random() * 0.8}
+                            opacity={0.1 + Math.random() * 0.4}
                         />
-                        {/* Noise Fan */}
-                        <path 
-                            d={`M 100 450 C ${150 + i * 5} ${450 - (i - 6) * 10}, ${300 - i * 5} 300, 400 300`} 
-                            fill="none" 
-                            stroke="var(--c-node-red)" 
-                            strokeWidth="0.5"
-                            strokeDasharray={i % 2 === 0 ? "none" : "2 2"}
-                        />
-                    </g>
+                    );
+                })}
+                
+                {/* Cross-linking "Web" Lines */}
+                {[...Array(15)].map((_, i) => (
+                    <path 
+                        key={`web-in-${i}`}
+                        d={`M ${150 + Math.random() * 150} ${180 + Math.random() * 80} Q ${250 + Math.random() * 50} ${300 + (Math.random() - 0.5) * 100}, ${150 + Math.random() * 150} ${370 + Math.random() * 80}`}
+                        fill="none"
+                        stroke="var(--text-muted)"
+                        strokeWidth="0.3"
+                        opacity="0.1"
+                    />
                 ))}
             </g>
 
-            {/* Dust Particles for Inputs */}
+            {/* Neural Dust Particles - Inputs */}
             {isRunning && (
                 <g>
-                    {[...Array(40)].map((_, i) => (
-                        <motion.circle 
-                            key={`in-dust-${i}`} 
-                            r={0.8 + Math.random()} 
-                            fill={i % 2 === 0 ? "var(--c-node-brown)" : "var(--c-node-red)"}
-                            initial={{ opacity: 0 }}
-                            animate={{ 
-                                opacity: [0, 0.8, 0],
-                                offsetDistance: ["0%", "100%"] 
-                            }}
-                            transition={{ 
-                                duration: 1.5 + Math.random() * 2, 
-                                repeat: Infinity, 
-                                ease: "easeInOut", 
-                                delay: Math.random() * 2 
-                            }}
-                            style={{ 
-                                offsetPath: `path('M 100 ${i % 2 === 0 ? 150 : 450} C 200 ${i % 2 === 0 ? 150 + (Math.random() - 0.5) * 100 : 450 + (Math.random() - 0.5) * 100}, 300 300, 400 300')` 
-                            }}
-                        />
-                    ))}
+                    {[...Array(60)].map((_, i) => {
+                        const isTop = i % 2 === 0;
+                        const jitter = (Math.random() - 0.5) * 100;
+                        return (
+                            <motion.circle 
+                                key={`neural-dust-in-${i}`} 
+                                r={0.5 + Math.random() * 1.2} 
+                                fill={isTop ? "var(--c-node-brown)" : "var(--c-node-red)"}
+                                initial={{ opacity: 0 }}
+                                animate={{ 
+                                    opacity: [0, 0.6, 0],
+                                    offsetDistance: ["0%", "100%"] 
+                                }}
+                                transition={{ 
+                                    duration: 2 + Math.random() * 3, 
+                                    repeat: Infinity, 
+                                    ease: "easeInOut", 
+                                    delay: Math.random() * 3 
+                                }}
+                                style={{ 
+                                    offsetPath: `path('M 100 ${isTop ? 150 : 450} C ${200 + Math.random() * 50} ${isTop ? 150 + jitter : 450 + jitter}, ${300 + Math.random() * 50} ${300 + jitter/2}, 400 300')` 
+                                }}
+                            />
+                        );
+                    })}
                 </g>
             )}
 
-            {/* Output Fan Network (Center to Right) */}
-            <g opacity="0.3">
-                {[...Array(12)].map((_, i) => (
-                    <g key={`fan-out-${i}`}>
-                        {/* Clean Fan */}
+            {/* Organic Neural Web - Outputs (Center to Right) */}
+            <g opacity="0.4">
+                {[...Array(24)].map((_, i) => {
+                    const jitter = (Math.random() - 0.5) * 80;
+                    const pathD = i % 2 === 0 
+                        ? `M 400 300 C ${480 + i * 3} ${300 + jitter/2}, ${620 - i * 2} ${150 + jitter}, 700 150`
+                        : `M 400 300 C ${480 + i * 3} ${300 + jitter/2}, ${620 - i * 2} ${450 + jitter}, 700 450`;
+                    return (
                         <path 
-                            d={`M 400 300 C ${500 + i * 5} 300, ${600 - i * 5} ${150 + (i - 6) * 10}, 700 150`} 
-                            fill="none" 
-                            stroke="var(--c-node-green)" 
-                            strokeWidth="0.5"
-                            strokeDasharray={i % 2 === 0 ? "none" : "2 2"}
+                            key={`organic-out-${i}`}
+                            d={pathD}
+                            fill="none"
+                            stroke={i % 2 === 0 ? "var(--c-node-green)" : "var(--c-node-purple)"}
+                            strokeWidth={Math.random() * 0.8}
+                            opacity={0.1 + Math.random() * 0.4}
                         />
-                        {/* Residue Fan */}
-                        <path 
-                            d={`M 400 300 C ${500 + i * 5} 300, ${600 - i * 5} ${450 - (i - 6) * 10}, 700 450`} 
-                            fill="none" 
-                            stroke="var(--c-node-purple)" 
-                            strokeWidth="0.5"
-                            strokeDasharray={i % 2 === 0 ? "2 2" : "none"}
-                        />
-                    </g>
+                    );
+                })}
+
+                {/* Cross-linking "Web" Lines */}
+                {[...Array(15)].map((_, i) => (
+                    <path 
+                        key={`web-out-${i}`}
+                        d={`M ${450 + Math.random() * 150} ${180 + Math.random() * 80} Q ${550 + Math.random() * 50} ${300 + (Math.random() - 0.5) * 100}, ${450 + Math.random() * 150} ${370 + Math.random() * 80}`}
+                        fill="none"
+                        stroke="var(--text-muted)"
+                        strokeWidth="0.3"
+                        opacity="0.1"
+                    />
                 ))}
             </g>
 
-            {/* Dust Particles for Outputs */}
-            {isRunning && progress > 20 && (
+            {/* Neural Dust Particles - Outputs */}
+            {isRunning && progress > 15 && (
                 <g>
-                    {[...Array(40)].map((_, i) => (
-                        <motion.circle 
-                            key={`out-dust-${i}`} 
-                            r={0.8 + Math.random()} 
-                            fill={i % 2 === 0 ? "var(--c-node-green)" : "var(--c-node-purple)"}
-                            initial={{ opacity: 0 }}
-                            animate={{ 
-                                opacity: [0, 0.8, 0],
-                                offsetDistance: ["0%", "100%"] 
-                            }}
-                            transition={{ 
-                                duration: 1.5 + Math.random() * 2, 
-                                repeat: Infinity, 
-                                ease: "easeInOut", 
-                                delay: Math.random() * 2 
-                            }}
-                            style={{ 
-                                offsetPath: `path('M 400 300 C 500 300, 600 ${i % 2 === 0 ? 150 + (Math.random() - 0.5) * 100 : 450 + (Math.random() - 0.5) * 100}, 700 ${i % 2 === 0 ? 150 : 450}')` 
-                            }}
-                        />
-                    ))}
+                    {[...Array(60)].map((_, i) => {
+                        const isTop = i % 2 === 0;
+                        const jitter = (Math.random() - 0.5) * 100;
+                        return (
+                            <motion.circle 
+                                key={`neural-dust-out-${i}`} 
+                                r={0.5 + Math.random() * 1.2} 
+                                fill={isTop ? "var(--c-node-green)" : "var(--c-node-purple)"}
+                                initial={{ opacity: 0 }}
+                                animate={{ 
+                                    opacity: [0, 0.6, 0],
+                                    offsetDistance: ["0%", "100%"] 
+                                }}
+                                transition={{ 
+                                    duration: 2 + Math.random() * 3, 
+                                    repeat: Infinity, 
+                                    ease: "easeInOut", 
+                                    delay: Math.random() * 3 
+                                }}
+                                style={{ 
+                                    offsetPath: `path('M 400 300 C ${450 + Math.random() * 50} ${300 + jitter/2}, ${600 + Math.random() * 50} ${isTop ? 150 + jitter : 450 + jitter}, 700 ${isTop ? 150 : 450}')` 
+                                }}
+                            />
+                        );
+                    })}
                 </g>
             )}
 
