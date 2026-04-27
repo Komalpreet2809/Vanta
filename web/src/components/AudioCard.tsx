@@ -19,11 +19,11 @@ type Props = {
 };
 
 const COLOR: Record<Variant, { wave: string; progress: string }> = {
-  charcoal: { wave: "var(--text-muted)", progress: "var(--text-main)" },
-  red: { wave: "var(--c-node-red)", progress: "var(--text-main)" },
-  green: { wave: "var(--c-node-green)", progress: "var(--text-main)" },
-  purple: { wave: "var(--c-node-purple)", progress: "var(--text-main)" },
-  brown: { wave: "var(--c-node-brown)", progress: "var(--text-main)" },
+  charcoal: { wave: "#888880", progress: "#333330" },
+  red: { wave: "#B54545", progress: "#333330" },
+  green: { wave: "#4A6B4A", progress: "#333330" },
+  purple: { wave: "#745296", progress: "#333330" },
+  brown: { wave: "#A68A64", progress: "#333330" },
 };
 
 export function AudioCard({
