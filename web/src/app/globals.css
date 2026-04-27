@@ -116,3 +116,82 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+/* Driver.js Custom Styling */
+.driver-popover.driverjs-theme {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border-radius: 0 !important;
+  border: 2px solid var(--text-main) !important;
+  box-shadow: 6px 6px 0 var(--text-main) !important;
+  padding: 20px !important;
+  max-width: 300px !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 18px !important;
+  color: var(--text-main) !important;
+  margin-bottom: 8px !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-description {
+  font-family: inherit !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  font-weight: 500 !important;
+  color: var(--text-main) !important;
+  opacity: 0.9 !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+  margin-top: 15px !important;
+  gap: 8px !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-next-btn,
+.driver-popover.driverjs-theme .driver-popover-prev-btn,
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+  background-color: var(--bg-btn) !important;
+  color: var(--text-main) !important;
+  border: 2px solid var(--text-main) !important;
+  border-radius: 0 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 10px !important;
+  padding: 6px 12px !important;
+  text-shadow: none !important;
+  box-shadow: 2px 2px 0 var(--text-main) !important;
+  transition: all 0.2s !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-next-btn:hover,
+.driver-popover.driverjs-theme .driver-popover-prev-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 3px 3px 0 var(--text-main) !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+  color: var(--text-muted) !important;
+  font-family: ui-monospace, monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow {
+  display: none !important; /* Cleaner industrial look without arrows */
+}
+
+/* Spotlight styling */
+.driver-active-element {
+  border: 2px solid var(--text-main) !important;
+  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .driver-active-element {
+  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.7) !important;
+}

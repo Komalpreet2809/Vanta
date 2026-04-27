@@ -16,6 +16,7 @@ type Props = {
   onFile?: (file: File) => void;
   emptyLabel?: string;
   className?: string;
+  id?: string;
 };
 
 const COLOR: Record<Variant, { wave: string; progress: string }> = {
@@ -36,6 +37,7 @@ export function AudioCard({
   onFile,
   emptyLabel,
   className = "",
+  id,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WaveSurfer | null>(null);
@@ -89,7 +91,7 @@ export function AudioCard({
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
 
   return (
-    <div className={`card-border p-5 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
+    <div id={id} className={`card-border p-5 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
       <div className="flex items-center justify-between pb-1">
         <div className="flex items-center gap-2.5">
           <h3 className="font-mono-heading text-[16px] font-black tracking-tight uppercase">

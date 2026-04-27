@@ -1,9 +1,15 @@
 "use client";
 
-import { Moon, Sun, RefreshCw } from "lucide-react";
+import { Moon, Sun, RefreshCw, HelpCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function Header({ onReset }: { onReset?: () => void }) {
+export function Header({ 
+  onReset, 
+  onStartTour 
+}: { 
+  onReset?: () => void;
+  onStartTour?: () => void;
+}) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -58,6 +64,15 @@ export function Header({ onReset }: { onReset?: () => void }) {
       </div>
 
       <div className="flex items-center gap-3">
+        <button 
+          onClick={onStartTour}
+          className="btn-icon h-10 w-10 flex items-center justify-center"
+          aria-label="Start guided tour"
+          title="How to use Vanta"
+        >
+          <HelpCircle className="h-5 w-5 stroke-[2.5]" />
+        </button>
+
         <button 
           onClick={onReset}
           className="btn-icon h-10 w-10 flex items-center justify-center"

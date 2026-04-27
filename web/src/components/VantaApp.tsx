@@ -8,6 +8,8 @@ import { TipsCard } from "./TipsCard";
 import { extract, health, type ExtractMeta } from "../lib/api";
 import { Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 type Result = {
   extracted: Blob;
@@ -96,13 +98,79 @@ export function VantaApp() {
     setStage("");
   }, []);
 
+  const startTour = useCallback(() => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        { 
+          element: '#vanta-header', 
+          popover: { 
+            title: 'Welcome to Vanta', 
+            description: 'The next generation of signal isolation. Let\'s show you how to extract any voice from a noisy environment.',
+            side: "bottom", 
+            align: 'start' 
+          } 
+        },
+        { 
+          element: '#vanta-inputs', 
+          popover: { 
+            title: 'The Inputs', 
+            description: 'Everything starts here. You need two pieces of audio to begin the extraction process.',
+            side: "right", 
+            align: 'start' 
+          } 
+        },
+        { 
+          element: '#vanta-reference', 
+          popover: { 
+            title: 'Reference Audio', 
+            description: 'Upload a clean sample of the voice you want to isolate. A few seconds of clear speech is enough.',
+            side: "right", 
+            align: 'center' 
+          } 
+        },
+        { 
+          element: '#vanta-noise', 
+          popover: { 
+            title: 'Noisy Recording', 
+            description: 'Upload the recording that contains both the target voice and the background noise you want to remove.',
+            side: "right", 
+            align: 'center' 
+          } 
+        },
+        { 
+          element: '#vanta-engine', 
+          popover: { 
+            title: 'The Extraction Engine', 
+            description: 'Once both files are loaded, click "EXTRACT VOICE". Our AI will analyze the signals and isolate the target in real-time.',
+            side: "top", 
+            align: 'center' 
+          } 
+        },
+        { 
+          element: '#vanta-outputs', 
+          popover: { 
+            title: 'Crystal Clear Results', 
+            description: 'Your isolated voice will appear here as "Clean Voice", while the background noise is separated into "Residue".',
+            side: "left", 
+            align: 'start' 
+          } 
+        },
+      ]
+    });
+
+    driverObj.drive();
+  }, []);
+
   return (
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden">
-        <Header onReset={reset} />
+        <div id="vanta-header">
+          <Header onReset={reset} onStartTour={startTour} />
+        </div>
 
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] overflow-hidden px-8 gap-4">
           {/* INPUTS COLUMN */}
-          <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
+          <section id="vanta-inputs" className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
             <div className="p-4 h-20 flex flex-col justify-center">
               <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-wider text-[var(--text-main)] leading-none">Inputs</h2>
               <p className="text-[12px] font-medium opacity-80 mt-1.5">Provide reference and noise audio.</p>
@@ -111,6 +179,7 @@ export function VantaApp() {
             <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
               <div className="flex-1 min-h-0">
                 <AudioCard
+                  id="vanta-reference"
                   heading="Reference Audio"
                   source={enrollment}
                   variant="brown"
@@ -123,6 +192,7 @@ export function VantaApp() {
 
               <div className="flex-1 min-h-0">
                 <AudioCard
+                  id="vanta-noise"
                   heading="Noise Audio"
                   source={mixture}
                   variant="red"
@@ -147,11 +217,12 @@ export function VantaApp() {
                 progress={progress}
                 stage={stage}
                 onExtract={run}
+                id="vanta-engine"
               />
           </section>
 
           {/* OUTPUTS COLUMN */}
-          <section className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
+          <section id="vanta-outputs" className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
             <div className="p-4 h-20 flex flex-col justify-center">
               <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-wider text-[var(--text-main)] leading-none">Outputs</h2>
               <p className="text-[12px] font-medium opacity-80 mt-1.5">Clean voice and residue (noise).</p>

@@ -8,6 +8,7 @@ type Props = {
   progress: number;
   stage: string;
   onExtract: () => void;
+  id?: string;
 };
 
 export function EngineCenter({
@@ -16,11 +17,12 @@ export function EngineCenter({
   progress,
   stage,
   onExtract,
+  id,
 }: Props) {
   const isRunning = status === "running";
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full">
+    <div id={id} className="flex flex-col items-center justify-center w-full h-full">
 
 
       {/* SVG Diagram Container - Fully responsive aspect-square */}
