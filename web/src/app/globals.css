@@ -15,11 +15,10 @@
   --text-main: #333330;
   --text-muted: #888880;
   
-  --c-green: #2A2A28; /* Changed from sage green to charcoal for retro touch */
-  --c-red: #D16D6D;
-  --c-purple: #9284B1;
-  --c-brown: #9E896A;
-  --c-dark-green: #4A5A3B;
+  --c-green: #4A6B4A; 
+  --c-red: #B54545;
+  --c-purple: #745296;
+  --c-brown: #A68A64;
   --c-charcoal: #2A2A28;
 }
 
