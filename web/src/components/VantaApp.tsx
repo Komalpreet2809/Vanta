@@ -131,7 +131,7 @@ export function VantaApp() {
           </section>
 
           {/* ENGINE COLUMN - The focal point matching inspo.png */}
-          <section className="bg-[var(--bg-center)] p-0 flex flex-col h-full overflow-hidden">
+          <section className="bg-transparent p-0 flex flex-col h-full overflow-hidden">
               <EngineCenter
                 canExtract={!!canRun}
                 status={status}
