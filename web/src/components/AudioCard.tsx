@@ -168,16 +168,16 @@ export function AudioCard({
           } ${isDragging ? "border-[var(--text-main)] bg-[var(--bg-card)] scale-[0.99]" : ""}`}
         >
           <div className="flex flex-col items-center gap-2">
-             <div className="w-8 h-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] mb-0.5 shadow-sm">
+             <div className="w-8 h-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] shadow-sm">
                 <AudioLines className="h-3.5 w-3.5 text-[var(--text-muted)] opacity-40" />
              </div>
              <div className="text-center px-6">
                 <div className="text-[12px] font-bold text-[var(--text-main)] mb-0.5 uppercase tracking-wider">
                     {onFile ? "Drag & drop or click to upload" : emptyLabel ?? "No signal loaded"}
                 </div>
-                <div className="text-[10px] text-[var(--text-muted)] font-mono font-bold uppercase tracking-tight">
+                <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-tighter opacity-60">
                     WAV, MP3, M4A
-                </div>
+                </p>
              </div>
           </div>
         </div>
