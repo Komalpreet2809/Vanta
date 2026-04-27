@@ -208,16 +208,6 @@ export function EngineCenter({
                 </g>
             )}
 
-            {/* Wavy Vertical Path */}
-            <motion.path 
-                d="M 400 100 Q 420 150, 400 200 Q 380 250, 400 300 Q 420 350, 400 400 Q 380 450, 400 500" 
-                fill="none" 
-                stroke="var(--border-main)" 
-                strokeWidth="1" 
-                strokeDasharray="4 4"
-                animate={isRunning ? { strokeDashoffset: [0, -20] } : {}}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            />
         </svg>
 
         {/* Nodes Column */}
