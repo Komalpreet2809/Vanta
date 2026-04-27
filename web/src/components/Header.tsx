@@ -34,7 +34,7 @@ export function Header() {
   };
 
   return (
-    <header className="px-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
+    <header className="pl-2 pr-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-3">
           <img src="/logo.png" alt="Vanta Logo" className="h-16 w-auto mix-blend-multiply opacity-90" />
