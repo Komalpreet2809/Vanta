@@ -25,21 +25,21 @@
 }
 
 .dark {
-  --bg-app: #0A0A0B; 
-  --bg-header: #0A0A0B; 
-  --bg-footer: #0A0A0B; 
-  --bg-card: #121214; 
-  --bg-btn: #1A1A1D;
+  --bg-app: #0F0E0C; 
+  --bg-header: #0F0E0C; 
+  --bg-footer: #0F0E0C; 
+  --bg-card: #1A1815; 
+  --bg-btn: #2E2A26;
   
-  --border-main: #242426;
-  --border-card: #1F1F21;
-  --border-dashed: #3A3A3D;
+  --border-main: #2E2A26;
+  --border-card: #24211D;
+  --border-dashed: #403A34;
   
-  --text-main: #D1D1D6;
-  --text-muted: #636366;
+  --text-main: #C4B5A3;
+  --text-muted: #6B6256;
   
-  --c-green: #D1D1D6; 
-  --c-charcoal: #050505;
+  --c-green: #C4B5A3; 
+  --c-charcoal: #080706;
 }
 
 @theme inline {
