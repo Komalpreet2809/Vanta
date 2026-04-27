@@ -36,8 +36,14 @@ export function Header() {
   return (
     <header className="pl-2 pr-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Vanta Logo" className="h-16 w-auto mix-blend-multiply opacity-90" />
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 border-2 border-[var(--text-main)] flex flex-col justify-center gap-1.5 p-2 bg-[var(--bg-card)] shadow-[3px_3px_0_var(--text-main)] relative overflow-hidden group">
+            <div className="h-1 w-full bg-[var(--text-main)] opacity-20" />
+            <div className="h-1 w-full bg-[var(--text-main)] relative">
+               <div className="absolute inset-0 bg-[var(--text-main)] animate-pulse" />
+            </div>
+            <div className="h-1 w-full bg-[var(--text-main)] opacity-20" />
+          </div>
           <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-1">VANTA</span>
         </div>
       </div>
