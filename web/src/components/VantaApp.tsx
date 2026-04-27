@@ -117,7 +117,7 @@ export function VantaApp() {
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden font-sans">
         <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-[1fr_1.5fr_1fr] overflow-hidden px-12 gap-12 pb-32">
+        <main className="flex-1 grid grid-cols-[1fr_1.5fr_1fr] overflow-hidden px-12 gap-12">
           {/* INPUTS COLUMN */}
           <section id="vanta-inputs" className="flex flex-col h-full py-4 overflow-hidden">
             <div className="mb-6 shrink-0">
@@ -125,7 +125,7 @@ export function VantaApp() {
               <p className="text-[11px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
             </div>
             
-            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar pb-32">
                 <AudioCard
                   id="vanta-reference"
                   heading="REFERENCE AUDIO"
@@ -169,7 +169,7 @@ export function VantaApp() {
               <p className="text-[11px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
             </div>
 
-            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar pb-32">
                 <AudioCard
                   heading="CLEAN VOICE"
                   source={result?.extracted ?? null}
