@@ -142,18 +142,7 @@ export function EngineCenter({
         </div>
       </div>
 
-      {/* Status indicator - Matches reference exactly */}
-      <div className="mt-12 flex flex-col items-center gap-1">
-         <div className="flex items-center gap-2">
-            <div className={`h-2.5 w-2.5 rounded-full ${isRunning ? 'bg-amber-500 animate-pulse' : 'bg-[#C4C1B8]'}`} />
-            <span className="text-[14px] font-bold uppercase tracking-widest text-[#333330] opacity-80">
-              {isRunning ? 'Processing' : 'Idle'}
-            </span>
-         </div>
-         <p className="text-[12px] font-medium text-[#888880] tracking-tight">
-           {isRunning ? 'Engine is active.' : 'Engine is ready.'}
-         </p>
-      </div>
+
     </div>
   );
 }
