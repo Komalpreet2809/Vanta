@@ -211,7 +211,7 @@ export function EngineCenter({
         </svg>
 
         {/* Nodes Column */}
-        <div className="relative flex flex-col items-center justify-between h-[400px] z-10">
+        <div className="relative flex flex-col items-center justify-between h-[360px] z-10">
           {STAGES.map((s, i) => (
             <div key={s.id} className="flex items-center group">
               <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
