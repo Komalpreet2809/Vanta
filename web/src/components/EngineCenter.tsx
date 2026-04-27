@@ -209,7 +209,7 @@ export function EngineCenter({
                 <motion.div 
                     animate={i === activeStageIndex ? { scale: [1, 1.1, 1], boxShadow: "0 0 30px rgba(0,0,0,0.15)" } : {}}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className={`w-14 h-14 rounded-full border flex items-center justify-center bg-[var(--bg-app)] transition-all duration-700 relative ${
+                    className={`w-16 h-16 rounded-full border flex items-center justify-center bg-[var(--bg-app)] transition-all duration-700 relative ${
                         i <= activeStageIndex ? 'border-[var(--text-main)] shadow-xl z-20 opacity-100' : 'border-[var(--border-main)] opacity-50 scale-90'
                     }`}
                 >
@@ -224,11 +224,11 @@ export function EngineCenter({
                     )}
                     
                     {/* Icon */}
-                    <s.icon className={`w-5 h-5 ${i <= activeStageIndex ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)] opacity-60'}`} />
+                    <s.icon className={`w-8 h-8 ${i <= activeStageIndex ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)] opacity-60'}`} />
                 </motion.div>
 
                 {/* Node Text - Positioned to the right */}
-                <div className="absolute left-16 w-40 flex flex-col">
+                <div className="absolute left-20 w-40 flex flex-col">
                     <span className={`text-[11px] font-bold tracking-widest transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-30'}`}>
                         {s.label}
                     </span>
