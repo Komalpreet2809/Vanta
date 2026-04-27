@@ -41,7 +41,7 @@ export function Header({
   };
 
   return (
-    <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent">
+    <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
       <div className="flex items-center gap-5">
           <div className="w-16 h-16 flex items-center justify-center">
             <svg 
