@@ -201,7 +201,7 @@ export function EngineCenter({
         </svg>
 
         {/* Nodes Column */}
-        <div className="relative flex flex-col items-center justify-between h-[320px] z-10">
+        <div className="relative flex flex-col items-center justify-between h-[400px] z-10">
           {STAGES.map((s, i) => (
             <div key={s.id} className="flex items-center group">
               <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
@@ -209,7 +209,7 @@ export function EngineCenter({
                 <motion.div 
                     animate={i === activeStageIndex ? { scale: [1, 1.1, 1], boxShadow: "0 0 30px rgba(0,0,0,0.15)" } : {}}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className={`w-16 h-16 rounded-full border flex items-center justify-center bg-[var(--bg-app)] transition-all duration-700 relative ${
+                    className={`w-20 h-20 rounded-full border flex items-center justify-center bg-[var(--bg-app)] transition-all duration-700 relative ${
                         i <= activeStageIndex ? 'border-[var(--text-main)] shadow-xl z-20 opacity-100' : 'border-[var(--border-main)] opacity-50 scale-90'
                     }`}
                 >
@@ -224,15 +224,15 @@ export function EngineCenter({
                     )}
                     
                     {/* Icon */}
-                    <s.icon className={`w-8 h-8 ${i <= activeStageIndex ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)] opacity-60'}`} />
+                    <s.icon className={`w-10 h-10 ${i <= activeStageIndex ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)] opacity-60'}`} />
                 </motion.div>
 
                 {/* Node Text - Positioned to the right */}
-                <div className="absolute left-20 w-40 flex flex-col">
-                    <span className={`text-[11px] font-bold tracking-widest transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-30'}`}>
+                <div className="absolute left-24 w-40 flex flex-col">
+                    <span className={`text-[13px] font-bold tracking-widest transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-30'}`}>
                         {s.label}
                     </span>
-                    <span className={`text-[9px] text-[var(--text-muted)] font-medium leading-tight transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-0'}`}>
+                    <span className={`text-[10px] text-[var(--text-muted)] font-medium leading-tight transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-0'}`}>
                         {s.desc}
                     </span>
                 </div>
