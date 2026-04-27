@@ -37,12 +37,15 @@ export function Header() {
     <header className="pl-2 pr-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 border-2 border-[var(--text-main)] flex flex-col justify-center gap-1.5 p-2 bg-[var(--bg-card)] shadow-[3px_3px_0_var(--text-main)] relative overflow-hidden group">
-            <div className="h-1 w-full bg-[var(--text-main)] opacity-20" />
-            <div className="h-1 w-full bg-[var(--text-main)] relative">
-               <div className="absolute inset-0 bg-[var(--text-main)] animate-pulse" />
-            </div>
-            <div className="h-1 w-full bg-[var(--text-main)] opacity-20" />
+          <div className="h-12 w-12 border-2 border-[var(--text-main)] flex items-center justify-center bg-[var(--bg-card)] shadow-[3px_3px_0_var(--text-main)] relative p-2.5">
+            {/* Corner Brackets */}
+            <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t-2 border-l-2 border-[var(--text-main)]" />
+            <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t-2 border-r-2 border-[var(--text-main)]" />
+            <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b-2 border-l-2 border-[var(--text-main)]" />
+            <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b-2 border-r-2 border-[var(--text-main)]" />
+            
+            {/* The Isolated Signal (Absolute Focus) */}
+            <div className="w-3.5 h-3.5 bg-[var(--text-main)] animate-pulse" />
           </div>
           <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-1">VANTA</span>
         </div>
