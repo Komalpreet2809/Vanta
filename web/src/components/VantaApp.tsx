@@ -199,35 +199,35 @@ export function VantaApp() {
         </main>
 
         {/* BOTTOM STATUS BAR */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-[650px] px-12 z-50">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-[650px] px-12 z-50">
             <motion.div 
                 layout
-                className="vanta-card p-5 flex items-center justify-between gap-8 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
+                className="vanta-card p-3 flex items-center justify-between gap-6 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
             >
-                <div className="flex items-center gap-6">
-                    <div className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}>
-                         <Activity className={`w-6 h-6 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50'}`} />
+                <div className="flex items-center gap-4">
+                    <div className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}>
+                         <Activity className={`w-5 h-5 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50'}`} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-mono-heading text-[13px] font-black tracking-widest">
+                        <span className="font-mono-heading text-[12px] font-black tracking-widest">
                             {status === 'running' ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
                         </span>
-                        <span className="text-[10px] text-[var(--text-muted)] font-bold opacity-80">
+                        <span className="text-[9px] text-[var(--text-muted)] font-bold opacity-80">
                             {status === 'running' ? `${stage} • ${Math.round(progress)}%` : "Both signals are processed simultaneously for best results."}
                         </span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-[var(--border-main)]/50">
-                        <div className={`w-1.5 h-1.5 rounded-full ${status === 'running' ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
-                        <span className="text-[10px] font-mono font-black uppercase tracking-tighter text-[var(--text-muted)]">{status === 'running' ? 'Active' : 'Ready'}</span>
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 border border-[var(--border-main)]/50">
+                        <div className={`w-1 h-1 rounded-full ${status === 'running' ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
+                        <span className="text-[9px] font-mono font-black uppercase tracking-tighter text-[var(--text-muted)]">{status === 'running' ? 'Active' : 'Ready'}</span>
                     </div>
 
                     <button
                         disabled={!canRun}
                         onClick={run}
-                        className={`px-10 py-3.5 rounded-lg font-mono-heading text-[12px] font-black tracking-widest transition-all ${
+                        className={`px-8 py-2.5 rounded-lg font-mono-heading text-[11px] font-black tracking-widest transition-all ${
                             status === 'running' 
                             ? 'bg-transparent border border-[var(--border-main)] opacity-50 cursor-not-allowed'
                             : canRun 
