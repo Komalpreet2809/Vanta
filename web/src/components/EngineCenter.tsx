@@ -5,12 +5,16 @@ import { motion } from "motion/react";
 type Props = {
   canExtract: boolean;
   status: "idle" | "running" | "error";
+  progress: number;
+  stage: string;
   onExtract: () => void;
 };
 
 export function EngineCenter({
   canExtract,
   status,
+  progress,
+  stage,
   onExtract,
 }: Props) {
   const isRunning = status === "running";
@@ -97,12 +101,23 @@ export function EngineCenter({
         {/* Central Hero Circle - Redesigned for Reference Image */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="relative h-[320px] w-[320px] rounded-full border-[10px] border-[#D9D7CE] shadow-lg flex items-center justify-center bg-[#EFEDE6]">
-            {/* Dark Progress Ring Segment */}
-            <motion.div 
-              animate={isRunning ? { rotate: 405 } : { rotate: 45 }}
-              transition={isRunning ? { repeat: Infinity, duration: 1.5, ease: "linear" } : { duration: 0.5 }}
-              className="absolute inset-[-10px] rounded-full border-[10px] border-transparent border-t-[var(--c-green)]" 
-            />
+            {/* SVG Progress Ring */}
+            <svg className="absolute inset-[-10px] w-[340px] h-[340px] -rotate-90 pointer-events-none">
+              {isRunning && (
+                <motion.circle
+                  cx="170"
+                  cy="170"
+                  r="165"
+                  fill="none"
+                  stroke="var(--c-green)"
+                  strokeWidth="10"
+                  strokeDasharray={165 * 2 * Math.PI}
+                  initial={{ strokeDashoffset: 165 * 2 * Math.PI }}
+                  animate={{ strokeDashoffset: (165 * 2 * Math.PI) * (1 - Math.max(2, progress) / 100) }}
+                  transition={{ ease: "linear", duration: 0.1 }}
+                />
+              )}
+            </svg>
             
             <motion.button
               disabled={!canExtract || isRunning}
@@ -124,15 +139,22 @@ export function EngineCenter({
               </div>
 
               {/* Main Text */}
-              <span className="text-[20px] font-bold text-[#333330] uppercase tracking-wider mb-4">
-                Extract Voice
-              </span>
-              
-              {/* Play Button Icon (Small triangle) */}
-              <div className="mt-2">
-                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#333330">
-                   <path d="M8 5v14l11-7z" />
-                 </svg>
+              <div className="flex flex-col items-center mt-2 px-6">
+                <span className={`font-bold text-[#333330] tracking-wider text-center ${isRunning ? 'text-[16px]' : 'text-[20px] uppercase mb-4'}`}>
+                  {isRunning ? stage : "Extract Voice"}
+                </span>
+                
+                {isRunning ? (
+                  <span className="text-[24px] font-mono-heading font-black text-[var(--c-green)] mt-2">
+                    {Math.round(progress)}%
+                  </span>
+                ) : (
+                  <div className="mt-2">
+                     <svg width="20" height="20" viewBox="0 0 24 24" fill="#333330">
+                       <path d="M8 5v14l11-7z" />
+                     </svg>
+                  </div>
+                )}
               </div>
             </motion.button>
           </div>

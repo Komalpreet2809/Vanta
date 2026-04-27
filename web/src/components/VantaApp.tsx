@@ -23,6 +23,8 @@ export function VantaApp() {
   const [result, setResult] = useState<Result | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [backend, setBackend] = useState<"checking" | "online" | "offline">("checking");
+  const [progress, setProgress] = useState(0);
+  const [stage, setStage] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -35,6 +37,27 @@ export function VantaApp() {
     };
   }, []);
 
+  useEffect(() => {
+    if (status !== "running") {
+      setProgress(0);
+      setStage("");
+      return;
+    }
+    
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      // Ease progress towards 95% asymptotically
+      currentProgress += (95 - currentProgress) * 0.04;
+      setProgress(currentProgress);
+      
+      if (currentProgress < 30) setStage("ANALYZING SIGNALS...");
+      else if (currentProgress < 70) setStage("ISOLATING TARGET...");
+      else setStage("EXTRACTING RESIDUE...");
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [status]);
+
   const canRun = !!(mixture && enrollment) && status !== "running";
 
   const run = useCallback(async () => {
@@ -43,8 +66,12 @@ export function VantaApp() {
     setResult(null);
     try {
       const r = await extract(mixture, enrollment);
-      setResult(r);
-      setStatus("idle");
+      setProgress(100);
+      setStage("FINALIZING...");
+      setTimeout(() => {
+        setResult(r);
+        setStatus("idle");
+      }, 600); // Brief pause to show 100% finalizing before results pop
     } catch (e) {
       console.error(e);
       setStatus("error");
@@ -105,9 +132,11 @@ export function VantaApp() {
 
           {/* ENGINE COLUMN - The focal point matching inspo.png */}
           <section className="bg-[var(--bg-center)] p-0 flex flex-col h-full overflow-hidden">
-             <EngineCenter
+              <EngineCenter
                 canExtract={!!canRun}
                 status={status}
+                progress={progress}
+                stage={stage}
                 onExtract={run}
               />
           </section>
