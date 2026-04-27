@@ -7,6 +7,7 @@ import { Header } from "./Header";
 import { TipsCard } from "./TipsCard";
 import { extract, health, type ExtractMeta } from "../lib/api";
 import { Info } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 type Result = {
   extracted: Blob;
@@ -119,36 +120,58 @@ export function VantaApp() {
             </div>
 
             <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
-              <div className="flex-1 min-h-0">
-                <AudioCard
-                  heading="Clean Voice"
-                  source={result?.extracted ?? null}
-                  filenameOverride="Extracted_Voice.mp3"
-                  variant="green"
-                  onDownload={
-                    result
-                      ? () => download(result.extracted, "vanta_extracted.mp3")
-                      : undefined
-                  }
-                  emptyLabel={"Clean voice will appear here\nafter processing"}
-                  className="h-full w-full"
-                />
+              <div className="flex-1 min-h-0 relative">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={result ? "result-clean" : "empty-clean"}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0"
+                  >
+                    <AudioCard
+                      heading="Clean Voice"
+                      source={result?.extracted ?? null}
+                      filenameOverride="Extracted_Voice.mp3"
+                      variant="green"
+                      onDownload={
+                        result
+                          ? () => download(result.extracted, "vanta_extracted.mp3")
+                          : undefined
+                      }
+                      emptyLabel={"Clean voice will appear here\nafter processing"}
+                      className="h-full w-full"
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
-              <div className="flex-1 min-h-0">
-                <AudioCard
-                  heading="Residue (Noise)"
-                  source={result?.residue ?? null}
-                  filenameOverride="Residue_Noise.mp3"
-                  variant="purple"
-                  onDownload={
-                    result
-                      ? () => download(result.residue, "vanta_residue.mp3")
-                      : undefined
-                  }
-                  emptyLabel={"Residue will appear here\nafter processing"}
-                  className="h-full w-full"
-                />
+              <div className="flex-1 min-h-0 relative">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={result ? "result-residue" : "empty-residue"}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, delay: result ? 0.1 : 0 }}
+                    className="absolute inset-0"
+                  >
+                    <AudioCard
+                      heading="Residue (Noise)"
+                      source={result?.residue ?? null}
+                      filenameOverride="Residue_Noise.mp3"
+                      variant="purple"
+                      onDownload={
+                        result
+                          ? () => download(result.residue, "vanta_residue.mp3")
+                          : undefined
+                      }
+                      emptyLabel={"Residue will appear here\nafter processing"}
+                      className="h-full w-full"
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
 

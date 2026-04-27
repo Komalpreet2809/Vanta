@@ -32,14 +32,13 @@ export function EngineCenter({
         <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
           
           {/* LEFT CURLY BRACE { - Floating with gaps at both ends */}
-          <g>
+          <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}>
             {/* Top Curve - Starts at 70 (Gap from node at 30), Ends at 210 (Gap from orb) */}
             <path
               d="M 70 110 C 150 110, 150 220, 210 220"
               fill="none"
               stroke="var(--text-main)"
               strokeWidth="1.5"
-              opacity="0.8"
             />
             {/* Bottom Curve */}
             <path
@@ -47,19 +46,17 @@ export function EngineCenter({
               fill="none"
               stroke="var(--text-main)"
               strokeWidth="1.5"
-              opacity="0.8"
             />
-          </g>
+          </motion.g>
 
           {/* RIGHT CURLY BRACE } - Floating with gaps at both ends */}
-          <g>
+          <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.2 }}>
             {/* Top Curve - Starts at 730 (Gap from node at 770), Ends at 590 (Gap from orb) */}
             <path
               d="M 730 110 C 650 110, 650 220, 590 220"
               fill="none"
               stroke="var(--text-main)"
               strokeWidth="1.5"
-              opacity="0.8"
             />
             {/* Bottom Curve */}
             <path
@@ -67,9 +64,8 @@ export function EngineCenter({
               fill="none"
               stroke="var(--text-main)"
               strokeWidth="1.5"
-              opacity="0.8"
             />
-          </g>
+          </motion.g>
 
           {/* Node Indicators (Aligned with brace ends at x=70 and x=730) */}
           {/* Reference */}
@@ -102,7 +98,11 @@ export function EngineCenter({
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="relative h-[320px] w-[320px] rounded-full border-[10px] border-[#D9D7CE] shadow-lg flex items-center justify-center bg-[#EFEDE6]">
             {/* Dark Progress Ring Segment */}
-            <div className="absolute inset-[-10px] rounded-full border-[10px] border-transparent border-t-[var(--c-green)] rotate-[45deg]" />
+            <motion.div 
+              animate={isRunning ? { rotate: 405 } : { rotate: 45 }}
+              transition={isRunning ? { repeat: Infinity, duration: 1.5, ease: "linear" } : { duration: 0.5 }}
+              className="absolute inset-[-10px] rounded-full border-[10px] border-transparent border-t-[var(--c-green)]" 
+            />
             
             <motion.button
               disabled={!canExtract || isRunning}
