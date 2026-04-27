@@ -36,38 +36,22 @@ export function Header() {
   return (
     <header className="pl-2 pr-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-4">
-          <svg 
-            width="52" 
-            height="52" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="var(--text-main)" 
-            strokeWidth="2.2" 
-            strokeLinecap="square" 
-            strokeLinejoin="miter" 
-            className="text-[var(--text-main)] shrink-0"
-          >
-            {/* High-Stroke Mic Capsule */}
-            <rect x="8.5" y="2" width="7" height="11" rx="3.5" strokeWidth="2.5" />
-            
-            {/* Technical Slits */}
-            <line x1="11" y1="5" x2="13" y2="5" strokeWidth="1" />
-            <line x1="11" y1="8" x2="13" y2="8" strokeWidth="1" />
-            
-            {/* Cradle & Heavy Base */}
-            <path d="M5 10v1a7 7 0 0 0 14 0v-1" />
-            <line x1="12" y1="18" x2="12" y2="22" />
-            <line x1="8" y1="22" x2="16" y2="22" strokeWidth="1.5" />
-            
-            {/* Sharp, Precise Waveform */}
-            <path 
-              d="M2 12h4l1.5-4 1.5 8 1.5-4h4" 
-              strokeWidth="1.8"
-              className="opacity-100"
-            />
-          </svg>
-          <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-1">VANTA</span>
+        <div className="flex items-center gap-5">
+          <div className="shrink-0">
+            <svg 
+              width="44" 
+              height="44" 
+              viewBox="0 0 24 24" 
+              fill="var(--text-main)" 
+              className="text-[var(--text-main)]"
+            >
+              {/* Bold, Geometric 'V' Signal Path */}
+              <path d="M2 2h5l5 15 5-15h5l-8 20h-4z" />
+              {/* A single industrial 'dot' signifying the target isolation point */}
+              <rect x="11" y="20" width="2" height="2" />
+            </svg>
+          </div>
+          <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-2">VANTA</span>
         </div>
       </div>
 
