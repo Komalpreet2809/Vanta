@@ -87,9 +87,18 @@ export function VantaApp() {
     URL.revokeObjectURL(url);
   }, []);
 
+  const reset = useCallback(() => {
+    setEnrollment(null);
+    setMixture(null);
+    setResult(null);
+    setStatus("idle");
+    setProgress(0);
+    setStage("");
+  }, []);
+
   return (
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden">
-        <Header />
+        <Header onReset={reset} />
 
         <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] overflow-hidden px-8 gap-4">
           {/* INPUTS COLUMN */}

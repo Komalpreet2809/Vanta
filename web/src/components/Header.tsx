@@ -1,13 +1,12 @@
 "use client";
 
-import { History, Moon, Sun, Mic } from "lucide-react";
+import { Moon, Sun, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function Header() {
+export function Header({ onReset }: { onReset?: () => void }) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Sync with system preference on mount if no preference stored
     const stored = localStorage.getItem("vanta-theme");
     if (stored === "dark") {
       setIsDark(true);
@@ -59,14 +58,21 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-3">
-
+        <button 
+          onClick={onReset}
+          className="btn-icon h-10 w-10 flex items-center justify-center"
+          aria-label="Reset session"
+          title="Clear all inputs and results"
+        >
+          <RefreshCw className="h-5 w-5 stroke-[2.5]" />
+        </button>
 
         <button 
           onClick={toggleDark}
           className="btn-icon h-10 w-10 flex items-center justify-center"
           aria-label="Toggle dark mode"
         >
-          {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </button>
       </div>
     </header>
