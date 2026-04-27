@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 
 export function Header({ 
   onReset, 
-  onStartTour 
+  onStartTour,
+  id
 }: { 
   onReset?: () => void;
   onStartTour?: () => void;
+  id?: string;
 }) {
   const [isDark, setIsDark] = useState(false);
 
@@ -39,7 +41,7 @@ export function Header({
   };
 
   return (
-    <header className="px-8 py-4 flex items-center justify-between bg-transparent">
+    <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent">
       <div className="flex items-center gap-4">
           <div className="w-10 h-10 flex items-center justify-center">
             <svg 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Music, Pause, Play, Upload, X, Download } from "lucide-react";
+import { Music, Pause, Play, Upload, X, Download, AudioLines } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
