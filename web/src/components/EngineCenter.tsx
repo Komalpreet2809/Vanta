@@ -55,62 +55,77 @@ export function EngineCenter({
                 </filter>
             </defs>
 
-            {/* Organic Neural Web - Inputs (Left to Center) */}
-            <g opacity="0.4">
-                {[...Array(24)].map((_, i) => {
-                    const jitter = (Math.random() - 0.5) * 80;
+            {/* Ultra-Fine Neural Fibres - Inputs (Left to Center) */}
+            <g opacity="0.6">
+                {[...Array(64)].map((_, i) => {
+                    const jitter = (Math.random() - 0.5) * 120;
+                    const controlJitter = (Math.random() - 0.5) * 150;
                     const pathD = i % 2 === 0 
-                        ? `M 100 150 C ${180 + i * 2} ${150 + jitter}, ${320 - i * 3} ${300 + jitter/2}, 400 300`
-                        : `M 100 450 C ${180 + i * 2} ${450 + jitter}, ${320 - i * 3} ${300 + jitter/2}, 400 300`;
+                        ? `M 100 150 C ${180 + i} ${150 + controlJitter}, ${320 - i} ${300 + jitter}, 400 300`
+                        : `M 100 450 C ${180 + i} ${450 + controlJitter}, ${320 - i} ${300 + jitter}, 400 300`;
                     return (
-                        <path 
-                            key={`organic-in-${i}`}
+                        <motion.path 
+                            key={`fibre-in-${i}`}
                             d={pathD}
                             fill="none"
                             stroke={i % 2 === 0 ? "var(--c-node-brown)" : "var(--c-node-red)"}
-                            strokeWidth={Math.random() * 0.8}
-                            opacity={0.1 + Math.random() * 0.4}
+                            strokeWidth="0.3"
+                            initial={{ opacity: 0.02 }}
+                            animate={{ opacity: [0.02, 0.15, 0.02] }}
+                            transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, ease: "easeInOut", delay: Math.random() * 2 }}
                         />
                     );
                 })}
                 
-                {/* Cross-linking "Web" Lines */}
-                {[...Array(15)].map((_, i) => (
-                    <path 
-                        key={`web-in-${i}`}
-                        d={`M ${150 + Math.random() * 150} ${180 + Math.random() * 80} Q ${250 + Math.random() * 50} ${300 + (Math.random() - 0.5) * 100}, ${150 + Math.random() * 150} ${370 + Math.random() * 80}`}
-                        fill="none"
-                        stroke="var(--text-muted)"
-                        strokeWidth="0.3"
-                        opacity="0.1"
-                    />
-                ))}
+                {/* Central Neural Hub Glow */}
+                <circle cx="400" cy="300" r="2" fill="white" filter="url(#glow)" className="opacity-80" />
+                
+                {/* Neural Webbing & Nodes */}
+                {[...Array(25)].map((_, i) => {
+                    const x = 200 + Math.random() * 180;
+                    const y = 200 + Math.random() * 200;
+                    return (
+                        <g key={`web-node-in-${i}`}>
+                            <circle cx={x} cy={y} r="0.8" fill="var(--text-muted)" opacity="0.3" />
+                            {i % 3 === 0 && (
+                                <path 
+                                    d={`M ${x} ${y} L ${x + (Math.random() - 0.5) * 40} ${y + (Math.random() - 0.5) * 40}`}
+                                    stroke="var(--text-muted)"
+                                    strokeWidth="0.2"
+                                    opacity="0.1"
+                                />
+                            )}
+                        </g>
+                    );
+                })}
             </g>
 
-            {/* Neural Dust Particles - Inputs */}
+            {/* Magical Neural Particles - Inputs */}
             {isRunning && (
                 <g>
-                    {[...Array(60)].map((_, i) => {
+                    {[...Array(80)].map((_, i) => {
                         const isTop = i % 2 === 0;
-                        const jitter = (Math.random() - 0.5) * 100;
+                        const jitter = (Math.random() - 0.5) * 140;
                         return (
                             <motion.circle 
-                                key={`neural-dust-in-${i}`} 
-                                r={0.5 + Math.random() * 1.2} 
+                                key={`magical-dust-in-${i}`} 
+                                r={0.4 + Math.random() * 1.5} 
                                 fill={isTop ? "var(--c-node-brown)" : "var(--c-node-red)"}
                                 initial={{ opacity: 0 }}
                                 animate={{ 
-                                    opacity: [0, 0.6, 0],
+                                    opacity: [0, 1, 0],
+                                    scale: [0.5, 1.2, 0.5],
                                     offsetDistance: ["0%", "100%"] 
                                 }}
                                 transition={{ 
-                                    duration: 2 + Math.random() * 3, 
+                                    duration: 1.5 + Math.random() * 2.5, 
                                     repeat: Infinity, 
-                                    ease: "easeInOut", 
-                                    delay: Math.random() * 3 
+                                    ease: "linear", 
+                                    delay: Math.random() * 2 
                                 }}
                                 style={{ 
-                                    offsetPath: `path('M 100 ${isTop ? 150 : 450} C ${200 + Math.random() * 50} ${isTop ? 150 + jitter : 450 + jitter}, ${300 + Math.random() * 50} ${300 + jitter/2}, 400 300')` 
+                                    offsetPath: `path('M 100 ${isTop ? 150 : 450} C ${200 + Math.random() * 80} ${isTop ? 150 + jitter : 450 + jitter}, ${300 + Math.random() * 80} ${300 + jitter/2}, 400 300')`,
+                                    filter: "blur(0.5px)"
                                 }}
                             />
                         );
@@ -118,62 +133,74 @@ export function EngineCenter({
                 </g>
             )}
 
-            {/* Organic Neural Web - Outputs (Center to Right) */}
-            <g opacity="0.4">
-                {[...Array(24)].map((_, i) => {
-                    const jitter = (Math.random() - 0.5) * 80;
+            {/* Ultra-Fine Neural Fibres - Outputs (Center to Right) */}
+            <g opacity="0.6">
+                {[...Array(64)].map((_, i) => {
+                    const jitter = (Math.random() - 0.5) * 120;
+                    const controlJitter = (Math.random() - 0.5) * 150;
                     const pathD = i % 2 === 0 
-                        ? `M 400 300 C ${480 + i * 3} ${300 + jitter/2}, ${620 - i * 2} ${150 + jitter}, 700 150`
-                        : `M 400 300 C ${480 + i * 3} ${300 + jitter/2}, ${620 - i * 2} ${450 + jitter}, 700 450`;
+                        ? `M 400 300 C ${480 + i} ${300 + jitter}, ${620 - i} ${150 + controlJitter}, 700 150`
+                        : `M 400 300 C ${480 + i} ${300 + jitter}, ${620 - i} ${450 + controlJitter}, 700 450`;
                     return (
-                        <path 
-                            key={`organic-out-${i}`}
+                        <motion.path 
+                            key={`fibre-out-${i}`}
                             d={pathD}
                             fill="none"
                             stroke={i % 2 === 0 ? "var(--c-node-green)" : "var(--c-node-purple)"}
-                            strokeWidth={Math.random() * 0.8}
-                            opacity={0.1 + Math.random() * 0.4}
+                            strokeWidth="0.3"
+                            initial={{ opacity: 0.02 }}
+                            animate={{ opacity: [0.02, 0.15, 0.02] }}
+                            transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, ease: "easeInOut", delay: Math.random() * 2 }}
                         />
                     );
                 })}
 
-                {/* Cross-linking "Web" Lines */}
-                {[...Array(15)].map((_, i) => (
-                    <path 
-                        key={`web-out-${i}`}
-                        d={`M ${450 + Math.random() * 150} ${180 + Math.random() * 80} Q ${550 + Math.random() * 50} ${300 + (Math.random() - 0.5) * 100}, ${450 + Math.random() * 150} ${370 + Math.random() * 80}`}
-                        fill="none"
-                        stroke="var(--text-muted)"
-                        strokeWidth="0.3"
-                        opacity="0.1"
-                    />
-                ))}
+                {/* Neural Webbing & Nodes */}
+                {[...Array(25)].map((_, i) => {
+                    const x = 420 + Math.random() * 180;
+                    const y = 200 + Math.random() * 200;
+                    return (
+                        <g key={`web-node-out-${i}`}>
+                            <circle cx={x} cy={y} r="0.8" fill="var(--text-muted)" opacity="0.3" />
+                            {i % 3 === 0 && (
+                                <path 
+                                    d={`M ${x} ${y} L ${x + (Math.random() - 0.5) * 40} ${y + (Math.random() - 0.5) * 40}`}
+                                    stroke="var(--text-muted)"
+                                    strokeWidth="0.2"
+                                    opacity="0.1"
+                                />
+                            )}
+                        </g>
+                    );
+                })}
             </g>
 
-            {/* Neural Dust Particles - Outputs */}
-            {isRunning && progress > 15 && (
+            {/* Magical Neural Particles - Outputs */}
+            {isRunning && progress > 10 && (
                 <g>
-                    {[...Array(60)].map((_, i) => {
+                    {[...Array(80)].map((_, i) => {
                         const isTop = i % 2 === 0;
-                        const jitter = (Math.random() - 0.5) * 100;
+                        const jitter = (Math.random() - 0.5) * 140;
                         return (
                             <motion.circle 
-                                key={`neural-dust-out-${i}`} 
-                                r={0.5 + Math.random() * 1.2} 
+                                key={`magical-dust-out-${i}`} 
+                                r={0.4 + Math.random() * 1.5} 
                                 fill={isTop ? "var(--c-node-green)" : "var(--c-node-purple)"}
                                 initial={{ opacity: 0 }}
                                 animate={{ 
-                                    opacity: [0, 0.6, 0],
+                                    opacity: [0, 1, 0],
+                                    scale: [0.5, 1.2, 0.5],
                                     offsetDistance: ["0%", "100%"] 
                                 }}
                                 transition={{ 
-                                    duration: 2 + Math.random() * 3, 
+                                    duration: 1.5 + Math.random() * 2.5, 
                                     repeat: Infinity, 
-                                    ease: "easeInOut", 
-                                    delay: Math.random() * 3 
+                                    ease: "linear", 
+                                    delay: Math.random() * 2 
                                 }}
                                 style={{ 
-                                    offsetPath: `path('M 400 300 C ${450 + Math.random() * 50} ${300 + jitter/2}, ${600 + Math.random() * 50} ${isTop ? 150 + jitter : 450 + jitter}, 700 ${isTop ? 150 : 450}')` 
+                                    offsetPath: `path('M 400 300 C ${450 + Math.random() * 80} ${300 + jitter/2}, ${600 + Math.random() * 80} ${isTop ? 150 + jitter : 450 + jitter}, 700 ${isTop ? 150 : 450}')`,
+                                    filter: "blur(0.5px)"
                                 }}
                             />
                         );
