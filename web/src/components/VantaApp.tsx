@@ -117,15 +117,15 @@ export function VantaApp() {
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden font-sans">
         <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-[1fr_1.5fr_1fr] overflow-hidden px-12 gap-12">
+        <main className="flex-1 grid grid-cols-[1fr_1.5fr_1fr] overflow-hidden px-12 gap-10">
           {/* INPUTS COLUMN */}
           <section id="vanta-inputs" className="flex flex-col h-full py-4 overflow-hidden">
-            <div className="mb-6 shrink-0">
+            <div className="mb-4 shrink-0">
               <h2 className="font-mono-heading text-[16px] font-black tracking-widest text-[var(--text-main)] mb-1">INPUTS</h2>
               <p className="text-[11px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
             </div>
             
-            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar pb-32">
+            <div className="flex-1 flex flex-col gap-4 overflow-hidden justify-center">
                 <AudioCard
                   id="vanta-reference"
                   heading="REFERENCE AUDIO"
@@ -144,7 +144,7 @@ export function VantaApp() {
                   onFile={(f) => setMixture(f)}
                 />
 
-                <div className="mt-auto pt-6 pb-2">
+                <div className="mt-2">
                   <TipsCard />
                 </div>
             </div>
@@ -164,12 +164,12 @@ export function VantaApp() {
 
           {/* OUTPUTS COLUMN */}
           <section id="vanta-outputs" className="flex flex-col h-full py-4 overflow-hidden">
-            <div className="mb-6 shrink-0">
+            <div className="mb-4 shrink-0">
               <h2 className="font-mono-heading text-[16px] font-black tracking-widest text-[var(--text-main)] mb-1">OUTPUTS</h2>
               <p className="text-[11px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
             </div>
 
-            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar pb-32">
+            <div className="flex-1 flex flex-col gap-4 overflow-hidden justify-center">
                 <AudioCard
                   heading="CLEAN VOICE"
                   source={result?.extracted ?? null}
@@ -186,10 +186,10 @@ export function VantaApp() {
                   emptyLabel="Noise residue will appear here"
                 />
 
-                <div className="mt-auto pt-6 pb-2">
-                   <div className="flex items-start gap-4 p-4 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
-                      <Activity className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
-                      <p className="text-[10px] text-[var(--text-muted)] leading-relaxed font-medium">
+                <div className="mt-2">
+                   <div className="flex items-start gap-3 p-3 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
+                      <Activity className="h-3.5 w-3.5 text-[var(--text-muted)] shrink-0 mt-0.5" />
+                      <p className="text-[9px] text-[var(--text-muted)] leading-relaxed font-medium">
                         Your outputs will be available here once processing is complete. Both signals are extracted in real-time.
                       </p>
                    </div>
