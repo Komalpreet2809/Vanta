@@ -117,7 +117,7 @@ export function VantaApp() {
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden font-sans">
         <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-[0.8fr_2.2fr_0.8fr] overflow-hidden px-10 gap-8">
+        <main className="flex-1 grid grid-cols-[450px_1fr_450px] overflow-hidden px-12 gap-10">
           {/* INPUTS COLUMN */}
           <section id="vanta-inputs" className="flex flex-col h-full py-4 overflow-hidden">
             <div className="mb-4 shrink-0 h-16">
