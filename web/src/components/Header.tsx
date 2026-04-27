@@ -38,7 +38,7 @@ export function Header() {
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-3">
           <img src="/logo.png" alt="Vanta Logo" className="h-16 w-auto mix-blend-multiply opacity-90" />
-          <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--c-green)] leading-none -ml-1">VANTA</span>
+          <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-1">VANTA</span>
         </div>
       </div>
 

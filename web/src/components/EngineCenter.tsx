@@ -97,7 +97,7 @@ export function EngineCenter({
                   cy="50%"
                   r="48%"
                   fill="none"
-                  stroke="var(--c-green)"
+                  stroke="var(--text-main)"
                   strokeWidth="10"
                   strokeDasharray="301.59%" 
                   initial={{ strokeDashoffset: "301.59%" }}
@@ -121,7 +121,7 @@ export function EngineCenter({
                     key={i}
                     animate={isRunning ? { height: ["40%", "100%", "40%"] } : { height: `${h * 100}%` }}
                     transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.1 }}
-                    className="w-[4px] rounded-full bg-[var(--c-green)]"
+                    className="w-[4px] rounded-none bg-[var(--text-main)]"
                   />
                 ))}
               </div>
@@ -133,7 +133,7 @@ export function EngineCenter({
                 </span>
                 
                 {isRunning ? (
-                  <span className="text-[24px] font-mono-heading font-black text-[var(--c-green)] mt-2">
+                  <span className="text-[24px] font-mono-heading font-black text-[var(--text-main)] mt-2">
                     {Math.round(progress)}%
                   </span>
                 ) : (
