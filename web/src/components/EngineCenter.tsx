@@ -21,15 +21,7 @@ export function EngineCenter({
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
-      {/* Header Text - Matches inspo.png exactly */}
-        <div className="flex flex-col items-center gap-1 mb-8">
-          <h1 className="font-mono-heading font-black text-[28px] uppercase tracking-wider text-[var(--c-green)]">
-            VANTA ENGINE
-          </h1>
-          <p className="text-[12px] font-medium opacity-80 text-[#444444]">
-            Isolates the target voice from noise.
-          </p>
-        </div>
+
 
       {/* SVG Diagram Container - Fully responsive aspect-square */}
       <div className="relative w-full aspect-square max-w-[600px] flex items-center justify-center">
