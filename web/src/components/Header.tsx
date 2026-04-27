@@ -43,10 +43,7 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="btn-icon h-10 px-4 flex items-center gap-2 font-mono-heading text-[11px] uppercase tracking-wider">
-          <History className="h-4 w-4" />
-          <span>History</span>
-        </button>
+
 
         <button 
           onClick={toggleDark}
