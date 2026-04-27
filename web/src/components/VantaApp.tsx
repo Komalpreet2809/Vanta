@@ -117,12 +117,12 @@ export function VantaApp() {
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden font-sans">
         <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-[1fr_1.5fr_1fr] overflow-hidden px-12 gap-10">
+        <main className="flex-1 grid grid-cols-[0.8fr_2.2fr_0.8fr] overflow-hidden px-10 gap-8">
           {/* INPUTS COLUMN */}
           <section id="vanta-inputs" className="flex flex-col h-full py-4 overflow-hidden">
-            <div className="mb-4 shrink-0 h-12">
-              <h2 className="font-mono-heading text-[16px] font-black tracking-widest text-[var(--text-main)] mb-1">INPUTS</h2>
-              <p className="text-[11px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
+            <div className="mb-4 shrink-0 h-14">
+              <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-1">INPUTS</h2>
+              <p className="text-[12px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
             </div>
             
             <div className="flex-1 flex flex-col gap-4 overflow-hidden">
@@ -150,7 +150,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="h-24 shrink-0 mt-2">
+                <div className="h-28 shrink-0 mt-2">
                   <TipsCard />
                 </div>
             </div>
@@ -170,9 +170,9 @@ export function VantaApp() {
 
           {/* OUTPUTS COLUMN */}
           <section id="vanta-outputs" className="flex flex-col h-full py-4 overflow-hidden">
-            <div className="mb-4 shrink-0 h-12">
-              <h2 className="font-mono-heading text-[16px] font-black tracking-widest text-[var(--text-main)] mb-1">OUTPUTS</h2>
-              <p className="text-[11px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
+            <div className="mb-4 shrink-0 h-14">
+              <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-1">OUTPUTS</h2>
+              <p className="text-[12px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
             </div>
 
             <div className="flex-1 flex flex-col gap-4 overflow-hidden">
@@ -198,10 +198,10 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="h-24 shrink-0 mt-2">
-                   <div className="h-full flex items-start gap-3 p-3 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
-                      <Activity className="h-3.5 w-3.5 text-[var(--text-muted)] shrink-0 mt-0.5" />
-                      <p className="text-[9px] text-[var(--text-muted)] leading-relaxed font-medium">
+                <div className="h-28 shrink-0 mt-2">
+                   <div className="h-full flex items-start gap-4 p-4 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
+                      <Activity className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
+                      <p className="text-[11px] text-[var(--text-muted)] leading-relaxed font-medium">
                         Your outputs will be available here once processing is complete. Both signals are extracted in real-time.
                       </p>
                    </div>
