@@ -199,7 +199,7 @@ export function VantaApp() {
                 </div>
 
                 <div className="h-24 shrink-0 mt-2">
-                   <div className="h-full flex items-start gap-4 p-4 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
+                   <div className="h-full flex items-start gap-4">
                       <Activity className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
                       <p className="text-[12px] text-[var(--text-muted)] leading-relaxed font-medium">
                         Your outputs will be available here once processing is complete.
