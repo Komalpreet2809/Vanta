@@ -6,7 +6,7 @@ import { EngineCenter } from "./EngineCenter";
 import { Header } from "./Header";
 import { TipsCard } from "./TipsCard";
 import { extract, health, type ExtractMeta } from "../lib/api";
-import { Info } from "lucide-react";
+import { Activity, Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -189,7 +189,7 @@ export function VantaApp() {
 
             <div className="pt-8">
                <div className="flex items-start gap-4 p-4 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
-                  <Info className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
+                  <Activity className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
                   <p className="text-[10px] text-[var(--text-muted)] leading-relaxed font-medium">
                     Your outputs will be available here once processing is complete. Both signals are extracted in real-time.
                   </p>
@@ -198,10 +198,53 @@ export function VantaApp() {
           </section>
         </main>
 
-        <footer className="px-10 py-4 flex items-center justify-between border-t border-[var(--border-main)] bg-transparent">
-           <span className="text-[10px] font-mono font-bold tracking-widest text-[var(--text-muted)] uppercase">VANTA v1.0.0</span>
+        {/* BOTTOM STATUS BAR */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-[650px] px-12 z-50">
+            <motion.div 
+                layout
+                className="vanta-card p-5 flex items-center justify-between gap-8 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
+            >
+                <div className="flex items-center gap-6">
+                    <div className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}>
+                         <Activity className={`w-6 h-6 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50'}`} />
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="font-mono-heading text-[13px] font-black tracking-widest">
+                            {status === 'running' ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
+                        </span>
+                        <span className="text-[10px] text-[var(--text-muted)] font-bold opacity-80">
+                            {status === 'running' ? `${stage} • ${Math.round(progress)}%` : "Both signals are processed simultaneously for best results."}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-[var(--border-main)]/50">
+                        <div className={`w-1.5 h-1.5 rounded-full ${status === 'running' ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
+                        <span className="text-[10px] font-mono font-black uppercase tracking-tighter text-[var(--text-muted)]">{status === 'running' ? 'Active' : 'Ready'}</span>
+                    </div>
+
+                    <button
+                        disabled={!canRun}
+                        onClick={run}
+                        className={`px-10 py-3.5 rounded-lg font-mono-heading text-[12px] font-black tracking-widest transition-all ${
+                            status === 'running' 
+                            ? 'bg-transparent border border-[var(--border-main)] opacity-50 cursor-not-allowed'
+                            : canRun 
+                                ? 'bg-[var(--text-main)] text-[var(--bg-app)] hover:scale-105 active:scale-95 shadow-xl hover:shadow-[var(--text-main)]/20'
+                                : 'bg-[var(--bg-app)] border border-[var(--border-main)] opacity-30 cursor-not-allowed'
+                        }`}
+                    >
+                        {status === 'running' ? "EXTRACTING..." : "START EXTRACTION"}
+                    </button>
+                </div>
+            </motion.div>
+        </div>
+
+        <footer className="px-10 py-4 flex items-center justify-between border-t border-[var(--border-main)]/30 bg-transparent relative z-10">
+           <span className="text-[10px] font-mono font-bold tracking-widest text-[var(--text-muted)] uppercase opacity-60">VANTA v1.0.0</span>
            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold tracking-widest text-[var(--text-muted)] uppercase flex items-center gap-1.5">
+              <span className="text-[10px] font-mono font-black tracking-widest text-[var(--text-muted)] uppercase flex items-center gap-1.5 opacity-60">
                 MADE WITH <span className="text-red-500">❤️</span> BY KOMAL
               </span>
            </div>
