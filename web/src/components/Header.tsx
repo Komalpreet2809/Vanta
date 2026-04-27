@@ -45,10 +45,13 @@ export function Header() {
               fill="var(--text-main)" 
               className="text-[var(--text-main)]"
             >
-              {/* Bold, Geometric 'V' Signal Path */}
-              <path d="M2 2h5l5 15 5-15h5l-8 20h-4z" />
-              {/* A single industrial 'dot' signifying the target isolation point */}
-              <rect x="11" y="20" width="2" height="2" />
+              {/* Unique 'Diamond Signal' mark */}
+              {/* The Prism / Focus Top */}
+              <path d="M12 2L4 12h16L12 2z" />
+              {/* The Isolated Signal Bars */}
+              <rect x="6" y="14" width="12" height="1.5" />
+              <rect x="8" y="17.5" width="8" height="1.5" />
+              <rect x="11" y="21" width="2" height="1.5" />
             </svg>
           </div>
           <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-2">VANTA</span>
