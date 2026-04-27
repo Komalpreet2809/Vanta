@@ -39,52 +39,46 @@ export function Header({
   };
 
   return (
-    <header className="pl-2 pr-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-5">
-          <div className="shrink-0">
+    <header className="px-8 py-4 flex items-center justify-between bg-transparent">
+      <div className="flex items-center gap-4">
+          <div className="w-10 h-10 flex items-center justify-center">
             <svg 
-              width="44" 
-              height="44" 
+              width="24" 
+              height="24" 
               viewBox="0 0 24 24" 
               fill="var(--text-main)" 
-              className="text-[var(--text-main)]"
             >
-              {/* Unique 'Diamond Signal' mark */}
-              {/* The Prism / Focus Top */}
               <path d="M12 2L4 12h16L12 2z" />
-              {/* The Isolated Signal Bars */}
               <rect x="6" y="14" width="12" height="1.5" />
               <rect x="8" y="17.5" width="8" height="1.5" />
               <rect x="11" y="21" width="2" height="1.5" />
             </svg>
           </div>
-          <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-2">VANTA</span>
-        </div>
+          <span className="text-[28px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
       </div>
 
       <div className="flex items-center gap-3">
         <button 
           onClick={onStartTour}
-          className="btn-icon h-10 w-10 flex items-center justify-center"
+          className="vanta-btn w-10 h-10"
           aria-label="Start guided tour"
           title="How to use Vanta"
         >
-          <HelpCircle className="h-5 w-5 stroke-[2.5]" />
+          <HelpCircle className="h-5 w-5" />
         </button>
 
         <button 
           onClick={onReset}
-          className="btn-icon h-10 w-10 flex items-center justify-center"
+          className="vanta-btn w-10 h-10"
           aria-label="Reset session"
           title="Clear all inputs and results"
         >
-          <RefreshCw className="h-5 w-5 stroke-[2.5]" />
+          <RefreshCw className="h-5 w-5" />
         </button>
 
         <button 
           onClick={toggleDark}
-          className="btn-icon h-10 w-10 flex items-center justify-center"
+          className="vanta-btn w-10 h-10"
           aria-label="Toggle dark mode"
         >
           {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

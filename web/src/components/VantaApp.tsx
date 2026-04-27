@@ -48,7 +48,6 @@ export function VantaApp() {
     
     let currentProgress = 0;
     const interval = setInterval(() => {
-      // Ease progress towards 95% asymptotically
       currentProgress += (95 - currentProgress) * 0.04;
       setProgress(currentProgress);
       
@@ -73,7 +72,7 @@ export function VantaApp() {
       setTimeout(() => {
         setResult(r);
         setStatus("idle");
-      }, 600); // Brief pause to show 100% finalizing before results pop
+      }, 600);
     } catch (e) {
       console.error(e);
       setStatus("error");
@@ -101,206 +100,110 @@ export function VantaApp() {
   const startTour = useCallback(() => {
     const driverObj = driver({
       showProgress: true,
+      popoverClass: 'driverjs-theme',
       steps: [
-        { 
-          element: '#vanta-header', 
-          popover: { 
-            title: 'Welcome to Vanta', 
-            description: 'The next generation of signal isolation. Let\'s show you how to extract any voice from a noisy environment.',
-            side: "bottom", 
-            align: 'start' 
-          } 
-        },
-        { 
-          element: '#vanta-inputs', 
-          popover: { 
-            title: 'The Inputs', 
-            description: 'Everything starts here. You need two pieces of audio to begin the extraction process.',
-            side: "right", 
-            align: 'start' 
-          } 
-        },
-        { 
-          element: '#vanta-reference', 
-          popover: { 
-            title: 'Reference Audio', 
-            description: 'Upload a clean sample of the voice you want to isolate. A few seconds of clear speech is enough.',
-            side: "right", 
-            align: 'center' 
-          } 
-        },
-        { 
-          element: '#vanta-noise', 
-          popover: { 
-            title: 'Noisy Recording', 
-            description: 'Upload the recording that contains both the target voice and the background noise you want to remove.',
-            side: "right", 
-            align: 'center' 
-          } 
-        },
-        { 
-          element: '#vanta-engine', 
-          popover: { 
-            title: 'The Extraction Engine', 
-            description: 'Once both files are loaded, click "EXTRACT VOICE". Our AI will analyze the signals and isolate the target in real-time.',
-            side: "top", 
-            align: 'center' 
-          } 
-        },
-        { 
-          element: '#vanta-outputs', 
-          popover: { 
-            title: 'Crystal Clear Results', 
-            description: 'Your isolated voice will appear here as "Clean Voice", while the background noise is separated into "Residue".',
-            side: "left", 
-            align: 'start' 
-          } 
-        },
+        { element: '#vanta-header', popover: { title: 'Welcome to Vanta', description: 'The next generation of signal isolation. Let\'s show you how to extract any voice from a noisy environment.', side: "bottom", align: 'start' } },
+        { element: '#vanta-inputs', popover: { title: 'The Inputs', description: 'Everything starts here. You need two pieces of audio to begin the extraction process.', side: "right", align: 'start' } },
+        { element: '#vanta-reference', popover: { title: 'Reference Audio', description: 'Upload a clean sample of the voice you want to isolate.', side: "right", align: 'center' } },
+        { element: '#vanta-noise', popover: { title: 'Noisy Recording', description: 'Upload the recording that contains both the target voice and background noise.', side: "right", align: 'center' } },
+        { element: '#vanta-engine', popover: { title: 'The Extraction Engine', description: 'Click "EXTRACT VOICE" to start the AI isolation process.', side: "top", align: 'center' } },
+        { element: '#vanta-outputs', popover: { title: 'Results', description: 'Your isolated voice will appear here once processing is complete.', side: "left", align: 'start' } },
       ]
     });
-
     driverObj.drive();
   }, []);
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden">
-        <div id="vanta-header">
-          <Header onReset={reset} onStartTour={startTour} />
-        </div>
+    <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden font-sans">
+        <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-[1fr_1.3fr_1fr] overflow-hidden px-8 gap-4">
+        <main className="flex-1 grid grid-cols-[1fr_1.5fr_1fr] overflow-hidden px-12 gap-12">
           {/* INPUTS COLUMN */}
-          <section id="vanta-inputs" className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
-            <div className="p-4 h-20 flex flex-col justify-center">
-              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-wider text-[var(--text-main)] leading-none">Inputs</h2>
-              <p className="text-[12px] font-medium opacity-80 mt-1.5">Provide reference and noise audio.</p>
+          <section id="vanta-inputs" className="flex flex-col h-full overflow-hidden py-4">
+            <div className="mb-8">
+              <h2 className="font-mono-heading text-[16px] font-black tracking-widest text-[var(--text-main)] mb-1">INPUTS</h2>
+              <p className="text-[11px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
             </div>
             
-            <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
-              <div className="flex-1 min-h-0">
+            <div className="flex-1 flex flex-col gap-8 overflow-hidden">
                 <AudioCard
                   id="vanta-reference"
-                  heading="Reference Audio"
+                  heading="REFERENCE AUDIO"
                   source={enrollment}
                   variant="brown"
                   onClear={() => setEnrollment(null)}
                   onFile={(f) => setEnrollment(f)}
-                  emptyLabel="No reference audio loaded"
-                  className="h-full w-full"
                 />
-              </div>
 
-              <div className="flex-1 min-h-0">
                 <AudioCard
                   id="vanta-noise"
-                  heading="Noise Audio"
+                  heading="NOISE AUDIO"
                   source={mixture}
                   variant="red"
                   onClear={() => setMixture(null)}
                   onFile={(f) => setMixture(f)}
-                  emptyLabel="No noisy recording loaded"
-                  className="h-full w-full"
                 />
-              </div>
             </div>
 
-            <div className="px-4 pb-6 pt-0 shrink-0 flex items-start">
+            <div className="pt-8">
               <TipsCard />
             </div>
           </section>
 
-          {/* ENGINE COLUMN - The focal point matching inspo.png */}
-          <section className="bg-transparent p-0 flex flex-col h-full overflow-hidden">
+          {/* ENGINE COLUMN */}
+          <section className="flex flex-col h-full overflow-hidden">
               <EngineCenter
+                id="vanta-engine"
                 canExtract={!!canRun}
                 status={status}
                 progress={progress}
                 stage={stage}
                 onExtract={run}
-                id="vanta-engine"
               />
           </section>
 
           {/* OUTPUTS COLUMN */}
-          <section id="vanta-outputs" className="flex flex-col h-full overflow-hidden bg-[var(--bg-app)]">
-            <div className="p-4 h-20 flex flex-col justify-center">
-              <h2 className="font-mono-heading font-black text-[20px] uppercase tracking-wider text-[var(--text-main)] leading-none">Outputs</h2>
-              <p className="text-[12px] font-medium opacity-80 mt-1.5">Clean voice and residue (noise).</p>
+          <section id="vanta-outputs" className="flex flex-col h-full overflow-hidden py-4">
+            <div className="mb-8">
+              <h2 className="font-mono-heading text-[16px] font-black tracking-widest text-[var(--text-main)] mb-1">OUTPUTS</h2>
+              <p className="text-[11px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
             </div>
 
-            <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
-              <div className="flex-1 min-h-0 relative">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={result ? "result-clean" : "empty-clean"}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute inset-0"
-                  >
-                    <AudioCard
-                      heading="Clean Voice"
-                      source={result?.extracted ?? null}
-                      filenameOverride="Extracted_Voice.mp3"
-                      variant="green"
-                      onDownload={
-                        result
-                          ? () => download(result.extracted, "vanta_extracted.mp3")
-                          : undefined
-                      }
-                      emptyLabel={"Clean voice will appear here\nafter processing"}
-                      className="h-full w-full"
-                    />
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+            <div className="flex-1 flex flex-col gap-8 overflow-hidden">
+                <AudioCard
+                  heading="CLEAN VOICE"
+                  source={result?.extracted ?? null}
+                  variant="green"
+                  onDownload={result ? () => download(result.extracted, "vanta_clean.mp3") : undefined}
+                  emptyLabel="Your clean voice will appear here"
+                />
 
-              <div className="flex-1 min-h-0 relative">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={result ? "result-residue" : "empty-residue"}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.4, delay: result ? 0.1 : 0 }}
-                    className="absolute inset-0"
-                  >
-                    <AudioCard
-                      heading="Residue (Noise)"
-                      source={result?.residue ?? null}
-                      filenameOverride="Residue_Noise.mp3"
-                      variant="purple"
-                      onDownload={
-                        result
-                          ? () => download(result.residue, "vanta_residue.mp3")
-                          : undefined
-                      }
-                      emptyLabel={"Residue will appear here\nafter processing"}
-                      className="h-full w-full"
-                    />
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                <AudioCard
+                  heading="RESIDUE (NOISE)"
+                  source={result?.residue ?? null}
+                  variant="purple"
+                  onDownload={result ? () => download(result.residue, "vanta_residue.mp3") : undefined}
+                  emptyLabel="Noise residue will appear here"
+                />
             </div>
 
-            <div className="px-4 pb-6 pt-0 shrink-0 flex items-start">
-               <div className="card-border p-3 flex items-start gap-3 bg-[var(--bg-app)] shadow-sm w-full">
-                  <Info className="h-4 w-4 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-[var(--text-main)] leading-relaxed font-medium">
-                    Your outputs will be available here once processing is complete.<br />
-                    Both signals are extracted in real-time.
+            <div className="pt-8">
+               <div className="flex items-start gap-4 p-4 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
+                  <Info className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
+                  <p className="text-[10px] text-[var(--text-muted)] leading-relaxed font-medium">
+                    Your outputs will be available here once processing is complete. Both signals are extracted in real-time.
                   </p>
                </div>
             </div>
           </section>
         </main>
 
-        <footer className="px-6 py-2 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-footer)]">
-           <span className="text-[11px] font-mono font-bold tracking-tight opacity-70">VANTA v1.0.0</span>
-           <div className="flex items-center gap-2 opacity-80">
-
-              <span className="text-[11px] font-bold tracking-tight uppercase">{backend === "online" ? "MADE WITH ❤️ BY KOMAL" : "OFFLINE"}</span>
+        <footer className="px-10 py-4 flex items-center justify-between border-t border-[var(--border-main)] bg-transparent">
+           <span className="text-[10px] font-mono font-bold tracking-widest text-[var(--text-muted)] uppercase">VANTA v1.0.0</span>
+           <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold tracking-widest text-[var(--text-muted)] uppercase flex items-center gap-1.5">
+                MADE WITH <span className="text-red-500">❤️</span> BY KOMAL
+              </span>
            </div>
         </footer>
     </div>

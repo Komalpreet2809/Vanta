@@ -4,17 +4,14 @@ import { Lightbulb } from "lucide-react";
 
 export function TipsCard() {
   return (
-    <div className="card-border p-3 shadow-sm bg-[var(--bg-app)] w-full">
-      <div className="flex items-center justify-between pb-1 mb-2">
-        <div className="flex items-center gap-2.5 text-[var(--text-main)]">
-          <div className="h-8 w-8 border-2 border-[var(--text-main)] flex items-center justify-center bg-[var(--bg-card)] shadow-[2px_2px_0_var(--text-main)]">
-            <Lightbulb className="h-4 w-4" />
-          </div>
-          <span className="font-mono-heading text-[13px] font-black uppercase tracking-tight text-[var(--text-main)]">TIPS</span>
+    <div className="p-2 w-full">
+      <div className="flex items-center gap-3 mb-3 text-[var(--text-main)]">
+        <div className="h-8 w-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-card)]">
+          <Lightbulb className="h-4 w-4 text-[var(--text-muted)]" />
         </div>
-
+        <span className="font-mono-heading text-[12px] opacity-80">TIPS</span>
       </div>
-      <ul className="list-disc pl-5 text-[12px] text-[var(--text-main)] space-y-1.5 marker:text-[var(--text-main)] font-medium opacity-80">
+      <ul className="list-disc pl-5 text-[11px] text-[var(--text-main)] space-y-2 marker:text-[var(--text-muted)] font-medium">
         <li>Supports WAV, MP3, M4A</li>
         <li>Recommended: 5–30 seconds</li>
       </ul>

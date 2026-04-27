@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioLines, Download, FileAudio, Music, Pause, Play, Upload, X } from "lucide-react";
+import { Music, Pause, Play, Upload, X, Download } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 
@@ -19,12 +19,12 @@ type Props = {
   id?: string;
 };
 
-const COLOR: Record<Variant, { wave: string; progress: string }> = {
-  charcoal: { wave: "#888880", progress: "#333330" },
-  red: { wave: "#B54545", progress: "#333330" },
-  green: { wave: "#4A6B4A", progress: "#333330" },
-  purple: { wave: "#745296", progress: "#333330" },
-  brown: { wave: "#A68A64", progress: "#333330" },
+const COLOR: Record<Variant, { wave: string; progress: string; dot: string }> = {
+  charcoal: { wave: "#888880", progress: "#2C2C2A", dot: "#888880" },
+  red: { wave: "#B54545", progress: "#2C2C2A", dot: "#B54545" },
+  green: { wave: "#4A6B4A", progress: "#2C2C2A", dot: "#4A6B4A" },
+  purple: { wave: "#745296", progress: "#2C2C2A", dot: "#745296" },
+  brown: { wave: "#A68A64", progress: "#2C2C2A", dot: "#A68A64" },
 };
 
 export function AudioCard({
@@ -62,9 +62,9 @@ export function AudioCard({
       progressColor: colors.progress,
       cursorColor: "transparent",
       barWidth: 2,
-      barGap: 2,
-      barRadius: 0,
-      height: 24,
+      barGap: 3,
+      barRadius: 10,
+      height: 32,
       normalize: true,
       interact: true,
     });
@@ -89,55 +89,54 @@ export function AudioCard({
 
   const filename = filenameOverride ?? (source instanceof File ? source.name : "audio.mp3");
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
+  const colors = COLOR[variant];
 
   return (
-    <div id={id} className={`card-border p-5 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
-      <div className="flex items-center justify-between pb-1">
-        <div className="flex items-center gap-2.5">
-          <h3 className="font-mono-heading text-[16px] font-black tracking-tight uppercase">
-            {heading}
-          </h3>
-        </div>
-
+    <div id={id} className={`flex flex-col gap-3 ${className}`}>
+      <div className="flex items-center gap-2 mb-1">
+        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.dot }} />
+        <h3 className="font-mono-heading text-[11px] font-black tracking-widest text-[var(--text-main)] opacity-90">
+          {heading}
+        </h3>
       </div>
 
       {source ? (
-        <div className="flex flex-col gap-3">
-          {/* File Info Row */}
-          <div className="flex items-center gap-2">
-            <div className="btn-icon h-9 w-9 shrink-0">
-              <Music className="h-4 w-4" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="truncate text-[12px] font-bold">{filename}</div>
-              <div className="text-[10px] font-mono font-bold text-[var(--text-muted)] mt-0.5">
-                {sizeStr} • {formatTime(duration)}
-              </div>
-            </div>
-            {onClear && (
-              <button onClick={onClear} className="btn-icon h-9 w-9 shrink-0">
-                <X className="h-4 w-4 stroke-[1.5]" />
-              </button>
-            )}
-            {onDownload && (
-              <button onClick={onDownload} className="btn-icon h-9 w-9 shrink-0">
-                <Download className="h-4 w-4 stroke-[1.5]" />
-              </button>
-            )}
+        <div className="vanta-card p-4 flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+             <div className="w-10 h-10 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)]">
+                <Music className="h-4 w-4 text-[var(--text-muted)]" />
+             </div>
+             <div className="flex-1 min-w-0">
+               <div className="truncate text-[12px] font-bold text-[var(--text-main)]">{filename}</div>
+               <div className="text-[10px] font-medium text-[var(--text-muted)]">
+                 {sizeStr} • {formatTime(duration)}
+               </div>
+             </div>
+             <div className="flex items-center gap-1">
+                {onClear && (
+                    <button onClick={onClear} className="w-8 h-8 rounded-full hover:bg-[var(--border-main)] flex items-center justify-center transition-colors">
+                        <X className="h-3.5 w-3.5" />
+                    </button>
+                )}
+                {onDownload && (
+                    <button onClick={onDownload} className="w-8 h-8 rounded-full hover:bg-[var(--border-main)] flex items-center justify-center transition-colors">
+                        <Download className="h-3.5 w-3.5" />
+                    </button>
+                )}
+             </div>
           </div>
 
-          {/* Waveform Row */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4 px-1">
             <button
               onClick={() => wsRef.current?.playPause()}
               disabled={!ready}
-              className="btn-icon h-9 w-9 shrink-0 disabled:opacity-50"
+              className="w-10 h-10 rounded-full bg-[var(--text-main)] text-[var(--bg-app)] flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50"
             >
-              {playing ? <Pause className="h-3.5 w-3.5 fill-current" /> : <Play className="h-3.5 w-3.5 fill-current translate-x-[1px]" />}
+              {playing ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current translate-x-[1px]" />}
             </button>
-            <div className="flex-1 relative">
+            <div className="flex-1">
               <div ref={containerRef} className="w-full" />
-              <div className="flex justify-between text-[10px] font-mono font-bold text-[var(--text-muted)] mt-1">
+              <div className="flex justify-between text-[9px] font-medium text-[var(--text-muted)] mt-1.5 px-0.5">
                 <span>{formatTime(time)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
@@ -164,22 +163,22 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`flex-1 border-2 border-dashed border-[var(--text-main)] rounded-none flex items-center justify-center transition-all ${
-            onFile ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/5" : ""
-          } ${isDragging ? "bg-black/5 dark:bg-white/5" : "bg-transparent"}`}
+          className={`flex-1 border-2 border-dashed border-[var(--border-main)] rounded-xl flex items-center justify-center transition-all duration-300 min-h-[140px] ${
+            onFile ? "cursor-pointer hover:border-[var(--text-main)] hover:bg-[var(--bg-card)]" : "bg-black/[0.02]"
+          } ${isDragging ? "border-[var(--text-main)] bg-[var(--bg-card)] scale-[0.99]" : ""}`}
         >
           <div className="flex flex-col items-center gap-3">
-            <Upload className="h-7 w-7 stroke-[1.5] text-[var(--text-main)] opacity-70" />
-            <div className="text-[11px] text-[var(--text-main)] leading-relaxed text-center opacity-50 font-medium px-4">
-              {onFile ? (
-                <>
-                  drag and drop an audio file here<br />
-                  or click to browse
-                </>
-              ) : (
-                emptyLabel ?? "No signal loaded"
-              )}
-            </div>
+             <div className="w-12 h-12 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] mb-1">
+                <Upload className="h-5 w-5 text-[var(--text-muted)]" />
+             </div>
+             <div className="text-center px-6">
+                <div className="text-[11px] font-bold text-[var(--text-main)] mb-0.5">
+                    {onFile ? "Drag & drop or click to upload" : emptyLabel ?? "No signal loaded"}
+                </div>
+                <div className="text-[9px] text-[var(--text-muted)] font-medium">
+                    WAV, MP3, M4A
+                </div>
+             </div>
           </div>
         </div>
       )}

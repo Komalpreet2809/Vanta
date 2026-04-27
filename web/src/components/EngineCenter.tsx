@@ -11,6 +11,13 @@ type Props = {
   id?: string;
 };
 
+const STAGES = [
+  { id: "analyze", label: "ANALYZE", desc: "Detecting audio patterns" },
+  { id: "separate", label: "SEPARATE", desc: "Isolating voice from noise" },
+  { id: "enhance", label: "ENHANCE", desc: "Improving clarity and quality" },
+  { id: "reconstruct", label: "RECONSTRUCT", desc: "Building clean voice output" },
+];
+
 export function EngineCenter({
   canExtract,
   status,
@@ -20,145 +27,152 @@ export function EngineCenter({
   id,
 }: Props) {
   const isRunning = status === "running";
+  
+  // Calculate which stage we are in based on progress (0-100)
+  // analyze: 0-25, separate: 25-50, enhance: 50-75, reconstruct: 75-100
+  const activeStageIndex = isRunning ? Math.floor((progress / 100) * STAGES.length) : -1;
 
   return (
-    <div id={id} className="flex flex-col items-center justify-center w-full h-full">
+    <div id={id} className="flex flex-col items-center justify-between w-full h-full py-8">
+      {/* AI Voice Extraction Header */}
+      <div className="text-center mb-4">
+        <div className="flex items-center justify-center gap-4 mb-1">
+            <div className="h-[1px] w-8 bg-[var(--border-main)]" />
+            <h2 className="font-mono-heading text-[12px] opacity-80">AI Voice Extraction</h2>
+            <div className="h-[1px] w-8 bg-[var(--border-main)]" />
+        </div>
+        <p className="text-[10px] text-[var(--text-muted)] font-medium">Advanced isolation technology</p>
+      </div>
 
+      <div className="relative flex-1 w-full flex items-center justify-center overflow-visible">
+        {/* SVG Flow Container */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+            {/* Input Paths (Left to Center) */}
+            <g opacity="0.6">
+                {/* Reference Path */}
+                <path d="M 50 150 C 150 150, 300 300, 400 300" fill="none" stroke="var(--c-node-brown)" strokeWidth="1" strokeDasharray="4 4" />
+                {/* Noise Path */}
+                <path d="M 50 450 C 150 450, 300 300, 400 300" fill="none" stroke="var(--c-node-red)" strokeWidth="1" strokeDasharray="4 4" />
+                
+                {/* Flow particles if running */}
+                {isRunning && (
+                    <>
+                        <motion.circle r="2" fill="var(--c-node-brown)"
+                            animate={{ offsetDistance: ["0%", "100%"] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                            style={{ offsetPath: "path('M 50 150 C 150 150, 300 300, 400 300')" }}
+                        />
+                        <motion.circle r="2" fill="var(--c-node-red)"
+                            animate={{ offsetDistance: ["0%", "100%"] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.5 }}
+                            style={{ offsetPath: "path('M 50 450 C 150 450, 300 300, 400 300')" }}
+                        />
+                    </>
+                )}
+            </g>
 
-      {/* SVG Diagram Container - Fully responsive aspect-square */}
-      <div className="relative w-full aspect-square max-w-[600px] flex items-center justify-center">
-        <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid meet">
-          
-          {/* LEFT CURLY BRACE { */}
-          <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}>
-            {/* Top Curve - Straight then curve */}
-            <path
-              d="M 15 200 L 100 200 C 160 200, 130 400, 180 400"
-              fill="none"
-              stroke="var(--text-main)"
-              strokeWidth="3.5"
-            />
-            {/* Bottom Curve - Straight then curve */}
-            <path
-              d="M 15 600 L 100 600 C 160 600, 130 400, 180 400"
-              fill="none"
-              stroke="var(--text-main)"
-              strokeWidth="3.5"
-            />
-          </motion.g>
+            {/* Output Paths (Center to Right) */}
+            <g opacity="0.6">
+                 {/* Clean Voice Path */}
+                 <path d="M 400 300 C 500 300, 650 150, 750 150" fill="none" stroke="var(--c-node-green)" strokeWidth="1" strokeDasharray="4 4" />
+                 {/* Residue Path */}
+                 <path d="M 400 300 C 500 300, 650 450, 750 450" fill="none" stroke="var(--c-node-purple)" strokeWidth="1" strokeDasharray="4 4" />
 
-          {/* RIGHT CURLY BRACE } */}
-          <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.2 }}>
-            {/* Top Curve - Straight then curve */}
-            <path
-              d="M 785 200 L 700 200 C 640 200, 670 400, 620 400"
-              fill="none"
-              stroke="var(--text-main)"
-              strokeWidth="3.5"
-            />
-            {/* Bottom Curve - Straight then curve */}
-            <path
-              d="M 785 600 L 700 600 C 640 600, 670 400, 620 400"
-              fill="none"
-              stroke="var(--text-main)"
-              strokeWidth="3.5"
-            />
-          </motion.g>
+                 {/* Flow particles if running */}
+                 {isRunning && progress > 50 && (
+                    <>
+                        <motion.circle r="2" fill="var(--c-node-green)"
+                            animate={{ offsetDistance: ["0%", "100%"] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                            style={{ offsetPath: "path('M 400 300 C 500 300, 650 150, 750 150')" }}
+                        />
+                        <motion.circle r="2" fill="var(--c-node-purple)"
+                            animate={{ offsetDistance: ["0%", "100%"] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.5 }}
+                            style={{ offsetPath: "path('M 400 300 C 500 300, 650 450, 750 450')" }}
+                        />
+                    </>
+                )}
+            </g>
 
-          {/* Node Indicators */}
-          {/* Reference */}
-          <g transform="translate(15, 200)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-brown)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-node-brown)" />
-          </g>
-          {/* Noise */}
-          <g transform="translate(15, 600)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-red)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-node-red)" />
-          </g>
-          {/* Clean Voice */}
-          <g transform="translate(785, 200)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-green)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-node-green)" />
-          </g>
-          {/* Residue (Noise) */}
-          <g transform="translate(785, 600)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-purple)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-node-purple)" />
-          </g>
+            {/* Central Vertical Path */}
+            <path d="M 400 100 L 400 500" fill="none" stroke="var(--border-main)" strokeWidth="2" strokeDasharray="4 4" />
         </svg>
 
-        {/* Central Hero Circle - Fully Responsive */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] max-w-[320px]">
-          <div className="relative w-full aspect-square rounded-full border-[10px] border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)]">
-            {/* SVG Progress Ring */}
-            <svg className="absolute inset-[-10px] w-[calc(100%+20px)] h-[calc(100%+20px)] -rotate-90 pointer-events-none">
-              {isRunning && (
-                <motion.circle
-                  cx="50%"
-                  cy="50%"
-                  r="48%"
-                  fill="none"
-                  stroke="var(--text-main)"
-                  strokeWidth="10"
-                  strokeDasharray="301.59%" 
-                  initial={{ strokeDashoffset: "301.59%" }}
-                  animate={{ strokeDashoffset: `${301.59 * (1 - Math.max(2, progress) / 100)}%` }}
-                  transition={{ ease: "linear", duration: 0.1 }}
-                />
-              )}
-            </svg>
-            
-            <motion.button
-              disabled={!canExtract || isRunning}
-              onClick={onExtract}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              className="relative w-[80%] aspect-square rounded-full bg-[var(--bg-card)] border-[3px] border-[var(--text-main)] shadow-[6px_6px_0_var(--text-main)] flex flex-col items-center justify-center transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--text-main)] active:shadow-none active:translate-x-[6px] active:translate-y-[6px]"
-            >
-              {/* Waveform Icon (Green bars in reference) */}
-              <div className="flex items-center gap-[4px] h-10 mb-4">
-                {[0.4, 0.7, 1.0, 0.8, 0.5, 0.8, 1.0, 0.7, 0.4].map((h, i) => (
-                  <motion.div
-                    key={i}
-                    animate={isRunning ? { height: ["40%", "100%", "40%"] } : { height: `${h * 100}%` }}
-                    transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.1 }}
-                    className="w-[4px] rounded-none bg-[var(--text-main)]"
-                  />
-                ))}
-              </div>
+        {/* Nodes Column */}
+        <div className="relative flex flex-col items-center justify-between h-[400px] z-10">
+          {STAGES.map((s, i) => (
+            <div key={s.id} className="flex items-center group">
+              <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
+                {/* Node Circle */}
+                <motion.div 
+                    animate={i === activeStageIndex ? { scale: [1, 1.2, 1], boxShadow: "0 0 20px var(--text-main)" } : {}}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    className={`w-12 h-12 rounded-full border-2 flex items-center justify-center bg-[var(--bg-app)] transition-all duration-500 ${
+                        i <= activeStageIndex ? 'border-[var(--text-main)] shadow-md' : 'border-[var(--border-main)] opacity-40'
+                    }`}
+                >
+                    {/* Node Icon/Placeholder */}
+                    <div className={`w-2 h-2 rounded-full ${i <= activeStageIndex ? 'bg-[var(--text-main)]' : 'bg-[var(--border-main)]'}`} />
+                </motion.div>
 
-              {/* Main Text */}
-              <div className="flex flex-col items-center mt-2 px-6">
-                <span className={`font-bold text-[#333330] tracking-wider text-center ${isRunning ? 'text-[16px]' : 'text-[20px] uppercase mb-4'}`}>
-                  {isRunning ? stage : "Extract Voice"}
-                </span>
-                
-                {isRunning ? (
-                  <span className="text-[24px] font-mono-heading font-black text-[var(--text-main)] mt-2">
-                    {Math.round(progress)}%
-                  </span>
-                ) : null}
+                {/* Node Text - Positioned to the right */}
+                <div className="absolute left-16 w-40 flex flex-col">
+                    <span className={`text-[11px] font-bold tracking-widest transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-30'}`}>
+                        {s.label}
+                    </span>
+                    <span className={`text-[9px] text-[var(--text-muted)] font-medium leading-tight transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-0'}`}>
+                        {s.desc}
+                    </span>
+                </div>
               </div>
-            </motion.button>
-          </div>
-          
-
+            </div>
+          ))}
         </div>
       </div>
 
-
+      {/* Bottom Status Bar */}
+      <div className="w-full max-w-[400px] mt-8">
+        <motion.button
+            disabled={!canExtract || isRunning}
+            onClick={onExtract}
+            className={`w-full py-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all duration-300 ${
+                isRunning 
+                ? 'bg-[var(--bg-card)] border-[var(--border-main)] shadow-inner' 
+                : canExtract 
+                    ? 'bg-[var(--bg-card)] border-[var(--text-main)] shadow-md hover:scale-[1.02]' 
+                    : 'bg-transparent border-[var(--border-main)] opacity-50'
+            }`}
+        >
+            <div className="flex items-center gap-3">
+                {/* Waveform Icon */}
+                <div className="flex items-end gap-0.5 h-4">
+                    {[0.4, 1.0, 0.6, 0.8, 0.4].map((h, i) => (
+                        <motion.div
+                            key={i}
+                            animate={isRunning ? { height: ["20%", "100%", "20%"] } : { height: `${h * 100}%` }}
+                            transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.1 }}
+                            className="w-[2px] bg-[var(--text-main)] rounded-full"
+                        />
+                    ))}
+                </div>
+                <span className="font-mono-heading text-[12px] font-black">
+                    {isRunning ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
+                </span>
+                <div className={`w-1.5 h-1.5 rounded-full ${isRunning ? 'bg-[var(--c-node-green)] animate-pulse' : 'bg-[var(--text-muted)]'}`} />
+            </div>
+            
+            {isRunning ? (
+                <div className="text-[10px] text-[var(--text-muted)] font-medium">
+                    {stage} • {Math.round(progress)}%
+                </div>
+            ) : (
+                <div className="text-[10px] text-[var(--text-muted)] font-medium">
+                    Upload your audio files to begin voice extraction.
+                </div>
+            )}
+        </motion.button>
+      </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-

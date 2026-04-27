@@ -1,23 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  /* Refined Industrial Light Mode (Matches Reference Image) */
-  --bg-app: #F5F2E1; 
-  --bg-header: #F5F2E1; 
-  --bg-footer: #F5F2E1; 
-  --bg-card: #FBF8ED; 
-  --bg-btn: #FBF8ED;
+  /* Soft Industrial Palette */
+  --bg-app: #F0EEE1; 
+  --bg-header: #F0EEE1; 
+  --bg-footer: #F0EEE1; 
+  --bg-card: #E8E6D9; 
+  --bg-btn: #E8E6D9;
   
-  --border-main: #D1CEC4;
-  --border-card: #E1DFD7;
-  --border-dashed: #C4C1B8;
+  --border-main: #D6D4C7;
+  --border-card: #CECBBF;
+  --border-dashed: #BDBAB0;
   
-  --text-main: #333330;
-  --text-muted: #888880;
+  --text-main: #2C2C2A;
+  --text-muted: #7A7A75;
   
-  --c-green: #2A2A28; /* Charcoal for headings */
-  --c-charcoal: #2A2A28;
-  /* Specific Node/Waveform Colors */
+  /* Node Colors */
   --c-node-brown: #A68A64;
   --c-node-red: #B54545;
   --c-node-green: #4A6B4A;
@@ -25,21 +23,23 @@
 }
 
 .dark {
-  --bg-app: #0F0E0C; 
-  --bg-header: #0F0E0C; 
-  --bg-footer: #0F0E0C; 
-  --bg-card: #1A1815; 
-  --bg-btn: #2E2A26;
+  --bg-app: #121211; 
+  --bg-header: #121211; 
+  --bg-footer: #121211; 
+  --bg-card: #1C1C1A; 
+  --bg-btn: #242422;
   
-  --border-main: #2E2A26;
-  --border-card: #24211D;
-  --border-dashed: #403A34;
+  --border-main: #2A2A28;
+  --border-card: #222220;
+  --border-dashed: #3A3A38;
   
-  --text-main: #C4B5A3;
-  --text-muted: #6B6256;
+  --text-main: #D1D1CB;
+  --text-muted: #7A7A75;
   
-  --c-green: #C4B5A3; 
-  --c-charcoal: #080706;
+  --c-node-brown: #A68A64;
+  --c-node-red: #B54545;
+  --c-node-green: #4A6B4A;
+  --c-node-purple: #745296;
 }
 
 @theme inline {
@@ -57,15 +57,19 @@
 
 @layer components {
   .font-mono-heading {
-    @apply font-mono font-bold;
+    @apply font-mono font-bold tracking-tight uppercase;
   }
   
-  .card-border {
-    @apply border-2 border-[var(--text-main)] rounded-none shadow-[4px_4px_0_var(--text-main)] transition-all;
+  .vanta-card {
+    @apply bg-[var(--bg-card)] border border-[var(--border-main)] rounded-lg shadow-sm transition-all duration-300;
   }
   
-  .btn-icon {
-    @apply flex items-center justify-center border-2 border-[var(--text-main)] rounded-none bg-[var(--bg-btn)] text-[var(--text-main)] shadow-[2px_2px_0_var(--text-main)] hover:-translate-y-[1px] hover:shadow-[3px_3px_0_var(--text-main)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all cursor-pointer;
+  .vanta-btn {
+    @apply flex items-center justify-center p-2 rounded-lg bg-[var(--bg-btn)] border border-[var(--border-main)] text-[var(--text-main)] hover:bg-[var(--border-main)] transition-all cursor-pointer;
+  }
+
+  .status-dot {
+    @apply w-2 h-2 rounded-full inline-block mr-2;
   }
 }
 
