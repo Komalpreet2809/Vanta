@@ -92,13 +92,6 @@ export function AudioCard({
     <div className={`card-border p-5 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
       <div className="flex items-center justify-between pb-1">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-full border border-[var(--border-card)] flex items-center justify-center bg-black/5 dark:bg-white/5">
-            {heading.toLowerCase().includes("reference") || heading.toLowerCase().includes("clean") ? (
-              <Music className="h-4 w-4 opacity-70" />
-            ) : (
-              <AudioLines className="h-4 w-4 opacity-70" />
-            )}
-          </div>
           <h3 className="font-mono-heading text-[16px] font-black tracking-tight uppercase">
             {heading}
           </h3>
