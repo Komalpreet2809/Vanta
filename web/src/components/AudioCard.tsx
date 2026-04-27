@@ -168,8 +168,8 @@ export function AudioCard({
           } ${isDragging ? "border-[var(--text-main)] bg-[var(--bg-card)] scale-[0.99]" : ""}`}
         >
           <div className="flex flex-col items-center gap-3">
-             <div className="w-14 h-14 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] mb-1 shadow-sm">
-                <AudioLines className="h-6 w-6 text-[var(--text-muted)] opacity-40" />
+             <div className="w-10 h-10 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] mb-1 shadow-sm">
+                <AudioLines className="h-4 w-4 text-[var(--text-muted)] opacity-40" />
              </div>
              <div className="text-center px-6">
                 <div className="text-[11px] font-bold text-[var(--text-main)] mb-1 uppercase tracking-wider">
