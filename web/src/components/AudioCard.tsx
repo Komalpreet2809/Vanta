@@ -99,7 +99,7 @@ export function AudioCard({
               <AudioLines className="h-4 w-4 opacity-70" />
             )}
           </div>
-          <h3 className="font-mono-heading text-[18px] font-black tracking-tight uppercase">
+          <h3 className="font-mono-heading text-[16px] font-black tracking-tight uppercase">
             {heading}
           </h3>
         </div>
