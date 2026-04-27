@@ -136,13 +136,7 @@ export function EngineCenter({
                   <span className="text-[24px] font-mono-heading font-black text-[var(--text-main)] mt-2">
                     {Math.round(progress)}%
                   </span>
-                ) : (
-                  <div className="mt-2">
-                     <svg width="20" height="20" viewBox="0 0 24 24" fill="#333330">
-                       <path d="M8 5v14l11-7z" />
-                     </svg>
-                  </div>
-                )}
+                ) : null}
               </div>
             </motion.button>
           </div>
