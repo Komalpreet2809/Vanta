@@ -88,7 +88,7 @@ export function EngineCenter({
 
         {/* Central Hero Circle - Fully Responsive */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] max-w-[320px]">
-          <div className="relative w-full aspect-square rounded-full border-[10px] border-[#D9D7CE] shadow-lg flex items-center justify-center bg-[#EFEDE6]">
+          <div className="relative w-full aspect-square rounded-full border-[10px] border-[var(--border-main)] shadow-lg flex items-center justify-center bg-[var(--bg-app)]">
             {/* SVG Progress Ring */}
             <svg className="absolute inset-[-10px] w-[calc(100%+20px)] h-[calc(100%+20px)] -rotate-90 pointer-events-none">
               {isRunning && (
