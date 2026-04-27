@@ -36,35 +36,34 @@ export function Header() {
   return (
     <header className="pl-2 pr-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <svg 
-            width="44" 
-            height="44" 
+            width="52" 
+            height="52" 
             viewBox="0 0 24 24" 
             fill="none" 
             stroke="var(--text-main)" 
-            strokeWidth="1.8" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
+            strokeWidth="2.2" 
+            strokeLinecap="square" 
+            strokeLinejoin="miter" 
             className="text-[var(--text-main)] shrink-0"
           >
-            {/* Mic Capsule */}
-            <path d="M12 2a3.5 3.5 0 0 0-3.5 3.5v6a3.5 3.5 0 0 0 7 0v-6A3.5 3.5 0 0 0 12 2z" />
+            {/* High-Stroke Mic Capsule */}
+            <rect x="8.5" y="2" width="7" height="11" rx="3.5" strokeWidth="2.5" />
             
-            {/* Mic Slits (Right side like image) */}
-            <line x1="13.5" y1="5.5" x2="15" y2="5.5" strokeWidth="1" />
-            <line x1="13.5" y1="8.5" x2="15" y2="8.5" strokeWidth="1" />
+            {/* Technical Slits */}
+            <line x1="11" y1="5" x2="13" y2="5" strokeWidth="1" />
+            <line x1="11" y1="8" x2="13" y2="8" strokeWidth="1" />
             
-            {/* Cradle & Stand */}
-            <path d="M19 11v1a7 7 0 0 1-14 0v-1" />
-            <line x1="12" y1="19" x2="12" y2="22" />
-            <line x1="9" y1="22" x2="15" y2="22" />
+            {/* Cradle & Heavy Base */}
+            <path d="M5 10v1a7 7 0 0 0 14 0v-1" />
+            <line x1="12" y1="18" x2="12" y2="22" />
+            <line x1="8" y1="22" x2="16" y2="22" strokeWidth="1.5" />
             
-            {/* Jagged Waveform (matches image pattern) */}
+            {/* Sharp, Precise Waveform */}
             <path 
-              d="M2 13h2.5l1.5-3.5 2 7 2.5-9.5 2.5 12.5 2.5-10.5 2.5 7.5 2-3.5h2" 
-              strokeWidth="1.5"
-              strokeLinejoin="miter"
+              d="M2 12h4l1.5-4 1.5 8 1.5-4h4" 
+              strokeWidth="1.8"
               className="opacity-100"
             />
           </svg>
