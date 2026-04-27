@@ -29,64 +29,60 @@ export function EngineCenter({
           
           {/* LEFT CURLY BRACE { */}
           <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}>
-            {/* Top Curve - Spread to y=200 */}
+            {/* Top Curve - Straight then curve */}
             <path
-              d="M 70 200 C 130 200, 130 400, 180 400"
+              d="M 15 200 L 100 200 C 160 200, 130 400, 180 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="3"
+              strokeWidth="3.5"
             />
-            {/* Bottom Curve - Spread to y=600 */}
+            {/* Bottom Curve - Straight then curve */}
             <path
-              d="M 70 600 C 130 600, 130 400, 180 400"
+              d="M 15 600 L 100 600 C 160 600, 130 400, 180 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="3"
+              strokeWidth="3.5"
             />
           </motion.g>
 
           {/* RIGHT CURLY BRACE } */}
           <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.2 }}>
-            {/* Top Curve - Spread to y=200 */}
+            {/* Top Curve - Straight then curve */}
             <path
-              d="M 730 200 C 670 200, 670 400, 620 400"
+              d="M 785 200 L 700 200 C 640 200, 670 400, 620 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="3"
+              strokeWidth="3.5"
             />
-            {/* Bottom Curve - Spread to y=600 */}
+            {/* Bottom Curve - Straight then curve */}
             <path
-              d="M 730 600 C 670 600, 670 400, 620 400"
+              d="M 785 600 L 700 600 C 640 600, 670 400, 620 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="3"
+              strokeWidth="3.5"
             />
           </motion.g>
 
-          {/* Node Indicators (Spread to y=200 and y=600) */}
+          {/* Node Indicators */}
           {/* Reference */}
-          <g transform="translate(70, 200)">
-            <circle r="4" fill="var(--bg-card)" />
-            <circle r="3" fill="var(--c-green)" />
-            <text x="10" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">REFERENCE</text>
+          <g transform="translate(15, 200)">
+            <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
+            <text x="22" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">REFERENCE</text>
           </g>
           {/* Noise */}
-          <g transform="translate(70, 600)">
-            <circle r="4" fill="var(--bg-card)" />
-            <circle r="3" fill="var(--c-red)" />
-            <text x="10" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">NOISE</text>
+          <g transform="translate(15, 600)">
+            <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
+            <text x="22" y="24" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">NOISE</text>
           </g>
           {/* Clean Voice */}
-          <g transform="translate(730, 200)">
-            <circle r="4" fill="var(--bg-card)" />
-            <circle r="3" fill="var(--c-green)" />
-            <text x="-70" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">CLEAN VOICE</text>
+          <g transform="translate(785, 200)">
+            <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
+            <text x="-85" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">CLEAN VOICE</text>
           </g>
           {/* Residue (Noise) */}
-          <g transform="translate(730, 600)">
-            <circle r="4" fill="var(--bg-card)" />
-            <circle r="3" fill="var(--c-purple)" />
-            <text x="-95" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">RESIDUE (NOISE)</text>
+          <g transform="translate(785, 600)">
+            <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
+            <text x="-110" y="24" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">RESIDUE (NOISE)</text>
           </g>
         </svg>
 
