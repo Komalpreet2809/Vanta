@@ -126,7 +126,7 @@ export function VantaApp() {
             </div>
             
             <div className="flex-1 flex flex-col gap-3 overflow-hidden">
-                <div className="flex-initial max-h-[100px] min-h-0">
+                <div className="flex-1 min-h-0">
                     <AudioCard
                       id="vanta-reference"
                       heading="REFERENCE AUDIO"
@@ -138,7 +138,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="flex-initial max-h-[100px] min-h-0">
+                <div className="flex-1 min-h-0">
                     <AudioCard
                       id="vanta-noise"
                       heading="NOISE AUDIO"
@@ -176,7 +176,7 @@ export function VantaApp() {
             </div>
 
             <div className="flex-1 flex flex-col gap-3 overflow-hidden">
-                <div className="flex-initial max-h-[100px] min-h-0">
+                <div className="flex-1 min-h-0">
                     <AudioCard
                       heading="CLEAN VOICE"
                       source={result?.extracted ?? null}
@@ -187,7 +187,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="flex-initial max-h-[100px] min-h-0">
+                <div className="flex-1 min-h-0">
                     <AudioCard
                       heading="RESIDUE (NOISE)"
                       source={result?.residue ?? null}
