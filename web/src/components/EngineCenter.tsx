@@ -19,7 +19,7 @@ export function EngineCenter({
     <div className="flex flex-col items-center justify-center w-full h-full">
       {/* Header Text - Matches inspo.png exactly */}
         <div className="flex flex-col items-center gap-1 mb-8">
-          <h1 className="font-mono-heading font-black text-[28px] uppercase tracking-[0.2em] text-[var(--c-green)]">
+          <h1 className="font-mono-heading font-black text-[28px] uppercase tracking-wider text-[var(--c-green)]">
             VANTA ENGINE
           </h1>
           <p className="text-[12px] font-medium opacity-80 text-[#444444]">
@@ -124,7 +124,7 @@ export function EngineCenter({
               </div>
 
               {/* Main Text */}
-              <span className="text-[20px] font-bold text-[#333330] uppercase tracking-[0.1em] mb-4">
+              <span className="text-[20px] font-bold text-[#333330] uppercase tracking-wider mb-4">
                 Extract Voice
               </span>
               
