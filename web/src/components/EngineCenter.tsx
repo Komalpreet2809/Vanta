@@ -35,17 +35,7 @@ export function EngineCenter({
 
   return (
     <div id={id} className="flex flex-col items-center justify-between w-full h-full py-8">
-      {/* AI Voice Extraction Header */}
-      <div className="text-center mb-4">
-        <div className="flex items-center justify-center gap-4 mb-1">
-            <div className="h-[1px] w-8 bg-[var(--border-main)]" />
-            <h2 className="font-mono-heading text-[12px] opacity-80">AI Voice Extraction</h2>
-            <div className="h-[1px] w-8 bg-[var(--border-main)]" />
-        </div>
-        <p className="text-[10px] text-[var(--text-muted)] font-medium">Advanced isolation technology</p>
-      </div>
-
-      <div className="relative flex-1 w-full flex items-center justify-center overflow-visible">
+      <div className="flex-1 w-full relative flex items-center justify-center overflow-visible">
         {/* SVG Flow Container */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
             <defs>
