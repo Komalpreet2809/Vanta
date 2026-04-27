@@ -163,19 +163,19 @@ export function AudioCard({
             };
             input.click();
           }}
-          className={`flex-1 border-2 border-dashed border-[var(--border-main)] rounded-xl flex items-center justify-center transition-all duration-300 min-h-[100px] ${
+          className={`flex-1 border-2 border-dashed border-[var(--border-main)] rounded-xl flex items-center justify-center transition-all duration-300 min-h-[80px] ${
             onFile ? "cursor-pointer hover:border-[var(--text-main)] hover:bg-[var(--bg-card)]" : "bg-black/[0.02]"
           } ${isDragging ? "border-[var(--text-main)] bg-[var(--bg-card)] scale-[0.99]" : ""}`}
         >
-          <div className="flex flex-col items-center gap-3">
-             <div className="w-10 h-10 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] mb-1 shadow-sm">
-                <AudioLines className="h-4 w-4 text-[var(--text-muted)] opacity-40" />
+          <div className="flex flex-col items-center gap-2">
+             <div className="w-8 h-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] mb-0.5 shadow-sm">
+                <AudioLines className="h-3.5 w-3.5 text-[var(--text-muted)] opacity-40" />
              </div>
              <div className="text-center px-6">
-                <div className="text-[11px] font-bold text-[var(--text-main)] mb-1 uppercase tracking-wider">
+                <div className="text-[12px] font-bold text-[var(--text-main)] mb-0.5 uppercase tracking-wider">
                     {onFile ? "Drag & drop or click to upload" : emptyLabel ?? "No signal loaded"}
                 </div>
-                <div className="text-[9px] text-[var(--text-muted)] font-mono font-bold">
+                <div className="text-[10px] text-[var(--text-muted)] font-mono font-bold uppercase tracking-tight">
                     WAV, MP3, M4A
                 </div>
              </div>

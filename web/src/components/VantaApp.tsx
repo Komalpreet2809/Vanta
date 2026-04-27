@@ -121,8 +121,8 @@ export function VantaApp() {
           {/* INPUTS COLUMN */}
           <section id="vanta-inputs" className="flex flex-col h-full py-4 overflow-hidden">
             <div className="mb-4 shrink-0 h-14">
-              <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-1">INPUTS</h2>
-              <p className="text-[12px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
+              <h2 className="font-mono-heading text-[22px] font-black tracking-widest text-[var(--text-main)] mb-1">INPUTS</h2>
+              <p className="text-[14px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
             </div>
             
             <div className="flex-1 flex flex-col gap-4 overflow-hidden">
@@ -171,8 +171,8 @@ export function VantaApp() {
           {/* OUTPUTS COLUMN */}
           <section id="vanta-outputs" className="flex flex-col h-full py-4 overflow-hidden">
             <div className="mb-4 shrink-0 h-14">
-              <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-1">OUTPUTS</h2>
-              <p className="text-[12px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
+              <h2 className="font-mono-heading text-[22px] font-black tracking-widest text-[var(--text-main)] mb-1">OUTPUTS</h2>
+              <p className="text-[14px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
             </div>
 
             <div className="flex-1 flex flex-col gap-4 overflow-hidden">
@@ -200,8 +200,8 @@ export function VantaApp() {
 
                 <div className="h-28 shrink-0 mt-2">
                    <div className="h-full flex items-start gap-4 p-4 rounded-xl bg-black/[0.02] border border-[var(--border-main)]">
-                      <Activity className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
-                      <p className="text-[11px] text-[var(--text-muted)] leading-relaxed font-medium">
+                      <Activity className="h-5 w-5 text-[var(--text-muted)] shrink-0 mt-0.5" />
+                      <p className="text-[12px] text-[var(--text-muted)] leading-relaxed font-medium">
                         Your outputs will be available here once processing is complete. Both signals are extracted in real-time.
                       </p>
                    </div>
@@ -211,35 +211,35 @@ export function VantaApp() {
         </main>
 
         {/* BOTTOM STATUS BAR */}
-        <div className="absolute bottom-15 left-1/2 -translate-x-1/2 w-full max-w-[650px] px-12 z-50">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-[750px] px-12 z-50">
             <motion.div 
                 layout
-                className="vanta-card p-3 flex items-center justify-between gap-6 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
+                className="vanta-card p-4 flex items-center justify-between gap-8 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
             >
-                <div className="flex items-center gap-4">
-                    <div className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}>
-                         <Activity className={`w-5 h-5 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50'}`} />
+                <div className="flex items-center gap-5">
+                    <div className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}>
+                         <Activity className={`w-6 h-6 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50'}`} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-mono-heading text-[12px] font-black tracking-widest">
+                        <span className="font-mono-heading text-[16px] font-black tracking-widest">
                             {status === 'running' ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
                         </span>
-                        <span className="text-[9px] text-[var(--text-muted)] font-bold opacity-80">
+                        <span className="text-[12px] text-[var(--text-muted)] font-bold opacity-80 uppercase tracking-tight">
                             {status === 'running' ? `${stage} • ${Math.round(progress)}%` : "Both signals are processed simultaneously for best results."}
                         </span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 border border-[var(--border-main)]/50">
-                        <div className={`w-1 h-1 rounded-full ${status === 'running' ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
-                        <span className="text-[9px] font-mono font-black uppercase tracking-tighter text-[var(--text-muted)]">{status === 'running' ? 'Active' : 'Ready'}</span>
+                <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/5 dark:bg-white/5 border border-[var(--border-main)]/50">
+                        <div className={`w-2 h-2 rounded-full ${status === 'running' ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
+                        <span className="text-[11px] font-mono font-black uppercase tracking-widest text-[var(--text-muted)]">{status === 'running' ? 'Active' : 'Ready'}</span>
                     </div>
 
                     <button
                         disabled={!canRun}
                         onClick={run}
-                        className={`px-8 py-2.5 rounded-lg font-mono-heading text-[11px] font-black tracking-widest transition-all ${
+                        className={`px-10 py-3.5 rounded-xl font-mono-heading text-[13px] font-black tracking-[0.2em] transition-all ${
                             status === 'running' 
                             ? 'bg-transparent border border-[var(--border-main)] opacity-50 cursor-not-allowed'
                             : canRun 

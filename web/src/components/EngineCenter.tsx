@@ -201,7 +201,7 @@ export function EngineCenter({
         </svg>
 
         {/* Nodes Column */}
-        <div className="relative flex flex-col items-center justify-between h-[320px] z-10">
+        <div className="relative flex flex-col items-center justify-between h-[400px] z-10">
           {STAGES.map((s, i) => (
             <div key={s.id} className="flex items-center group">
               <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
@@ -228,11 +228,11 @@ export function EngineCenter({
                 </motion.div>
 
                 {/* Node Text - Positioned to the right */}
-                <div className="absolute left-20 w-40 flex flex-col">
-                    <span className={`text-[11px] font-bold tracking-widest transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-30'}`}>
+                <div className="absolute left-20 w-48 flex flex-col">
+                    <span className={`text-[13px] font-bold tracking-[0.1em] transition-opacity duration-500 uppercase ${i <= activeStageIndex ? 'opacity-100' : 'opacity-30'}`}>
                         {s.label}
                     </span>
-                    <span className={`text-[9px] text-[var(--text-muted)] font-medium leading-tight transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-0'}`}>
+                    <span className={`text-[10px] text-[var(--text-muted)] font-medium leading-tight transition-opacity duration-500 ${i <= activeStageIndex ? 'opacity-100' : 'opacity-0'}`}>
                         {s.desc}
                     </span>
                 </div>
