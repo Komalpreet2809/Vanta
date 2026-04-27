@@ -55,57 +55,107 @@ export function EngineCenter({
                 </filter>
             </defs>
 
-            {/* Input Paths (Left to Center) */}
-            <g opacity="0.8">
-                {/* Reference Path */}
-                <path id="path-ref" d="M 100 150 C 200 150, 300 300, 400 300" fill="none" stroke="var(--c-node-brown)" strokeWidth="1.5" strokeDasharray="4 4" />
-                {/* Noise Path */}
-                <path id="path-noise" d="M 100 450 C 200 450, 300 300, 400 300" fill="none" stroke="var(--c-node-red)" strokeWidth="1.5" strokeDasharray="4 4" />
-                
-                {/* Dust Particles for Inputs */}
-                {isRunning && [
-                    ...Array(20).fill(0).map((_, i) => (
-                        <motion.circle key={`ref-dust-${i}`} r={Math.random() * 1.5} fill="var(--c-node-brown)" opacity={Math.random()}
-                            animate={{ offsetDistance: ["0%", "100%"] }}
-                            transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, ease: "linear", delay: Math.random() * 2 }}
-                            style={{ offsetPath: "path('M 100 150 C 200 150, 300 300, 400 300')" }}
+            {/* Input Fan Network (Left to Center) */}
+            <g opacity="0.3">
+                {[...Array(12)].map((_, i) => (
+                    <g key={`fan-in-${i}`}>
+                        {/* Reference Fan */}
+                        <path 
+                            d={`M 100 150 C ${150 + i * 5} ${150 + (i - 6) * 10}, ${300 - i * 5} 300, 400 300`} 
+                            fill="none" 
+                            stroke="var(--c-node-brown)" 
+                            strokeWidth="0.5" 
+                            strokeDasharray={i % 2 === 0 ? "2 2" : "none"}
                         />
-                    )),
-                    ...Array(20).fill(0).map((_, i) => (
-                        <motion.circle key={`noise-dust-${i}`} r={Math.random() * 1.5} fill="var(--c-node-red)" opacity={Math.random()}
-                            animate={{ offsetDistance: ["0%", "100%"] }}
-                            transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, ease: "linear", delay: Math.random() * 2 }}
-                            style={{ offsetPath: "path('M 100 450 C 200 450, 300 300, 400 300')" }}
+                        {/* Noise Fan */}
+                        <path 
+                            d={`M 100 450 C ${150 + i * 5} ${450 - (i - 6) * 10}, ${300 - i * 5} 300, 400 300`} 
+                            fill="none" 
+                            stroke="var(--c-node-red)" 
+                            strokeWidth="0.5"
+                            strokeDasharray={i % 2 === 0 ? "none" : "2 2"}
                         />
-                    ))
-                ]}
+                    </g>
+                ))}
             </g>
 
-            {/* Output Paths (Center to Right) */}
-            <g opacity="0.8">
-                 {/* Clean Voice Path */}
-                 <path id="path-clean" d="M 400 300 C 500 300, 600 150, 700 150" fill="none" stroke="var(--c-node-green)" strokeWidth="1.5" strokeDasharray="4 4" />
-                 {/* Residue Path */}
-                 <path id="path-residue" d="M 400 300 C 500 300, 600 450, 700 450" fill="none" stroke="var(--c-node-purple)" strokeWidth="1.5" strokeDasharray="4 4" />
+            {/* Dust Particles for Inputs */}
+            {isRunning && (
+                <g>
+                    {[...Array(40)].map((_, i) => (
+                        <motion.circle 
+                            key={`in-dust-${i}`} 
+                            r={0.8 + Math.random()} 
+                            fill={i % 2 === 0 ? "var(--c-node-brown)" : "var(--c-node-red)"}
+                            initial={{ opacity: 0 }}
+                            animate={{ 
+                                opacity: [0, 0.8, 0],
+                                offsetDistance: ["0%", "100%"] 
+                            }}
+                            transition={{ 
+                                duration: 1.5 + Math.random() * 2, 
+                                repeat: Infinity, 
+                                ease: "easeInOut", 
+                                delay: Math.random() * 2 
+                            }}
+                            style={{ 
+                                offsetPath: `path('M 100 ${i % 2 === 0 ? 150 : 450} C 200 ${i % 2 === 0 ? 150 + (Math.random() - 0.5) * 100 : 450 + (Math.random() - 0.5) * 100}, 300 300, 400 300')` 
+                            }}
+                        />
+                    ))}
+                </g>
+            )}
 
-                 {/* Dust Particles for Outputs */}
-                 {isRunning && progress > 30 && [
-                    ...Array(20).fill(0).map((_, i) => (
-                        <motion.circle key={`clean-dust-${i}`} r={Math.random() * 1.5} fill="var(--c-node-green)" opacity={Math.random()}
-                            animate={{ offsetDistance: ["0%", "100%"] }}
-                            transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, ease: "linear", delay: Math.random() * 2 }}
-                            style={{ offsetPath: "path('M 400 300 C 500 300, 600 150, 700 150')" }}
+            {/* Output Fan Network (Center to Right) */}
+            <g opacity="0.3">
+                {[...Array(12)].map((_, i) => (
+                    <g key={`fan-out-${i}`}>
+                        {/* Clean Fan */}
+                        <path 
+                            d={`M 400 300 C ${500 + i * 5} 300, ${600 - i * 5} ${150 + (i - 6) * 10}, 700 150`} 
+                            fill="none" 
+                            stroke="var(--c-node-green)" 
+                            strokeWidth="0.5"
+                            strokeDasharray={i % 2 === 0 ? "none" : "2 2"}
                         />
-                    )),
-                    ...Array(20).fill(0).map((_, i) => (
-                        <motion.circle key={`residue-dust-${i}`} r={Math.random() * 1.5} fill="var(--c-node-purple)" opacity={Math.random()}
-                            animate={{ offsetDistance: ["0%", "100%"] }}
-                            transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, ease: "linear", delay: Math.random() * 2 }}
-                            style={{ offsetPath: "path('M 400 300 C 500 300, 600 450, 700 450')" }}
+                        {/* Residue Fan */}
+                        <path 
+                            d={`M 400 300 C ${500 + i * 5} 300, ${600 - i * 5} ${450 - (i - 6) * 10}, 700 450`} 
+                            fill="none" 
+                            stroke="var(--c-node-purple)" 
+                            strokeWidth="0.5"
+                            strokeDasharray={i % 2 === 0 ? "2 2" : "none"}
                         />
-                    ))
-                ]}
+                    </g>
+                ))}
             </g>
+
+            {/* Dust Particles for Outputs */}
+            {isRunning && progress > 20 && (
+                <g>
+                    {[...Array(40)].map((_, i) => (
+                        <motion.circle 
+                            key={`out-dust-${i}`} 
+                            r={0.8 + Math.random()} 
+                            fill={i % 2 === 0 ? "var(--c-node-green)" : "var(--c-node-purple)"}
+                            initial={{ opacity: 0 }}
+                            animate={{ 
+                                opacity: [0, 0.8, 0],
+                                offsetDistance: ["0%", "100%"] 
+                            }}
+                            transition={{ 
+                                duration: 1.5 + Math.random() * 2, 
+                                repeat: Infinity, 
+                                ease: "easeInOut", 
+                                delay: Math.random() * 2 
+                            }}
+                            style={{ 
+                                offsetPath: `path('M 400 300 C 500 300, 600 ${i % 2 === 0 ? 150 + (Math.random() - 0.5) * 100 : 450 + (Math.random() - 0.5) * 100}, 700 ${i % 2 === 0 ? 150 : 450}')` 
+                            }}
+                        />
+                    ))}
+                </g>
+            )}
 
             {/* Wavy Vertical Path */}
             <motion.path 
