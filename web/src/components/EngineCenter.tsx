@@ -31,89 +31,89 @@ export function EngineCenter({
           </p>
         </div>
 
-      {/* SVG Diagram Container - Set to take full width and a fixed aspect for consistency */}
-      <div className="relative w-full aspect-[1.5/1] flex items-center justify-center">
-        <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
+      {/* SVG Diagram Container - Fully responsive aspect-square */}
+      <div className="relative w-full aspect-square max-w-[600px] flex items-center justify-center">
+        <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid meet">
           
-          {/* LEFT CURLY BRACE { - Floating with gaps at both ends */}
+          {/* LEFT CURLY BRACE { */}
           <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}>
-            {/* Top Curve - Starts at 70 (Gap from node at 30), Ends at 210 (Gap from orb) */}
+            {/* Top Curve - Spread to y=200 */}
             <path
-              d="M 70 110 C 150 110, 150 220, 210 220"
+              d="M 70 200 C 130 200, 130 400, 180 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="1.5"
+              strokeWidth="3"
             />
-            {/* Bottom Curve */}
+            {/* Bottom Curve - Spread to y=600 */}
             <path
-              d="M 70 330 C 150 330, 150 220, 210 220"
+              d="M 70 600 C 130 600, 130 400, 180 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="1.5"
+              strokeWidth="3"
             />
           </motion.g>
 
-          {/* RIGHT CURLY BRACE } - Floating with gaps at both ends */}
+          {/* RIGHT CURLY BRACE } */}
           <motion.g animate={isRunning ? { opacity: [0.4, 1, 0.4] } : { opacity: 0.8 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.2 }}>
-            {/* Top Curve - Starts at 730 (Gap from node at 770), Ends at 590 (Gap from orb) */}
+            {/* Top Curve - Spread to y=200 */}
             <path
-              d="M 730 110 C 650 110, 650 220, 590 220"
+              d="M 730 200 C 670 200, 670 400, 620 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="1.5"
+              strokeWidth="3"
             />
-            {/* Bottom Curve */}
+            {/* Bottom Curve - Spread to y=600 */}
             <path
-              d="M 730 330 C 650 330, 650 220, 590 220"
+              d="M 730 600 C 670 600, 670 400, 620 400"
               fill="none"
               stroke="var(--text-main)"
-              strokeWidth="1.5"
+              strokeWidth="3"
             />
           </motion.g>
 
-          {/* Node Indicators (Aligned with brace ends at x=70 and x=730) */}
+          {/* Node Indicators (Spread to y=200 and y=600) */}
           {/* Reference */}
-          <g transform="translate(70, 110)">
+          <g transform="translate(70, 200)">
             <circle r="4" fill="var(--bg-card)" />
             <circle r="3" fill="var(--c-green)" />
             <text x="10" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">REFERENCE</text>
           </g>
           {/* Noise */}
-          <g transform="translate(70, 330)">
+          <g transform="translate(70, 600)">
             <circle r="4" fill="var(--bg-card)" />
             <circle r="3" fill="var(--c-red)" />
             <text x="10" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">NOISE</text>
           </g>
           {/* Clean Voice */}
-          <g transform="translate(730, 110)">
+          <g transform="translate(730, 200)">
             <circle r="4" fill="var(--bg-card)" />
             <circle r="3" fill="var(--c-green)" />
             <text x="-70" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">CLEAN VOICE</text>
           </g>
           {/* Residue (Noise) */}
-          <g transform="translate(730, 330)">
+          <g transform="translate(730, 600)">
             <circle r="4" fill="var(--bg-card)" />
             <circle r="3" fill="var(--c-purple)" />
             <text x="-95" y="22" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">RESIDUE (NOISE)</text>
           </g>
         </svg>
 
-        {/* Central Hero Circle - Redesigned for Reference Image */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="relative h-[320px] w-[320px] rounded-full border-[10px] border-[#D9D7CE] shadow-lg flex items-center justify-center bg-[#EFEDE6]">
+        {/* Central Hero Circle - Fully Responsive */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] max-w-[320px]">
+          <div className="relative w-full aspect-square rounded-full border-[10px] border-[#D9D7CE] shadow-lg flex items-center justify-center bg-[#EFEDE6]">
             {/* SVG Progress Ring */}
-            <svg className="absolute inset-[-10px] w-[340px] h-[340px] -rotate-90 pointer-events-none">
+            <svg className="absolute inset-[-10px] w-[calc(100%+20px)] h-[calc(100%+20px)] -rotate-90 pointer-events-none">
               {isRunning && (
                 <motion.circle
-                  cx="170"
-                  cy="170"
-                  r="165"
+                  cx="50%"
+                  cy="50%"
+                  r="48%"
                   fill="none"
                   stroke="var(--c-green)"
                   strokeWidth="10"
-                  strokeDasharray={165 * 2 * Math.PI}
-                  initial={{ strokeDashoffset: 165 * 2 * Math.PI }}
-                  animate={{ strokeDashoffset: (165 * 2 * Math.PI) * (1 - Math.max(2, progress) / 100) }}
+                  strokeDasharray="301.59%" 
+                  initial={{ strokeDashoffset: "301.59%" }}
+                  animate={{ strokeDashoffset: `${301.59 * (1 - Math.max(2, progress) / 100)}%` }}
                   transition={{ ease: "linear", duration: 0.1 }}
                 />
               )}
@@ -124,7 +124,7 @@ export function EngineCenter({
               onClick={onExtract}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className="relative h-[260px] w-[260px] rounded-full bg-[var(--bg-card)] border-[3px] border-[var(--text-main)] shadow-[6px_6px_0_var(--text-main)] flex flex-col items-center justify-center transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--text-main)] active:shadow-none active:translate-x-[6px] active:translate-y-[6px]"
+              className="relative w-[80%] aspect-square rounded-full bg-[var(--bg-card)] border-[3px] border-[var(--text-main)] shadow-[6px_6px_0_var(--text-main)] flex flex-col items-center justify-center transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--text-main)] active:shadow-none active:translate-x-[6px] active:translate-y-[6px]"
             >
               {/* Waveform Icon (Green bars in reference) */}
               <div className="flex items-center gap-[4px] h-10 mb-4">
