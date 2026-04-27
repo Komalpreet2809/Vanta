@@ -92,11 +92,11 @@ export function AudioCard({
     <div className={`card-border p-5 flex flex-col gap-3 bg-[var(--bg-card)] ${className}`}>
       <div className="flex items-center justify-between pb-1">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-none border-2 border-[var(--text-main)] flex items-center justify-center bg-[var(--bg-app)] shadow-[2px_2px_0_var(--text-main)]">
+          <div className="h-8 w-8 rounded-full border border-[var(--border-card)] flex items-center justify-center bg-black/5 dark:bg-white/5">
             {heading.toLowerCase().includes("reference") || heading.toLowerCase().includes("clean") ? (
-              <Music className="h-3.5 w-3.5" />
+              <Music className="h-4 w-4 opacity-70" />
             ) : (
-              <AudioLines className="h-3.5 w-3.5" />
+              <AudioLines className="h-4 w-4 opacity-70" />
             )}
           </div>
           <h3 className="font-mono-heading text-[13px] font-black tracking-tight uppercase opacity-80">
@@ -136,7 +136,7 @@ export function AudioCard({
             <button
               onClick={() => wsRef.current?.playPause()}
               disabled={!ready}
-              className="btn-icon h-9 w-9 shrink-0 disabled:opacity-50 rounded-none"
+              className="btn-icon h-9 w-9 shrink-0 disabled:opacity-50"
             >
               {playing ? <Pause className="h-3.5 w-3.5 fill-current" /> : <Play className="h-3.5 w-3.5 fill-current translate-x-[1px]" />}
             </button>

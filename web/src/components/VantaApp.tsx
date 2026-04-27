@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AudioCard } from "./AudioCard";
 import { EngineCenter } from "./EngineCenter";
 import { Header } from "./Header";
@@ -59,8 +59,6 @@ export function VantaApp() {
   }, [status]);
 
   const canRun = !!(mixture && enrollment) && status !== "running";
-
-  const sessionId = useMemo(() => Math.random().toString(36).substring(2, 10).toUpperCase(), []);
 
   const run = useCallback(async () => {
     if (!mixture || !enrollment) return;
@@ -127,21 +125,8 @@ export function VantaApp() {
               </div>
             </div>
 
-            <div className="px-4 pb-6 pt-0 shrink-0 flex flex-col gap-3">
-               <div className="card-border p-3 bg-black/5 flex flex-col gap-1.5 border-dashed border-2">
-                  <div className="flex items-center justify-between opacity-40 text-[9px] font-mono font-bold uppercase tracking-widest">
-                    <span>LOG_SYSTEM</span>
-                    <span>SN: 88-2A-3C</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 mt-1">
-                    <div className="h-1 bg-[var(--text-main)] opacity-20" />
-                    <div className="h-1 bg-[var(--text-main)] opacity-10" />
-                  </div>
-                  <p className="text-[9px] font-mono font-bold opacity-30 mt-1 uppercase tracking-tighter">
-                    THERMAL: NOMINAL // LOAD: 12.4%
-                  </p>
-               </div>
-               <TipsCard />
+            <div className="px-4 pb-6 pt-0 shrink-0 flex items-start">
+              <TipsCard />
             </div>
           </section>
 
@@ -231,19 +216,11 @@ export function VantaApp() {
           </section>
         </main>
 
-        <footer className="px-6 py-1.5 border-t-2 border-[var(--text-main)] flex items-center justify-between bg-[var(--bg-footer)]">
-           <div className="flex items-center gap-6">
-             <span className="text-[10px] font-mono font-bold tracking-[0.2em] opacity-40 uppercase">VANTA_EXTRACTOR_v1.0.0</span>
-             <div className="hidden md:flex items-center gap-4 text-[9px] font-mono font-bold opacity-30 uppercase tracking-tighter">
-                <span>ID: {sessionId}</span>
-                <span>LOC: US-EAST-1</span>
-             </div>
-           </div>
-           <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-2 py-0.5 border border-[var(--text-main)] bg-[var(--bg-app)]">
-                <div className={`h-1.5 w-1.5 rounded-none ${backend === "online" ? "bg-[var(--c-green)] shadow-[0_0_8px_var(--c-green)]" : "bg-[var(--c-red)] shadow-[0_0_8px_var(--c-red)]"}`} />
-                <span className="text-[9px] font-mono font-black uppercase tracking-widest">{backend === "online" ? "SYS_READY" : "SYS_OFFLINE"}</span>
-              </div>
+        <footer className="px-6 py-2 border-t border-[var(--border-main)] flex items-center justify-between bg-[var(--bg-footer)]">
+           <span className="text-[11px] font-mono font-bold tracking-tight opacity-70">VANTA v1.0.0</span>
+           <div className="flex items-center gap-2 opacity-80">
+              <div className={`h-2 w-2 rounded-full ${backend === "online" ? "bg-[var(--c-green)]" : "bg-[var(--c-red)]"}`} />
+              <span className="text-[11px] font-bold tracking-tight">{backend === "online" ? "Ready" : "Offline"}</span>
            </div>
         </footer>
     </div>
