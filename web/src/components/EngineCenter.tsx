@@ -66,19 +66,23 @@ export function EngineCenter({
           {/* Node Indicators */}
           {/* Reference */}
           <g transform="translate(15, 200)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-green)" strokeWidth="3.5" />
+            <circle r="10" fill="var(--bg-card)" stroke="var(--c-brown)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-brown)" />
           </g>
           {/* Noise */}
           <g transform="translate(15, 600)">
             <circle r="10" fill="var(--bg-card)" stroke="var(--c-red)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-red)" />
           </g>
           {/* Clean Voice */}
           <g transform="translate(785, 200)">
             <circle r="10" fill="var(--bg-card)" stroke="var(--c-green)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-green)" />
           </g>
           {/* Residue (Noise) */}
           <g transform="translate(785, 600)">
             <circle r="10" fill="var(--bg-card)" stroke="var(--c-purple)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-purple)" />
           </g>
         </svg>
 
