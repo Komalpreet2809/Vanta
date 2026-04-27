@@ -15,11 +15,13 @@
   --text-main: #333330;
   --text-muted: #888880;
   
-  --c-green: #4A6B4A; 
-  --c-red: #B54545;
-  --c-purple: #745296;
-  --c-brown: #A68A64;
+  --c-green: #2A2A28; /* Charcoal for headings */
   --c-charcoal: #2A2A28;
+  /* Specific Node/Waveform Colors */
+  --c-node-brown: #A68A64;
+  --c-node-red: #B54545;
+  --c-node-green: #4A6B4A;
+  --c-node-purple: #745296;
 }
 
 .dark {

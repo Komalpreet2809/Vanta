@@ -66,23 +66,23 @@ export function EngineCenter({
           {/* Node Indicators */}
           {/* Reference */}
           <g transform="translate(15, 200)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-brown)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-brown)" />
+            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-brown)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-node-brown)" />
           </g>
           {/* Noise */}
           <g transform="translate(15, 600)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-red)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-red)" />
+            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-red)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-node-red)" />
           </g>
           {/* Clean Voice */}
           <g transform="translate(785, 200)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-green)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-green)" />
+            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-green)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-node-green)" />
           </g>
           {/* Residue (Noise) */}
           <g transform="translate(785, 600)">
-            <circle r="10" fill="var(--bg-card)" stroke="var(--c-purple)" strokeWidth="3.5" />
-            <circle r="4" fill="var(--c-purple)" />
+            <circle r="10" fill="var(--bg-card)" stroke="var(--c-node-purple)" strokeWidth="3.5" />
+            <circle r="4" fill="var(--c-node-purple)" />
           </g>
         </svg>
 
