@@ -1,6 +1,6 @@
 "use client";
 
-import { History, Moon, Sun } from "lucide-react";
+import { History, Moon, Sun, Mic } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function Header() {
@@ -37,15 +37,8 @@ export function Header() {
     <header className="pl-2 pr-6 py-1 flex items-center justify-between border-b border-[var(--border-main)] bg-[var(--bg-header)]">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 border-2 border-[var(--text-main)] flex items-center justify-center bg-[var(--bg-card)] shadow-[3px_3px_0_var(--text-main)] relative p-2">
-            <div className="grid grid-cols-3 gap-1.5">
-              {[...Array(9)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`h-1.5 w-1.5 ${i === 4 ? 'bg-[var(--text-main)] animate-pulse' : 'bg-[var(--text-main)] opacity-20'}`} 
-                />
-              ))}
-            </div>
+          <div className="h-12 w-12 border-2 border-[var(--text-main)] flex items-center justify-center bg-[var(--bg-card)] shadow-[3px_3px_0_var(--text-main)] relative">
+            <Mic className="h-6 w-6 text-[var(--text-main)]" />
           </div>
           <span className="font-mono-heading font-black text-[54px] uppercase tracking-wider text-[var(--text-main)] leading-none -ml-1">VANTA</span>
         </div>
