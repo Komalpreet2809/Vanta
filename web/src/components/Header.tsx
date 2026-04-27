@@ -42,11 +42,11 @@ export function Header({
 
   return (
     <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent">
-      <div className="flex items-center gap-4">
-          <div className="w-10 h-10 flex items-center justify-center">
+      <div className="flex items-center gap-5">
+          <div className="w-12 h-12 flex items-center justify-center">
             <svg 
-              width="24" 
-              height="24" 
+              width="30" 
+              height="30" 
               viewBox="0 0 24 24" 
               fill="var(--text-main)" 
             >
@@ -56,7 +56,7 @@ export function Header({
               <rect x="11" y="21" width="2" height="1.5" />
             </svg>
           </div>
-          <span className="text-[28px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
+          <span className="text-[40px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
       </div>
 
       <div className="flex items-center gap-3">
