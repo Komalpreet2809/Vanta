@@ -2,11 +2,11 @@
 
 :root {
   /* Refined Industrial Light Mode (Matches Reference Image) */
-  --bg-app: #F2F0E6; 
-  --bg-header: #F2F0E6; 
-  --bg-footer: #F2F0E6; 
-  --bg-card: #FAF8F2; 
-  --bg-btn: #FAF8F2;
+  --bg-app: #F5F2E1; 
+  --bg-header: #F5F2E1; 
+  --bg-footer: #F5F2E1; 
+  --bg-card: #FBF8ED; 
+  --bg-btn: #FBF8ED;
   
   --border-main: #D1CEC4;
   --border-card: #E1DFD7;
