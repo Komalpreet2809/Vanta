@@ -43,10 +43,10 @@ export function Header({
   return (
     <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent">
       <div className="flex items-center gap-5">
-          <div className="w-12 h-12 flex items-center justify-center">
+          <div className="w-16 h-16 flex items-center justify-center">
             <svg 
-              width="30" 
-              height="30" 
+              width="42" 
+              height="42" 
               viewBox="0 0 24 24" 
               fill="var(--text-main)" 
             >
