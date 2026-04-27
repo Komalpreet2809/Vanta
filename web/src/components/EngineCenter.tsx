@@ -141,8 +141,7 @@ export function EngineCenter({
             </motion.button>
           </div>
           
-          {/* Subtle Glow behind the orb */}
-          <div className="absolute -inset-10 bg-[var(--c-green)]/10 rounded-full blur-3xl -z-10" />
+
         </div>
       </div>
 
