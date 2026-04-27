@@ -97,7 +97,7 @@ export function VantaApp() {
               </div>
             </div>
 
-            <div className="p-4 h-32 flex items-start overflow-hidden">
+            <div className="px-4 pb-6 pt-0 shrink-0 flex items-start">
               <TipsCard />
             </div>
           </section>
@@ -152,7 +152,7 @@ export function VantaApp() {
               </div>
             </div>
 
-            <div className="p-4 h-32 flex items-start overflow-hidden">
+            <div className="px-4 pb-6 pt-0 shrink-0 flex items-start">
                <div className="card-border p-3 flex items-start gap-3 bg-[var(--bg-app)] shadow-sm w-full">
                   <Info className="h-4 w-4 stroke-[1.5] text-[var(--text-main)] shrink-0 mt-0.5" />
                   <p className="text-[11px] text-[var(--text-main)] leading-relaxed font-medium">
