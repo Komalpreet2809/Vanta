@@ -67,22 +67,18 @@ export function EngineCenter({
           {/* Reference */}
           <g transform="translate(15, 200)">
             <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
-            <text x="22" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">REFERENCE</text>
           </g>
           {/* Noise */}
           <g transform="translate(15, 600)">
             <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
-            <text x="22" y="24" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight">NOISE</text>
           </g>
           {/* Clean Voice */}
           <g transform="translate(785, 200)">
             <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
-            <text x="-85" y="-12" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">CLEAN VOICE</text>
           </g>
           {/* Residue (Noise) */}
           <g transform="translate(785, 600)">
             <circle r="10" fill="var(--bg-card)" stroke="var(--text-main)" strokeWidth="3.5" />
-            <text x="-110" y="24" className="text-[10px] font-bold fill-[var(--text-main)] tracking-tight text-right">RESIDUE (NOISE)</text>
           </g>
         </svg>
 
