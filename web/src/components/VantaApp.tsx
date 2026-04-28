@@ -230,7 +230,7 @@ export function VantaApp() {
          </main>
  
          {/* TOUR PROXY: Invisible element to highlight center area including status bar */}
-         <div id="vanta-tour-center" className="fixed top-[15%] bottom-[5%] left-1/2 -translate-x-1/2 w-full max-w-[500px] pointer-events-none z-[-1]" />
+         <div id="vanta-tour-center" className="fixed top-[15%] bottom-[5%] left-1/2 -translate-x-1/2 w-full max-w-[520px] pointer-events-none z-[-1]" />
 
          {/* BOTTOM STATUS BAR */}
          <div className="fixed xl:absolute bottom-4 xl:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
