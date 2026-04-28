@@ -248,8 +248,6 @@
 
 /* Spotlight styling */
 .driver-active-element {
-  outline: 2px solid var(--text-main) !important;
-  outline-offset: 6px !important;
   border-radius: 8px !important;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
   box-shadow: 0 0 50px rgba(var(--text-main-rgb), 0.2) !important;
