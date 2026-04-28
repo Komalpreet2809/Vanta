@@ -42,12 +42,12 @@ export function Header({
   };
 
   return (
-    <header id={id} className="px-8 py-2 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
-      <div className="flex items-center gap-3">
-          <div className="w-10 h-10 flex items-center justify-center">
+    <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
+      <div className="flex items-center gap-5">
+          <div className="w-16 h-16 flex items-center justify-center">
             <svg 
-              width="30" 
-              height="30" 
+              width="42" 
+              height="42" 
               viewBox="0 0 24 24" 
               fill="var(--text-main)" 
             >
@@ -57,10 +57,10 @@ export function Header({
               <rect x="11" y="21" width="2" height="1.5" />
             </svg>
           </div>
-          <span className="text-[28px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
+          <span className="text-[40px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <motion.button 
           whileHover={{ 
             scale: 1.1, 
@@ -70,7 +70,7 @@ export function Header({
           }}
           whileTap={{ scale: 0.9 }}
           onClick={onStartTour}
-          className="vanta-btn w-8 h-8 flex items-center justify-center transition-colors"
+          className="vanta-btn w-10 h-10 flex items-center justify-center transition-colors"
           aria-label="Start guided tour"
           title="How to use Vanta"
         >
@@ -86,7 +86,7 @@ export function Header({
           }}
           whileTap={{ scale: 0.9 }}
           onClick={onReset}
-          className="vanta-btn w-8 h-8 flex items-center justify-center transition-colors"
+          className="vanta-btn w-10 h-10 flex items-center justify-center transition-colors"
           aria-label="Reset session"
           title="Clear all inputs and results"
         >
@@ -102,7 +102,7 @@ export function Header({
           }}
           whileTap={{ scale: 0.9 }}
           onClick={toggleDark}
-          className="vanta-btn w-8 h-8 flex items-center justify-center transition-colors"
+          className="vanta-btn w-10 h-10 flex items-center justify-center transition-colors"
           aria-label="Toggle dark mode"
         >
           {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
