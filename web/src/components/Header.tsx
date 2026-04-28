@@ -43,22 +43,45 @@ export function Header({
 
   return (
     <header id={id} className="px-8 py-2 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
-      <div className="flex items-center gap-4">
-          <div className="w-12 h-12 flex items-center justify-center">
+      <motion.div 
+        whileHover="hover"
+        className="flex items-center gap-3 cursor-default group"
+      >
+          <motion.div 
+            variants={{
+              hover: { 
+                scale: 1.1,
+                filter: "drop-shadow(0 0 8px var(--text-main))"
+              }
+            }}
+            className="w-12 h-12 flex items-center justify-center"
+          >
             <svg 
               width="34" 
               height="34" 
               viewBox="0 0 24 24" 
               fill="var(--text-main)" 
+              className="transition-transform duration-300 group-hover:rotate-[-5deg]"
             >
               <path d="M12 2L4 12h16L12 2z" />
               <rect x="6" y="14" width="12" height="1.5" />
               <rect x="8" y="17.5" width="8" height="1.5" />
               <rect x="11" y="21" width="2" height="1.5" />
             </svg>
-          </div>
-          <span className="text-[32px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
-      </div>
+          </motion.div>
+          <motion.span 
+            variants={{
+              hover: { 
+                letterSpacing: "0.2em",
+                x: 5
+              }
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="text-[32px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none"
+          >
+            VANTA
+          </motion.span>
+      </motion.div>
 
       <div className="flex items-center gap-2">
         <motion.button 
