@@ -56,32 +56,26 @@ export function Header({
             className="w-12 h-12 flex items-center justify-center"
           >
             <svg 
-              width="38" 
-              height="38" 
+              width="40" 
+              height="40" 
               viewBox="0 0 100 100" 
               className="transition-transform duration-300 group-hover:rotate-[-5deg]"
             >
-              {/* V-Wave Logo Design */}
+              {/* Refined V-Wave Logo */}
               <path 
-                d="M15 25 L50 85 L85 25" 
+                d="M10 20 L50 90 L90 20" 
                 fill="none" 
                 stroke="var(--text-main)" 
-                strokeWidth="8" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
+                strokeWidth="12" 
+                strokeLinecap="butt" 
+                strokeLinejoin="miter"
               />
-              <path 
-                d="M30 25 L50 60 L70 25" 
-                fill="none" 
-                stroke="var(--text-main)" 
-                strokeWidth="6" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                opacity="0.6"
-              />
-              <rect x="47" y="15" width="6" height="45" rx="3" fill="var(--text-main)" />
-              <rect x="37" y="25" width="6" height="20" rx="3" fill="var(--text-main)" opacity="0.8" />
-              <rect x="57" y="25" width="6" height="30" rx="3" fill="var(--text-main)" opacity="0.8" />
+              {/* Straight Symmetrical Audio Bars */}
+              <rect x="32" y="20" width="6" height="20" rx="3" fill="var(--text-main)" opacity="0.3" />
+              <rect x="41" y="10" width="6" height="50" rx="3" fill="var(--text-main)" opacity="0.6" />
+              <rect x="50" y="0" width="6" height="80" rx="3" fill="var(--text-main)" />
+              <rect x="59" y="10" width="6" height="50" rx="3" fill="var(--text-main)" opacity="0.6" />
+              <rect x="68" y="20" width="6" height="20" rx="3" fill="var(--text-main)" opacity="0.3" />
             </svg>
           </motion.div>
           <span className="text-[32px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">
