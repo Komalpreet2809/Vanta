@@ -313,7 +313,7 @@ export function EngineCenter({
                             color: s.color,
                             borderColor: s.color
                           }}
-                          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                          transition={{ duration: 0.4, ease: "easeInOut" }}
                           className={`
                             relative z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500
                             ${isActive ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-card)] text-[var(--text-muted)] border border-white/5'}
