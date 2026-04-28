@@ -12,9 +12,9 @@ export const metadata: Metadata = {
   description:
     "Upload a 5-second reference clip of one voice and a messy recording — Vanta isolates that voice and returns it without everything else.",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
 };
 

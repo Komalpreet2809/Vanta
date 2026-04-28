@@ -1,0 +1,16 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  {/* V-Wave Refined Logo - SVG Favicon */}
+  <path 
+    d="M10 20 L50 90 L90 20" 
+    fill="none" 
+    stroke="black" 
+    stroke-width="12" 
+    stroke-linecap="butt" 
+    stroke-linejoin="miter"
+  />
+  <rect x="32" y="20" width="6" height="20" rx="3" fill="black" opacity="0.3" />
+  <rect x="41" y="10" width="6" height="50" rx="3" fill="black" opacity="0.6" />
+  <rect x="50" y="0" width="6" height="80" rx="3" fill="black" />
+  <rect x="59" y="10" width="6" height="50" rx="3" fill="black" opacity="0.6" />
+  <rect x="68" y="20" width="6" height="20" rx="3" fill="black" opacity="0.3" />
+</svg>
