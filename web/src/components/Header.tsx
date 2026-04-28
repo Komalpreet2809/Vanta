@@ -42,12 +42,12 @@ export function Header({
   };
 
   return (
-    <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
-      <div className="flex items-center gap-5">
-          <div className="w-16 h-16 flex items-center justify-center">
+    <header id={id} className="px-8 py-2 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
+      <div className="flex items-center gap-4">
+          <div className="w-12 h-12 flex items-center justify-center">
             <svg 
-              width="42" 
-              height="42" 
+              width="34" 
+              height="34" 
               viewBox="0 0 24 24" 
               fill="var(--text-main)" 
             >
@@ -57,10 +57,10 @@ export function Header({
               <rect x="11" y="21" width="2" height="1.5" />
             </svg>
           </div>
-          <span className="text-[40px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
+          <span className="text-[32px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <motion.button 
           whileHover={{ 
             scale: 1.1, 
