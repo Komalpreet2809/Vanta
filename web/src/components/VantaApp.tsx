@@ -172,7 +172,7 @@ export function VantaApp() {
           </section>
 
           {/* ENGINE COLUMN */}
-          <section id="vanta-unified-engine" className="relative flex flex-col h-fit xl:h-full min-h-[450px] overflow-hidden order-1 xl:order-2 pb-24 xl:pb-0">
+          <section id="vanta-unified-engine" className="relative flex flex-col h-fit xl:h-full min-h-[450px] overflow-visible order-1 xl:order-2 pb-32">
               <EngineCenter
                 id="vanta-engine"
                 canExtract={!!canRun}
@@ -183,7 +183,7 @@ export function VantaApp() {
               />
 
               {/* BOTTOM STATUS BAR (Moved inside for unified tour targeting) */}
-              <div className="fixed xl:absolute bottom-4 xl:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
+              <div className="fixed xl:absolute bottom-[-10px] xl:bottom-[-20px] left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
                   <motion.div 
                       id="vanta-status-bar"
                       layout
