@@ -69,18 +69,9 @@ export function Header({
               <rect x="11" y="21" width="2" height="1.5" />
             </svg>
           </motion.div>
-          <motion.span 
-            variants={{
-              hover: { 
-                letterSpacing: "0.2em",
-                x: 5
-              }
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="text-[32px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none"
-          >
+          <span className="text-[32px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">
             VANTA
-          </motion.span>
+          </span>
       </motion.div>
 
       <div className="flex items-center gap-2">
