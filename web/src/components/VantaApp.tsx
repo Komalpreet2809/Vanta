@@ -172,7 +172,7 @@ export function VantaApp() {
           </section>
 
           {/* ENGINE COLUMN */}
-          <section id="vanta-unified-engine" className="relative flex flex-col h-fit xl:h-full min-h-[450px] overflow-visible order-1 xl:order-2 pb-32">
+          <section id="vanta-unified-engine" className="relative flex flex-col h-fit xl:h-full min-h-[450px] overflow-visible order-1 xl:order-2 pb-60">
               <EngineCenter
                 id="vanta-engine"
                 canExtract={!!canRun}
