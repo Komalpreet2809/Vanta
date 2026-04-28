@@ -129,12 +129,12 @@
 
 /* Driver.js Custom Styling - Vanta Premium Glass Theme */
 .driver-popover.driverjs-theme {
-  background-color: rgba(var(--bg-card-rgb), 0.85) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  background-color: var(--bg-card) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   color: var(--text-main) !important;
   border-radius: 12px !important;
-  border: 1px solid rgba(var(--text-main-rgb), 0.1) !important;
+  border: 1px solid var(--border-main) !important;
   box-shadow: 
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
