@@ -171,8 +171,7 @@
 }
 
 .driver-popover.driverjs-theme .driver-popover-next-btn,
-.driver-popover.driverjs-theme .driver-popover-prev-btn,
-.driver-popover.driverjs-theme .driver-popover-close-btn {
+.driver-popover.driverjs-theme .driver-popover-prev-btn {
   background-color: var(--text-main) !important;
   color: var(--bg-app) !important;
   border: none !important;
@@ -188,6 +187,34 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 }
 
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+  position: absolute !important;
+  top: 15px !important;
+  right: 15px !important;
+  width: 34px !important;
+  height: 34px !important;
+  background-color: var(--border-main) !important;
+  color: var(--text-main) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(var(--text-main-rgb), 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  padding: 0 0 2px 0 !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  z-index: 1000 !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn:hover {
+  background-color: var(--text-main) !important;
+  color: var(--bg-app) !important;
+  transform: scale(1.1) rotate(90deg) !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
 .driver-popover.driverjs-theme .driver-popover-next-btn:hover {
   transform: translateY(-1px) !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--text-main) !important;
