@@ -147,8 +147,11 @@ class SepFormerTSE(nn.Module):
         compare_samples = int(5.0 * SAMPLE_RATE)
         src_embs = []
         for i in range(num_sources):
-            # Take only the first 5s (or less if mixture is short)
+            # Take only the first 5s
             chunk = sources_16k[i, :, :compare_samples]
+            # Hard-normalize the chunk to ensure identity matching is volume-invariant
+            chunk_peak = chunk.abs().max(dim=-1, keepdim=True)[0] + 1e-8
+            chunk = chunk * (0.95 / chunk_peak)
             src_embs.append(self.speaker_encoder(chunk))
         src_embs = torch.stack(src_embs, dim=0)                   # (num_sources, B, 192)
 
