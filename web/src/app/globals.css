@@ -248,13 +248,18 @@
 
 /* Spotlight styling */
 .driver-active-element {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
   border-radius: 8px !important;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 0 50px rgba(var(--text-main-rgb), 0.2) !important;
 }
 
-.driver-stage-no-animation {
-  fill: rgba(0, 0, 0, 0.6) !important;
+.driver-stage-no-animation, 
+.driver-stage-animation {
+  fill: rgba(0, 0, 0, 0.7) !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
