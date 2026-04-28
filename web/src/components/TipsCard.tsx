@@ -8,10 +8,15 @@ export function TipsCard() {
     <div className="p-2 w-full group">
       <div className="flex items-center gap-3 mb-3 text-[var(--text-main)]">
         <motion.div 
-            whileHover={{ scale: 1.15, rotate: 10 }}
-            className="h-8 w-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-card)] transition-colors group-hover:border-[var(--text-main)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+            whileHover={{ 
+              scale: 1.2, 
+              rotate: 15,
+              backgroundColor: "rgba(255, 191, 0, 0.1)",
+              boxShadow: "0 0 25px rgba(255, 191, 0, 0.4)"
+            }}
+            className="h-8 w-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-card)] transition-all duration-300 group-hover:border-yellow-500/50"
         >
-          <Lightbulb className="h-5 w-5 text-[var(--text-muted)] group-hover:text-[var(--text-main)] transition-colors" />
+          <Lightbulb className="h-5 w-5 text-[var(--text-muted)] group-hover:text-yellow-500 group-hover:fill-yellow-500/20 transition-all duration-300" />
         </motion.div>
         <span className="font-mono-heading text-[12px] opacity-80">TIPS</span>
       </div>
