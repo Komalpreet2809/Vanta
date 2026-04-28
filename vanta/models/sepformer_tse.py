@@ -137,18 +137,20 @@ class SepFormerTSE(nn.Module):
             pad = target_len - sources_16k.shape[-1]
             sources_16k = F.pad(sources_16k, (0, pad))
 
-        # Speaker fingerprints: enrollment, plus one per separated source.
-        # CRITICAL FIX: The SepFormer sources are bandwidth-limited to 4kHz (8kHz SR).
-        # We must resample the enrollment to match this bandwidth, otherwise the 
-        # ECAPA encoder sees "missing" high frequencies in the sources and picks 
-        # the wrong speaker.
+        # Speaker fingerprints: compare 5s of enrollment to 5s of sources.
+        # This prevents long silences at the end of the mixture from diluting the 
+        # embedding similarity.
         enr_8k = _resample(enrollment, SAMPLE_RATE, SEPFORMER_SR)
         enr_limited = _resample(enr_8k, SEPFORMER_SR, SAMPLE_RATE)
         target_emb = self.speaker_encoder(enr_limited)            # (B, 192)
-        # source embeddings: shape (num_sources, B, 192)
-        src_embs = torch.stack(
-            [self.speaker_encoder(sources_16k[i]) for i in range(num_sources)], dim=0
-        )
+
+        compare_samples = int(5.0 * SAMPLE_RATE)
+        src_embs = []
+        for i in range(num_sources):
+            # Take only the first 5s (or less if mixture is short)
+            chunk = sources_16k[i, :, :compare_samples]
+            src_embs.append(self.speaker_encoder(chunk))
+        src_embs = torch.stack(src_embs, dim=0)                   # (num_sources, B, 192)
 
         # Cosine similarity between each source and the target fingerprint.
         # Normalize for numerical stability.
@@ -156,6 +158,12 @@ class SepFormerTSE(nn.Module):
         src_norms = F.normalize(src_embs, dim=-1)
         # (num_sources, B)
         sims = (src_norms * target_norm.unsqueeze(0)).sum(dim=-1)
+
+        # DEBUG: Print similarities to console for troubleshooting
+        for b in range(mixture.shape[0]):
+            scores = sims[:, b].detach().cpu().tolist()
+            print(f"\n[VANTA] Identity Match - Source 0: {scores[0]:.3f}, Source 1: {scores[1]:.3f}")
+            print(f"[VANTA] Selected Source: {sims[:, b].argmax().item()}\n")
 
         # Per-batch-item: pick the source with the highest similarity.
         best_idx = sims.argmax(dim=0)                            # (B,)
