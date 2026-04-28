@@ -138,7 +138,13 @@ class SepFormerTSE(nn.Module):
             sources_16k = F.pad(sources_16k, (0, pad))
 
         # Speaker fingerprints: enrollment, plus one per separated source.
-        target_emb = self.speaker_encoder(enrollment)            # (B, 192)
+        # CRITICAL FIX: The SepFormer sources are bandwidth-limited to 4kHz (8kHz SR).
+        # We must resample the enrollment to match this bandwidth, otherwise the 
+        # ECAPA encoder sees "missing" high frequencies in the sources and picks 
+        # the wrong speaker.
+        enr_8k = _resample(enrollment, SAMPLE_RATE, SEPFORMER_SR)
+        enr_limited = _resample(enr_8k, SEPFORMER_SR, SAMPLE_RATE)
+        target_emb = self.speaker_encoder(enr_limited)            # (B, 192)
         # source embeddings: shape (num_sources, B, 192)
         src_embs = torch.stack(
             [self.speaker_encoder(sources_16k[i]) for i in range(num_sources)], dim=0
