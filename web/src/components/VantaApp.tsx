@@ -120,7 +120,8 @@ export function VantaApp() {
         { element: '#vanta-inputs', popover: { title: 'The Inputs', description: 'Everything starts here. You need two pieces of audio to begin the extraction process.', side: "right", align: 'start' } },
         { element: '#vanta-reference', popover: { title: 'Reference Audio', description: 'Upload a clean sample of the voice you want to isolate.', side: "right", align: 'center' } },
         { element: '#vanta-noise', popover: { title: 'Noisy Recording', description: 'Upload the recording that contains both the target voice and background noise.', side: "right", align: 'center' } },
-        { element: '#vanta-engine', popover: { title: 'Ignite the Engine', description: 'Once both signals are loaded, click "START EXTRACTION" to begin the neural isolation process.', side: "top", align: 'center' } },
+        { element: '#vanta-engine', popover: { title: 'Neural Engine', description: 'This is the heart of Vanta. Our SepFormer model analyzes the overlapping signals here to find the target speaker.', side: "top", align: 'center' } },
+        { element: '#vanta-extract-btn', popover: { title: 'Ignite the Engine', description: 'Ready to go? Click "START EXTRACTION" to begin the neural isolation process in real-time.', side: "top", align: 'center' } },
         { element: '#vanta-clean', popover: { title: 'Isolated Clean Voice', description: 'The target speaker will be rendered here. You can play it directly or download the high-fidelity WAV file.', side: "left", align: 'start' } },
         { element: '#vanta-residue', popover: { title: 'The Residue', description: 'Everything else (background noise, other voices) is moved to this card, ensuring your clean signal remains pure.', side: "left", align: 'start' } },
       ]
@@ -256,6 +257,7 @@ export function VantaApp() {
 
 
                     <button
+                        id="vanta-extract-btn"
                         disabled={!canRun}
                         onClick={run}
                         className={`px-6 py-2.5 rounded-lg font-mono-heading text-[11px] font-black tracking-widest transition-all ${
