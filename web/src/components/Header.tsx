@@ -50,8 +50,7 @@ export function Header({
           <motion.div 
             variants={{
               hover: { 
-                scale: 1.1,
-                filter: "drop-shadow(0 0 8px var(--text-main))"
+                scale: 1.1
               }
             }}
             className="w-12 h-12 flex items-center justify-center"
