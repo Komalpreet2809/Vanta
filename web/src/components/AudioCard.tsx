@@ -173,6 +173,11 @@ export function AudioCard({
           onDragLeave={() => setIsDragging(false)}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragging(false);
+            if (onFile && e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]);
+          }}
           onClick={() => {
             if (!onFile) return;
             const input = document.createElement("input");
@@ -195,17 +200,17 @@ export function AudioCard({
                       <motion.div
                         key={i}
                         animate={isHovered ? {
-                          height: [6, 14, 8, 16, 6][i],
+                          height: [6, 16, 8, 14, 6],
                           opacity: 1
                         } : {
-                          height: [6, 10, 8, 10, 6][i],
+                          height: 8,
                           opacity: 0.4
                         }}
                         transition={{
-                          duration: 0.5,
+                          duration: 0.6,
                           repeat: isHovered ? Infinity : 0,
                           repeatType: "reverse",
-                          delay: i * 0.05,
+                          delay: i * 0.1,
                           ease: "easeInOut"
                         }}
                         className="w-[2.5px] bg-[var(--text-muted)] rounded-full"
