@@ -139,19 +139,20 @@
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
   padding: 28px !important;
-  max-width: 380px !important;
+  max-width: 420px !important;
 }
 
 .driver-popover.driverjs-theme .driver-popover-title {
   font-family: var(--font-mono) !important;
   font-weight: 900 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.2em !important;
-  font-size: 14px !important;
+  letter-spacing: 0.12em !important;
+  font-size: 13px !important;
   color: var(--text-main) !important;
   margin-bottom: 16px !important;
   border-left: 3px solid var(--text-main) !important;
   padding-left: 12px !important;
+  padding-right: 35px !important;
 }
 
 .driver-popover.driverjs-theme .driver-popover-description {
