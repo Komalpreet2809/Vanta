@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Vanta — target speaker extraction",
   description:
     "Upload a 5-second reference clip of one voice and a messy recording — Vanta isolates that voice and returns it without everything else.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
