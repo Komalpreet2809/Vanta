@@ -227,7 +227,7 @@ export function VantaApp() {
          </main>
  
          {/* BOTTOM STATUS BAR */}
-         <div className="fixed xl:absolute bottom-6 xl:bottom-12 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
+         <div className="fixed xl:absolute bottom-4 xl:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
              <motion.div 
                  layout
                  className="vanta-card p-3 flex items-center justify-between gap-4 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
