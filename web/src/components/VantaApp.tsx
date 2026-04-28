@@ -46,15 +46,21 @@ export function VantaApp() {
       return;
     }
     
-    let currentProgress = 0;
+    const DURATION = 5000; // 5 seconds total
+    const start = Date.now();
+    
     const interval = setInterval(() => {
-      currentProgress += (95 - currentProgress) * 0.04;
-      setProgress(currentProgress);
+      const elapsed = Date.now() - start;
+      const progressValue = Math.min(95, (elapsed / DURATION) * 100);
+      setProgress(progressValue);
       
-      if (currentProgress < 30) setStage("ANALYZING SIGNALS...");
-      else if (currentProgress < 70) setStage("ISOLATING TARGET...");
-      else setStage("EXTRACTING RESIDUE...");
-    }, 100);
+      if (progressValue < 25) setStage("ANALYZING SIGNALS...");
+      else if (progressValue < 50) setStage("ISOLATING TARGET...");
+      else if (progressValue < 75) setStage("EXTRACTING RESIDUE...");
+      else setStage("FINALIZING...");
+      
+      if (elapsed >= DURATION) clearInterval(interval);
+    }, 16); // 60fps for smooth progress sync
 
     return () => clearInterval(interval);
   }, [status]);
@@ -66,13 +72,21 @@ export function VantaApp() {
     setStatus("running");
     setResult(null);
     try {
+      const startTime = Date.now();
       const r = await extract(mixture, enrollment);
+      const elapsed = Date.now() - startTime;
+      const minDuration = 5000; // Match the 5s visual sequence
+      
+      if (elapsed < minDuration) {
+        await new Promise(resolve => setTimeout(resolve, minDuration - elapsed));
+      }
+
       setProgress(100);
-      setStage("FINALIZING...");
+      setStage("RESULTS READY");
       setTimeout(() => {
         setResult(r);
         setStatus("idle");
-      }, 600);
+      }, 800);
     } catch (e) {
       console.error(e);
       setStatus("error");
@@ -117,16 +131,16 @@ export function VantaApp() {
     <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden font-sans">
         <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-[450px_1fr_450px] overflow-hidden px-12 gap-10">
+        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[450px_1fr_450px] lg:grid-cols-[380px_1fr_380px] overflow-y-auto xl:overflow-hidden px-4 md:px-8 xl:px-12 gap-6 xl:gap-10 py-6">
           {/* INPUTS COLUMN */}
-          <section id="vanta-inputs" className="flex flex-col h-full py-4 overflow-hidden">
-            <div className="mb-4 shrink-0 h-16">
-              <h2 className="font-mono-heading text-[22px] font-black tracking-widest text-[var(--text-main)] mb-1 uppercase">INPUTS</h2>
-              <p className="text-[13px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
+          <section id="vanta-inputs" className="flex flex-col h-fit xl:h-full overflow-hidden order-2 xl:order-1">
+            <div className="mb-3 shrink-0">
+              <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">INPUTS</h2>
+              <p className="text-[12px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
             </div>
             
-            <div className="flex-1 flex flex-col gap-3 overflow-hidden">
-                <div className="flex-1 min-h-0">
+            <div className="flex-1 flex flex-col gap-2 min-h-0">
+                <div className="flex-1 min-h-[180px]">
                     <AudioCard
                       id="vanta-reference"
                       heading="REFERENCE AUDIO"
@@ -138,7 +152,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="flex-1 min-h-0">
+                <div className="flex-1 min-h-[180px]">
                     <AudioCard
                       id="vanta-noise"
                       heading="NOISE AUDIO"
@@ -150,14 +164,14 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="h-24 shrink-0 mt-2">
+                <div className="h-20 shrink-0 mt-1">
                   <TipsCard />
                 </div>
             </div>
           </section>
 
           {/* ENGINE COLUMN */}
-          <section className="flex flex-col h-full overflow-hidden">
+          <section className="flex flex-col h-fit xl:h-full min-h-[450px] overflow-hidden order-1 xl:order-2">
               <EngineCenter
                 id="vanta-engine"
                 canExtract={!!canRun}
@@ -169,14 +183,14 @@ export function VantaApp() {
           </section>
 
           {/* OUTPUTS COLUMN */}
-          <section id="vanta-outputs" className="flex flex-col h-full py-4 overflow-hidden">
-            <div className="mb-4 shrink-0 h-16">
-              <h2 className="font-mono-heading text-[22px] font-black tracking-widest text-[var(--text-main)] mb-1 uppercase">OUTPUTS</h2>
-              <p className="text-[13px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
+          <section id="vanta-outputs" className="flex flex-col h-fit xl:h-full overflow-hidden order-3">
+            <div className="mb-3 shrink-0">
+              <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">OUTPUTS</h2>
+              <p className="text-[12px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
             </div>
 
-            <div className="flex-1 flex flex-col gap-3 overflow-hidden">
-                <div className="flex-1 min-h-0">
+            <div className="flex-1 flex flex-col gap-2 min-h-0">
+                <div className="flex-1 min-h-[180px]">
                     <AudioCard
                       heading="CLEAN VOICE"
                       source={result?.extracted ?? null}
@@ -187,7 +201,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="flex-1 min-h-0">
+                <div className="flex-1 min-h-[180px]">
                     <AudioCard
                       heading="RESIDUE (NOISE)"
                       source={result?.residue ?? null}
@@ -198,28 +212,33 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="h-24 shrink-0 mt-2">
-                   <div className="h-full flex items-start gap-4">
-                      <Activity className="h-4 w-4 text-[var(--text-muted)] shrink-0 mt-0.5" />
-                      <p className="text-[12px] text-[var(--text-muted)] leading-relaxed font-medium">
-                        Your outputs will be available here once processing is complete.
-                      </p>
-                   </div>
-                </div>
-            </div>
-          </section>
-        </main>
-
-        {/* BOTTOM STATUS BAR */}
-        <div className="absolute bottom-15 left-1/2 -translate-x-1/2 w-full max-w-[650px] px-12 z-50">
-            <motion.div 
-                layout
-                className="vanta-card p-3 flex items-center justify-between gap-6 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
-            >
-                <div className="flex items-center gap-4">
-                    <div className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}>
-                         <Activity className={`w-5 h-5 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50'}`} />
+                 <div className="h-20 shrink-0 mt-1">
+                    <div className="h-full flex items-start gap-4 group/activity">
+                       <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>
+                         <Activity className="h-4 w-4 text-[var(--text-muted)] group-hover/activity:text-[var(--text-main)] transition-colors shrink-0 mt-0.5" />
+                       </motion.div>
+                       <p className="text-[12px] text-[var(--text-muted)] leading-relaxed font-medium group-hover/activity:text-[var(--text-main)] transition-colors">
+                         Your outputs will be available here once processing is complete.
+                       </p>
                     </div>
+                 </div>
+             </div>
+           </section>
+         </main>
+ 
+         {/* BOTTOM STATUS BAR */}
+         <div className="fixed xl:absolute bottom-6 xl:bottom-12 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
+             <motion.div 
+                 layout
+                 className="vanta-card p-3 flex items-center justify-between gap-4 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
+             >
+                 <div className="flex items-center gap-4 group/status">
+                     <motion.div 
+                        whileHover={{ scale: 1.1 }}
+                        className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}
+                     >
+                          <Activity className={`w-6 h-6 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50 group-hover/status:opacity-100'} transition-opacity`} />
+                     </motion.div>
                     <div className="flex flex-col">
                         <span className="font-mono-heading text-[12px] font-black tracking-widest">
                             {status === 'running' ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
@@ -231,15 +250,12 @@ export function VantaApp() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 border border-[var(--border-main)]/50">
-                        <div className={`w-1 h-1 rounded-full ${status === 'running' ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
-                        <span className="text-[9px] font-mono font-black uppercase tracking-tighter text-[var(--text-muted)]">{status === 'running' ? 'Active' : 'Ready'}</span>
-                    </div>
+
 
                     <button
                         disabled={!canRun}
                         onClick={run}
-                        className={`px-8 py-2.5 rounded-lg font-mono-heading text-[11px] font-black tracking-widest transition-all ${
+                        className={`px-6 py-2.5 rounded-lg font-mono-heading text-[11px] font-black tracking-widest transition-all ${
                             status === 'running' 
                             ? 'bg-transparent border border-[var(--border-main)] opacity-50 cursor-not-allowed'
                             : canRun 

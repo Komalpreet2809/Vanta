@@ -3,6 +3,7 @@
 import { Music, Pause, Play, Upload, X, Download, AudioLines } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
+import { motion } from "motion/react";
 
 type Variant = "charcoal" | "red" | "green" | "purple" | "brown";
 
@@ -104,7 +105,7 @@ export function AudioCard({
         <div className="vanta-card p-4 flex flex-col gap-4">
           <div className="flex items-center gap-3">
              <div className="w-10 h-10 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)]">
-                <Music className="h-4 w-4 text-[var(--text-muted)]" />
+                <Music className="h-5 w-5 text-[var(--text-muted)]" />
              </div>
              <div className="flex-1 min-w-0">
                <div className="truncate text-[12px] font-bold text-[var(--text-main)]">{filename}</div>
@@ -114,26 +115,48 @@ export function AudioCard({
              </div>
              <div className="flex items-center gap-1">
                 {onClear && (
-                    <button onClick={onClear} className="w-8 h-8 rounded-full hover:bg-[var(--border-main)] flex items-center justify-center transition-colors">
-                        <X className="h-3.5 w-3.5" />
-                    </button>
+                    <motion.button 
+                       whileHover={{ 
+                         scale: 1.1, 
+                         rotate: 5,
+                         backgroundColor: "rgba(181, 69, 69, 0.2)",
+                         color: "#B54545"
+                       }}
+                       whileTap={{ scale: 0.9 }}
+                       onClick={onClear} 
+                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                    >
+                        <X className="h-4 w-4" />
+                    </motion.button>
                 )}
                 {onDownload && (
-                    <button onClick={onDownload} className="w-8 h-8 rounded-full hover:bg-[var(--border-main)] flex items-center justify-center transition-colors">
-                        <Download className="h-3.5 w-3.5" />
-                    </button>
+                    <motion.button 
+                       whileHover={{ 
+                         scale: 1.1, 
+                         rotate: -5,
+                         backgroundColor: "rgba(74, 107, 74, 0.2)",
+                         color: "#4A6B4A"
+                       }}
+                       whileTap={{ scale: 0.9 }}
+                       onClick={onDownload} 
+                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                    >
+                        <Download className="h-4 w-4" />
+                    </motion.button>
                 )}
              </div>
           </div>
 
           <div className="flex items-center gap-4 px-1">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => wsRef.current?.playPause()}
               disabled={!ready}
-              className="w-10 h-10 rounded-full bg-[var(--text-main)] text-[var(--bg-app)] flex items-center justify-center hover:scale-105 transition-transform disabled:opacity-50"
+              className="w-10 h-10 rounded-full bg-[var(--text-main)] text-[var(--bg-app)] flex items-center justify-center hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all disabled:opacity-50"
             >
-              {playing ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current translate-x-[1px]" />}
-            </button>
+              {playing ? <Pause className="h-5 w-5 fill-current" /> : <Play className="h-5 w-5 fill-current translate-x-[1px]" />}
+            </motion.button>
             <div className="flex-1">
               <div ref={containerRef} className="w-full" />
               <div className="flex justify-between text-[9px] font-medium text-[var(--text-muted)] mt-1.5 px-0.5">
@@ -169,7 +192,7 @@ export function AudioCard({
         >
           <div className="flex flex-col items-center gap-2">
              <div className="w-8 h-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] shadow-sm">
-                <AudioLines className="h-3.5 w-3.5 text-[var(--text-muted)] opacity-40" />
+                <AudioLines className="h-5 w-5 text-[var(--text-muted)] opacity-40" />
              </div>
              <div className="text-center px-6">
                 <div className="text-[12px] font-bold text-[var(--text-main)] mb-0.5 uppercase tracking-wider">

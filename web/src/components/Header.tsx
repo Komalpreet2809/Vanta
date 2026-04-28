@@ -2,6 +2,7 @@
 
 import { Moon, Sun, RefreshCw, HelpCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 
 export function Header({ 
   onReset, 
@@ -41,12 +42,12 @@ export function Header({
   };
 
   return (
-    <header id={id} className="px-8 py-4 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
-      <div className="flex items-center gap-5">
-          <div className="w-16 h-16 flex items-center justify-center">
+    <header id={id} className="px-8 py-2 flex items-center justify-between bg-transparent border-b border-[var(--border-main)]/30">
+      <div className="flex items-center gap-3">
+          <div className="w-10 h-10 flex items-center justify-center">
             <svg 
-              width="42" 
-              height="42" 
+              width="30" 
+              height="30" 
               viewBox="0 0 24 24" 
               fill="var(--text-main)" 
             >
@@ -56,35 +57,56 @@ export function Header({
               <rect x="11" y="21" width="2" height="1.5" />
             </svg>
           </div>
-          <span className="text-[40px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
+          <span className="text-[28px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">VANTA</span>
       </div>
 
-      <div className="flex items-center gap-3">
-        <button 
+      <div className="flex items-center gap-2">
+        <motion.button 
+          whileHover={{ 
+            scale: 1.1, 
+            rotate: 10,
+            backgroundColor: "rgba(255, 191, 0, 0.15)",
+            color: "#FFBF00"
+          }}
+          whileTap={{ scale: 0.9 }}
           onClick={onStartTour}
-          className="vanta-btn w-10 h-10"
+          className="vanta-btn w-8 h-8 flex items-center justify-center transition-colors"
           aria-label="Start guided tour"
           title="How to use Vanta"
         >
           <HelpCircle className="h-5 w-5" />
-        </button>
+        </motion.button>
 
-        <button 
+        <motion.button 
+          whileHover={{ 
+            scale: 1.1, 
+            rotate: -45,
+            backgroundColor: "rgba(0, 217, 255, 0.15)",
+            color: "#00D9FF"
+          }}
+          whileTap={{ scale: 0.9 }}
           onClick={onReset}
-          className="vanta-btn w-10 h-10"
+          className="vanta-btn w-8 h-8 flex items-center justify-center transition-colors"
           aria-label="Reset session"
           title="Clear all inputs and results"
         >
           <RefreshCw className="h-5 w-5" />
-        </button>
+        </motion.button>
 
-        <button 
+        <motion.button 
+          whileHover={{ 
+            scale: 1.1, 
+            rotate: 15,
+            backgroundColor: isDark ? "rgba(255, 140, 0, 0.15)" : "rgba(79, 70, 229, 0.15)",
+            color: isDark ? "#FF8C00" : "#4F46E5"
+          }}
+          whileTap={{ scale: 0.9 }}
           onClick={toggleDark}
-          className="vanta-btn w-10 h-10"
+          className="vanta-btn w-8 h-8 flex items-center justify-center transition-colors"
           aria-label="Toggle dark mode"
         >
           {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-        </button>
+        </motion.button>
       </div>
     </header>
   );
