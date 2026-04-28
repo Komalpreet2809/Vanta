@@ -41,7 +41,7 @@ export function EngineCenter({
 
   return (
     <div id={id} className="flex flex-col items-center justify-between w-full h-full py-8">
-      <div className="flex-1 w-full relative flex items-center justify-center overflow-visible">
+      <div className="flex-1 w-full max-w-[800px] max-h-[600px] relative flex items-center justify-center overflow-visible mx-auto">
         {/* SVG Flow Container */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
             <defs>
