@@ -75,6 +75,7 @@ async def extract(
     enrollment: UploadFile = File(..., description="5-second clean clip of target speaker"),
     include_residue: bool = False,
 ) -> Response:
+    print(f"\n[SERVER] Received extraction request: {mixture.filename} & {enrollment.filename}")
     if _inference is None:
         raise HTTPException(503, "model not loaded — did you mount the checkpoint?")
 
