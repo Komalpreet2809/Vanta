@@ -121,7 +121,7 @@ export function VantaApp() {
         { element: '#vanta-reference', popover: { title: 'Reference Audio', description: 'Upload a clean sample of the voice you want to isolate.', side: "right", align: 'center' } },
         { element: '#vanta-noise', popover: { title: 'Noisy Recording', description: 'Upload the recording that contains both the target voice and background noise.', side: "right", align: 'center' } },
         { element: '#vanta-engine', popover: { title: 'Neural Engine', description: 'This is the heart of Vanta. Our SepFormer model analyzes the overlapping signals here to find the target speaker.', side: "top", align: 'center' } },
-        { element: '#vanta-extract-btn', popover: { title: 'Ignite the Engine', description: 'Ready to go? Click "START EXTRACTION" to begin the neural isolation process in real-time.', side: "top", align: 'center' } },
+        { element: '#vanta-status-bar', popover: { title: 'Ignite the Engine', description: 'Ready to go? Click "START EXTRACTION" to begin the neural isolation process in real-time.', side: "top", align: 'center' } },
         { element: '#vanta-clean', popover: { title: 'Isolated Clean Voice', description: 'The target speaker will be rendered here. You can play it directly or download the high-fidelity WAV file.', side: "left", align: 'start' } },
         { element: '#vanta-residue', popover: { title: 'The Residue', description: 'Everything else (background noise, other voices) is moved to this card, ensuring your clean signal remains pure.', side: "left", align: 'start' } },
       ]
@@ -233,6 +233,7 @@ export function VantaApp() {
          {/* BOTTOM STATUS BAR */}
          <div className="fixed xl:absolute bottom-4 xl:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
              <motion.div 
+                 id="vanta-status-bar"
                  layout
                  className="vanta-card p-3 flex items-center justify-between gap-4 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
              >
