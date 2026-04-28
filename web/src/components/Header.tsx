@@ -56,16 +56,32 @@ export function Header({
             className="w-12 h-12 flex items-center justify-center"
           >
             <svg 
-              width="34" 
-              height="34" 
-              viewBox="0 0 24 24" 
-              fill="var(--text-main)" 
+              width="38" 
+              height="38" 
+              viewBox="0 0 100 100" 
               className="transition-transform duration-300 group-hover:rotate-[-5deg]"
             >
-              <path d="M12 2L4 12h16L12 2z" />
-              <rect x="6" y="14" width="12" height="1.5" />
-              <rect x="8" y="17.5" width="8" height="1.5" />
-              <rect x="11" y="21" width="2" height="1.5" />
+              {/* V-Wave Logo Design */}
+              <path 
+                d="M15 25 L50 85 L85 25" 
+                fill="none" 
+                stroke="var(--text-main)" 
+                strokeWidth="8" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+              />
+              <path 
+                d="M30 25 L50 60 L70 25" 
+                fill="none" 
+                stroke="var(--text-main)" 
+                strokeWidth="6" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                opacity="0.6"
+              />
+              <rect x="47" y="15" width="6" height="45" rx="3" fill="var(--text-main)" />
+              <rect x="37" y="25" width="6" height="20" rx="3" fill="var(--text-main)" opacity="0.8" />
+              <rect x="57" y="25" width="6" height="30" rx="3" fill="var(--text-main)" opacity="0.8" />
             </svg>
           </motion.div>
           <span className="text-[32px] font-black tracking-[0.1em] text-[var(--text-main)] uppercase leading-none">
