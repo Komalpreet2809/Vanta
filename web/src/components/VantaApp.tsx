@@ -120,7 +120,7 @@ export function VantaApp() {
         { element: '#vanta-inputs', popover: { title: 'The Inputs', description: 'Everything starts here. You need two pieces of audio to begin the extraction process.', side: "right", align: 'start' } },
         { element: '#vanta-reference', popover: { title: 'Reference Audio', description: 'Upload a clean sample of the voice you want to isolate.', side: "right", align: 'center' } },
         { element: '#vanta-noise', popover: { title: 'Noisy Recording', description: 'Upload the recording that contains both the target voice and background noise.', side: "right", align: 'center' } },
-        { element: '#vanta-unified-engine', popover: { title: 'Neural Engine & Extraction', description: 'This is the heart of Vanta. Once your signals are loaded, our SepFormer model analyzes them in real-time. Click "START EXTRACTION" at the bottom to begin the process.', side: "top", align: 'center' } },
+        { element: '#vanta-tour-center', popover: { title: 'Neural Engine & Extraction', description: 'This is the heart of Vanta. Once your signals are loaded, our SepFormer model analyzes them in real-time. Click "START EXTRACTION" at the bottom to begin the process.', side: "top", align: 'center' } },
         { element: '#vanta-clean', popover: { title: 'Isolated Clean Voice', description: 'The target speaker will be rendered here. You can play it directly or download the high-fidelity WAV file.', side: "left", align: 'start' } },
         { element: '#vanta-residue', popover: { title: 'The Residue', description: 'Everything else (background noise, other voices) is moved to this card, ensuring your clean signal remains pure.', side: "left", align: 'start' } },
       ]
@@ -172,7 +172,7 @@ export function VantaApp() {
           </section>
 
           {/* ENGINE COLUMN */}
-          <section id="vanta-unified-engine" className="relative flex flex-col h-fit xl:h-full min-h-[450px] overflow-visible order-1 xl:order-2 pb-60">
+          <section className="flex flex-col h-fit xl:h-full min-h-[450px] overflow-hidden order-1 xl:order-2">
               <EngineCenter
                 id="vanta-engine"
                 canExtract={!!canRun}
@@ -181,49 +181,6 @@ export function VantaApp() {
                 stage={stage}
                 onExtract={run}
               />
-
-              {/* BOTTOM STATUS BAR (Moved inside for unified tour targeting) */}
-              <div className="fixed xl:absolute bottom-4 xl:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
-                  <motion.div 
-                      id="vanta-status-bar"
-                      layout
-                      className="vanta-card p-3 flex items-center justify-between gap-4 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
-                  >
-                      <div className="flex items-center gap-4 group/status">
-                          <motion.div 
-                             whileHover={{ scale: 1.1 }}
-                             className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}
-                          >
-                               <Activity className={`w-6 h-6 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50 group-hover/status:opacity-100'} transition-opacity`} />
-                          </motion.div>
-                         <div className="flex flex-col">
-                             <span className="font-mono-heading text-[12px] font-black tracking-widest">
-                                 {status === 'running' ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
-                             </span>
-                             <span className="text-[9px] text-[var(--text-muted)] font-bold opacity-80">
-                                 {status === 'running' ? `${stage} • ${Math.round(progress)}%` : "Both signals are processed simultaneously for best results."}
-                             </span>
-                         </div>
-                     </div>
-
-                     <div className="flex items-center gap-4">
-                         <button
-                             id="vanta-extract-btn"
-                             disabled={!canRun}
-                             onClick={run}
-                             className={`px-6 py-2.5 rounded-lg font-mono-heading text-[11px] font-black tracking-widest transition-all ${
-                                 status === 'running' 
-                                 ? 'bg-transparent border border-[var(--border-main)] opacity-50 cursor-not-allowed'
-                                 : canRun 
-                                     ? 'bg-[var(--text-main)] text-[var(--bg-app)] hover:scale-105 active:scale-95 shadow-xl hover:shadow-[var(--text-main)]/20'
-                                     : 'bg-[var(--bg-app)] border border-[var(--border-main)] opacity-30 cursor-not-allowed'
-                             }`}
-                         >
-                             {status === 'running' ? "EXTRACTING..." : "START EXTRACTION"}
-                         </button>
-                     </div>
-                 </motion.div>
-             </div>
           </section>
 
           {/* OUTPUTS COLUMN */}
@@ -272,6 +229,51 @@ export function VantaApp() {
            </section>
          </main>
  
+         {/* TOUR PROXY: Invisible element to highlight center area including status bar */}
+         <div id="vanta-tour-center" className="fixed top-[15%] bottom-[5%] left-1/2 -translate-x-1/2 w-full max-w-[650px] pointer-events-none z-[-1]" />
+
+         {/* BOTTOM STATUS BAR */}
+         <div className="fixed xl:absolute bottom-4 xl:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[550px] px-4 md:px-8 z-50">
+             <motion.div 
+                 id="vanta-status-bar"
+                 layout
+                 className="vanta-card p-3 flex items-center justify-between gap-4 bg-[var(--bg-card)]/90 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-t border-white/20"
+             >
+                 <div className="flex items-center gap-4 group/status">
+                     <motion.div 
+                        whileHover={{ scale: 1.1 }}
+                        className={`w-11 h-11 rounded-full border flex items-center justify-center transition-all duration-500 shadow-inner ${status === 'running' ? 'bg-[var(--text-main)] text-[var(--bg-app)]' : 'bg-[var(--bg-app)] border-[var(--border-main)]'}`}
+                     >
+                          <Activity className={`w-6 h-6 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50 group-hover/status:opacity-100'} transition-opacity`} />
+                     </motion.div>
+                    <div className="flex flex-col">
+                        <span className="font-mono-heading text-[12px] font-black tracking-widest">
+                            {status === 'running' ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
+                        </span>
+                        <span className="text-[9px] text-[var(--text-muted)] font-bold opacity-80">
+                            {status === 'running' ? `${stage} • ${Math.round(progress)}%` : "Both signals are processed simultaneously for best results."}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <button
+                        id="vanta-extract-btn"
+                        disabled={!canRun}
+                        onClick={run}
+                        className={`px-6 py-2.5 rounded-lg font-mono-heading text-[11px] font-black tracking-widest transition-all ${
+                            status === 'running' 
+                            ? 'bg-transparent border border-[var(--border-main)] opacity-50 cursor-not-allowed'
+                            : canRun 
+                                ? 'bg-[var(--text-main)] text-[var(--bg-app)] hover:scale-105 active:scale-95 shadow-xl hover:shadow-[var(--text-main)]/20'
+                                : 'bg-[var(--bg-app)] border border-[var(--border-main)] opacity-30 cursor-not-allowed'
+                        }`}
+                    >
+                        {status === 'running' ? "EXTRACTING..." : "START EXTRACTION"}
+                    </button>
+                </div>
+            </motion.div>
+        </div>
 
         <footer className="px-10 py-4 flex items-center justify-between border-t border-[var(--border-main)]/30 bg-transparent relative z-10">
            <span className="text-[10px] font-mono font-bold tracking-widest text-[var(--text-muted)] uppercase opacity-60">VANTA v1.0.0</span>
