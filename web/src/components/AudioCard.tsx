@@ -47,6 +47,7 @@ export function AudioCard({
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || !source) {
@@ -170,11 +171,8 @@ export function AudioCard({
         <div 
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-            if (onFile && e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]);
-          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           onClick={() => {
             if (!onFile) return;
             const input = document.createElement("input");
@@ -191,8 +189,29 @@ export function AudioCard({
           } ${isDragging ? "border-[var(--text-main)] bg-[var(--bg-card)] scale-[0.99]" : ""}`}
         >
           <div className="flex flex-col items-center gap-2">
-             <div className="w-8 h-8 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] shadow-sm">
-                <AudioLines className="h-5 w-5 text-[var(--text-muted)] opacity-40" />
+             <div className="w-9 h-9 rounded-full border border-[var(--border-main)] flex items-center justify-center bg-[var(--bg-app)] shadow-sm">
+                <div className="flex items-center gap-[2px] h-4">
+                   {[0, 1, 2, 3, 4].map((i) => (
+                      <motion.div
+                        key={i}
+                        animate={isHovered ? {
+                          height: [6, 14, 8, 16, 6][i],
+                          opacity: 1
+                        } : {
+                          height: [6, 10, 8, 10, 6][i],
+                          opacity: 0.4
+                        }}
+                        transition={{
+                          duration: 0.5,
+                          repeat: isHovered ? Infinity : 0,
+                          repeatType: "reverse",
+                          delay: i * 0.05,
+                          ease: "easeInOut"
+                        }}
+                        className="w-[2.5px] bg-[var(--text-muted)] rounded-full"
+                      />
+                   ))}
+                </div>
              </div>
              <div className="text-center px-6">
                 <div className="text-[12px] font-bold text-[var(--text-main)] mb-0.5 uppercase tracking-wider">
