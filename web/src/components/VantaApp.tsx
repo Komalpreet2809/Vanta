@@ -120,8 +120,9 @@ export function VantaApp() {
         { element: '#vanta-inputs', popover: { title: 'The Inputs', description: 'Everything starts here. You need two pieces of audio to begin the extraction process.', side: "right", align: 'start' } },
         { element: '#vanta-reference', popover: { title: 'Reference Audio', description: 'Upload a clean sample of the voice you want to isolate.', side: "right", align: 'center' } },
         { element: '#vanta-noise', popover: { title: 'Noisy Recording', description: 'Upload the recording that contains both the target voice and background noise.', side: "right", align: 'center' } },
-        { element: '#vanta-engine', popover: { title: 'The Extraction Engine', description: 'Click "EXTRACT VOICE" to start the AI isolation process.', side: "top", align: 'center' } },
-        { element: '#vanta-outputs', popover: { title: 'Results', description: 'Your isolated voice will appear here once processing is complete.', side: "left", align: 'start' } },
+        { element: '#vanta-engine', popover: { title: 'Ignite the Engine', description: 'Once both signals are loaded, click "START EXTRACTION" to begin the neural isolation process.', side: "top", align: 'center' } },
+        { element: '#vanta-clean', popover: { title: 'Isolated Clean Voice', description: 'The target speaker will be rendered here. You can play it directly or download the high-fidelity WAV file.', side: "left", align: 'start' } },
+        { element: '#vanta-residue', popover: { title: 'The Residue', description: 'Everything else (background noise, other voices) is moved to this card, ensuring your clean signal remains pure.', side: "left", align: 'start' } },
       ]
     });
     driverObj.drive();
@@ -192,6 +193,7 @@ export function VantaApp() {
             <div className="flex-1 flex flex-col gap-2 min-h-0">
                 <div className="flex-1 min-h-[180px]">
                     <AudioCard
+                      id="vanta-clean"
                       heading="CLEAN VOICE"
                       source={result?.extracted ?? null}
                       variant="green"
@@ -203,6 +205,7 @@ export function VantaApp() {
 
                 <div className="flex-1 min-h-[180px]">
                     <AudioCard
+                      id="vanta-residue"
                       heading="RESIDUE (NOISE)"
                       source={result?.residue ?? null}
                       variant="purple"
