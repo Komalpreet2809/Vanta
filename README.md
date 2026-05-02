@@ -1,6 +1,5 @@
 # Vanta — Target Speaker Extraction
 
-![Vanta](vantaimage.png)
 
 A neural system that isolates one specific voice from a noisy recording. Give it a short reference clip of the target speaker and a messy mixture; it returns only that person's voice, plus a residue track of everything it removed.
 
