@@ -1,101 +1,131 @@
 # Vanta — Target Speaker Extraction
 
-A neural system that isolates one specific voice from messy audio. Give it a short reference clip of the person you want to hear, point it at a noisy recording, and it returns just that person's voice with interfering speakers and background noise removed.
+A neural system that isolates one specific voice from a noisy recording. Give it a short reference clip of the target speaker and a messy mixture; it returns only that person's voice, plus a residue track of everything it removed.
 
-**Live demo**: [vanta-henna.vercel.app](https://vanta-henna.vercel.app) (also [vanta.komalpreet.me](https://vanta.komalpreet.me) once DNS settles)
-**Backend API**: [komalsohal-vanta.hf.space](https://komalsohal-vanta.hf.space) (FastAPI on a Hugging Face Space)
+**Live demo** → [vanta.komalpreet.me](https://vanta.komalpreet.me)  
+**Backend API** → [komalsohal-vanta.hf.space](https://komalsohal-vanta.hf.space) (FastAPI on Hugging Face Spaces)
 
 ---
 
-## What it does
+## Table of Contents
 
-Unlike blind noise cancellation (Krisp, Zoom), Vanta is **informed** — it needs a voice "fingerprint" to know *who* to keep. Given two inputs:
+1. [How it works](#how-it-works)
+2. [Architecture](#architecture)
+3. [Training](#training)
+4. [Results](#results)
+5. [Repository layout](#repository-layout)
+6. [Running locally](#running-locally)
+7. [Deployment](#deployment)
+8. [Limitations](#limitations)
 
-1. **Reference** — 5 seconds of the target speaker, alone
-2. **Mixture** — the messy recording (up to 30 seconds)
+---
 
-…the model produces a cleaned version containing only the target speaker, plus a residue track of everything it removed.
+## How it works
+
+Unlike blind noise cancellation (Krisp, Zoom), Vanta is **informed** — it needs a voice fingerprint to know *who* to keep.
+
+| Input | Description |
+|---|---|
+| **Reference** | 5 seconds of the target speaker, alone |
+| **Mixture** | The noisy recording (up to 30 seconds) |
+
+The model produces a cleaned track containing only the target speaker, and optionally a residue track of everything removed.
+
+---
 
 ## Architecture
 
 ```
-                                mixture wav (B, T)
-                                       │
-                                       ▼
-                          ┌────────────────────────┐
-                          │ 1-D Conv Audio Encoder │  (learnable, 512 filters)
-                          │      kernel 16, stride 8      │
-                          └────────────┬───────────┘
-                                       │  (B, 512, T')
-                                       ▼
-reference wav ─▶ ECAPA-TDNN ─▶ 192-d ──▶ TCN Separator
-                  (frozen)         │      16 dilated-conv blocks
-                                   │      with per-block speaker
-                                   │      conditioning (additive bias)
+                            mixture wav (B, T)
+                                   │
+                                   ▼
+                      ┌────────────────────────┐
+                      │ 1-D Conv Audio Encoder │  512 filters, kernel 16, stride 8
+                      └────────────┬───────────┘
+                                   │  (B, 512, T')
+                                   ▼
+reference ─▶ ECAPA-TDNN ─▶ 192-d ──▶ TCN Separator
+              (frozen)              16 dilated-conv blocks
+                                    speaker-conditioned (additive bias per block)
                                    │
                                    ▼
                           predicted mask (B, 512, T')
                                    │
-                         enc × mask ▼
+                            enc × mask
+                                   │
+                      ┌────────────▼───────────┐
+                      │  Transposed 1-D Conv   │  (decoder, mirror of encoder)
+                      └────────────┬───────────┘
+                                   │
                                    ▼
-                          ┌────────────────────────┐
-                          │  Transposed 1-D Conv   │  (decoder, mirror of encoder)
-                          └────────────┬───────────┘
-                                       │
-                                       ▼
                           extracted wav (B, T)
 ```
 
-**Key choices and why:**
-- **Time domain, not spectrograms** — learnable 1-D conv encoder (Conv-TasNet style) preserves phase, so reconstructions don't sound metallic.
-- **ECAPA-TDNN speaker encoder** (frozen, pretrained on VoxCeleb) produces a 192-d "voice fingerprint" that survives mixtures of many speakers.
-- **Per-block speaker conditioning** — the fingerprint is projected once to the bottleneck width and added at every TCN block input, reminding the model *who* to keep at every layer.
-- **Global Layer Norm** between blocks for amplitude stability.
-- **SI-SDR loss** (Scale-Invariant Signal-to-Distortion Ratio) — doesn't penalize the model for volume differences; only cares about the shape and purity of the extracted waveform.
+**Design decisions:**
 
-## Training pipeline
+| Choice | Reason |
+|---|---|
+| Time-domain 1-D conv encoder | Preserves phase — no metallic reconstruction artifacts from STFT |
+| Frozen ECAPA-TDNN (VoxCeleb) | 192-d fingerprint that survives speaker mixtures without retraining |
+| Per-block speaker conditioning | Fingerprint injected at every TCN block; model is reminded *who* to keep at every layer |
+| Global Layer Norm between blocks | Amplitude stability across blocks |
+| SI-SDR loss | Ignores volume differences; optimises waveform shape and purity only |
 
-Trained end-to-end from raw LibriSpeech + noise + impulse responses:
+---
 
-**Data sources**
-- [LibriSpeech](https://openslr.org/12) `train-clean-100` (251 speakers, 100 hours of English audiobooks)
-- [MUSAN](https://openslr.org/17) noise subset (930 ambient clips)
-- [RIRS_NOISES](https://openslr.org/28) (60,000 simulated room impulse responses)
+## Training
 
-**Synthesis engine** — [`vanta/data/synthesize.py`](vanta/data/synthesize.py) generates training mixtures as:
+### Data sources
+
+| Corpus | Purpose |
+|---|---|
+| [LibriSpeech](https://openslr.org/12) `train-clean-100` | 251 speakers, 100 h of English audiobooks |
+| [MUSAN](https://openslr.org/17) noise subset | 930 ambient noise clips |
+| [RIRS_NOISES](https://openslr.org/28) | 60,000 simulated room impulse responses |
+
+### Mixture synthesis
+
+[`vanta/data/synthesize.py`](vanta/data/synthesize.py) generates training mixtures on-the-fly:
 
 ```
 y = s_target + α · s_interference + β · noise
 ```
 
-with:
-- Random target and (different) interference speakers
+- Random target and interference speakers (different speakers per mixture)
 - Independent RIRs convolved on each voice (80% probability)
-- SNR sampled from [−5, +5] dB (target vs. interference) and [+5, +20] dB (target vs. noise)
-- A separate clean enrollment clip (different utterance, same speaker)
+- SNR: [−5, +5] dB (target vs. interference), [+5, +20] dB (target vs. noise)
+- A separate clean enrollment clip from the same target speaker
 
-20,000 mixtures generated for training, 500 held-out for validation (on completely unseen speakers from `dev-clean`).
+20,000 mixtures for training; 500 held-out on fully unseen speakers from `dev-clean`.
 
-**Training run (v2)**
-- 8 GB RTX 4060 Laptop GPU
-- bf16 mixed precision (essential — fp32 OOMs at batch 2)
-- Batch 4, AdamW (lr 1e-3, weight decay 1e-5), cosine LR schedule
-- Dropout 0.1 in TCN blocks
-- Gradient clipping at norm 5.0
-- Early stopping (patience 5) — triggered at epoch 7
-- ~6 hours total
+### Training run (v2)
+
+| Setting | Value |
+|---|---|
+| Hardware | RTX 4060 Laptop, 8 GB VRAM |
+| Precision | bf16 mixed (fp32 OOMs at batch 2) |
+| Batch size | 4 |
+| Optimiser | AdamW — lr 1e-3, weight decay 1e-5 |
+| LR schedule | Cosine |
+| Regularisation | Dropout 0.1, gradient clip norm 5.0 |
+| Early stopping | Patience 5 — triggered at epoch 7 |
+| Total time | ~6 hours |
+
+---
 
 ## Results
 
-On 500 held-out mixtures from 40 unseen speakers:
+Evaluated on 500 held-out mixtures from 40 unseen speakers:
 
-| metric | input mixture | Vanta output | improvement |
+| Metric | Input mixture | Vanta output | Improvement |
 |---|---|---|---|
 | SI-SDR (mean) | −0.62 dB | +0.82 dB | **+1.43 dB** |
 | SI-SDR (median) | −0.52 dB | +1.48 dB | **+1.51 dB** |
 | STOI | — | 0.66 | — |
 
-On training-set samples (seen speakers), the model hits **+5 to +9 dB improvement** — showing it can mask cleanly when it has seen the voice. The ~+1.5 dB ceiling on held-out speakers is a data-diversity bottleneck; with `train-clean-360` and a longer run it would climb further.
+On seen speakers (training set), the model reaches **+5 to +9 dB SI-SDR improvement**, showing it can mask cleanly when it has heard the voice. The ~+1.5 dB ceiling on unseen speakers is a data-diversity bottleneck; training on `train-clean-360` with more epochs would push it higher.
+
+---
 
 ## Repository layout
 
@@ -104,49 +134,51 @@ vanta/
 ├── config.py              # Paths, sample rate (16 kHz)
 ├── losses.py              # SI-SDR loss
 ├── metrics.py             # SI-SDR + PESQ + STOI
-├── training.py            # Train loop with AMP, cosine LR, early stop, resume
+├── training.py            # Train loop — AMP, cosine LR, early stop, resume
 ├── inference.py           # Load checkpoint + extract speaker (used by server)
 ├── data/
 │   ├── indexer.py         # Speaker/Noise/RIR indices cached to JSON
-│   ├── synthesize.py      # The mixer — y = s1 + α s2 + β n with RIRs
+│   ├── synthesize.py      # Mixture synthesiser
 │   └── dataset.py         # PyTorch Dataset over the manifest
 ├── models/
 │   ├── audio_encoder.py   # 1-D Conv encoder + transposed-conv decoder
-│   ├── speaker_encoder.py # Wraps frozen ECAPA-TDNN from speechbrain
+│   ├── speaker_encoder.py # Frozen ECAPA-TDNN wrapper (speechbrain)
 │   ├── separator.py       # TCN blocks, gLN, speaker-conditioned mask
-│   └── vanta.py           # Top-level model (encoder + separator + decoder)
+│   └── vanta.py           # Top-level model
 └── utils/audio.py         # Load/save, resample, SNR scaling, peak norm
 
 scripts/
-├── download_data.py       # Resumable/retryable download of all corpora
-├── build_dataset.py       # Generate N mixture triples -> manifest.jsonl
+├── download_data.py       # Resumable download of all corpora
+├── build_dataset.py       # Generate N mixture triples → manifest.jsonl
 ├── train.py               # CLI entry point for training
-├── evaluate.py            # SI-SDR/PESQ/STOI on a manifest
+├── evaluate.py            # SI-SDR / PESQ / STOI on a manifest
 ├── bench_step.py          # Per-batch throughput + VRAM benchmark
-└── test_*.py              # Smoke tests for encoders and the full model
+└── test_*.py              # Smoke tests for encoders and full model
 
-server.py                  # FastAPI /health and /extract endpoints
+server.py                  # FastAPI — /health and /extract endpoints
 
-web/                       # Next.js 16 + Tailwind 4 frontend
+web/                       # Next.js + Tailwind frontend
 └── src/
     ├── app/               # Layout + page
-    ├── components/        # FileDrop, Waveform (wavesurfer.js), VantaApp
+    ├── components/        # AudioCard, EngineCenter, VantaApp
     └── lib/api.ts         # API client
 
-deploy/hf-space/           # Bundle pushed to Hugging Face Space (Docker)
+deploy/hf-space/           # Docker bundle pushed to Hugging Face Spaces
 ```
+
+---
 
 ## Running locally
 
-**Prereqs**: Python 3.11+ (3.13 tested), Node 20+, git-lfs, a CUDA GPU if you want to train.
+**Prerequisites:** Python 3.11+, Node 20+, git-lfs, CUDA GPU (for training only)
 
 ```bash
-# 1. Install Python deps (creates venv)
+# 1. Python environment
 python -m venv .venv
 .venv/Scripts/pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu124
 .venv/Scripts/pip install -r requirements.txt
 
-# 2. Download datasets (resumable; ~12 GB total)
+# 2. Download datasets (~12 GB total, resumable)
 .venv/Scripts/python scripts/download_data.py
 
 # 3. Build training mixtures
@@ -160,23 +192,26 @@ python -m venv .venv
   --out checkpoints/run1 \
   --epochs 20 --batch-size 4 --repeats 2 --dropout 0.1 --amp-dtype bf16
 
-# 5. Serve the model
+# 5. Start the inference server
 .venv/Scripts/python -m uvicorn server:app --port 8000
 
-# 6. Run the frontend
-cd web && npm install && npm run dev  # http://localhost:3000
+# 6. Start the frontend
+cd web && npm install && npm run dev   # http://localhost:3000
 ```
 
-## Deploy
+---
 
-Backend ships as a Docker image to a Hugging Face Space — see [`deploy/hf-space/`](deploy/hf-space/). `build.sh` copies the minimal inference subset of the repo into the Space bundle; `git push` uploads model via Git LFS. Frontend is deployed to Vercel from the `web/` directory with `NEXT_PUBLIC_VANTA_API` pointing at the Space URL.
+## Deployment
 
-## What's not here
+**Backend** — ships as a Docker image to a Hugging Face Space. See [`deploy/hf-space/`](deploy/hf-space/). The `build.sh` script copies the minimal inference subset into the Space bundle; `git push` uploads the model checkpoint via Git LFS.
 
-- Real-time / streaming inference (currently file-based)
-- Multilingual training data (LibriSpeech is English-only — model degrades on other languages)
-- Dereverb (model preserves reverb by design; removing it is a separate task)
-- MOS-rated user study (metrics reported are objective only)
+**Frontend** — deployed to Vercel from the `web/` directory. Set the `NEXT_PUBLIC_VANTA_API` environment variable to the Hugging Face Space URL at build time.
 
-   
- 
+---
+
+## Limitations
+
+- **File-based only** — no real-time or streaming inference
+- **English-only** — trained on LibriSpeech; degrades on other languages
+- **Reverb preserved** — model keeps room acoustics by design; dereverb is a separate task
+- **Objective metrics only** — no MOS-rated user study conducted
