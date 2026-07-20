@@ -69,3 +69,19 @@ class SpeakerEncoder(nn.Module):
         if self.freeze:
             self.encoder.eval()
         return self
+
+    def _apply(self, fn, *args, **kwargs):
+        # speechbrain's EncoderClassifier keeps its OWN `device` attribute and
+        # moves incoming audio onto it. nn.Module.to()/.cpu()/.cuda() only move
+        # the weights, so without this the two drift apart and you get
+        # "Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor)
+        # should be the same" — which breaks CPU-only deployments.
+        out = super()._apply(fn, *args, **kwargs)
+        try:
+            dev = next(self.encoder.parameters()).device
+            self.encoder.device = dev
+            if hasattr(self.encoder, "mods"):
+                self.encoder.mods.to(dev)
+        except StopIteration:
+            pass
+        return out

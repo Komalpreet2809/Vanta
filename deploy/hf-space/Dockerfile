@@ -28,12 +28,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # App code + model checkpoint (large file — tracked via Git LFS).
 COPY . .
 
-# Default: pretrained SepFormer backbone — still the most robust on real-world
-# recordings, so it's what users get. The from-scratch model (val SI-SDR
-# +7.93 dB, median +8.70, on the realistic benchmark) ships in the image and is
-# one env var away: VANTA_BACKEND=trained. It matches SepFormer on synthetic
-# benchmarks but not yet on arbitrary real recordings.
-ENV VANTA_BACKEND=sepformer
+# Default: the from-scratch trained separator — val SI-SDR +7.93 dB (median
+# +8.70) on the realistic benchmark (952 speakers, real noise and rooms,
+# turn-taking, recording-chain degradation). The pretrained SepFormer backbone
+# also ships in this image as a fallback: set VANTA_BACKEND=sepformer in the
+# Space settings to switch, no rebuild needed.
+ENV VANTA_BACKEND=trained
 ENV VANTA_CHECKPOINT=checkpoints/best.pt
 ENV VANTA_REPEATS=3
 # Permissive CORS so the Vercel frontend (or a curl test) can hit the API.
