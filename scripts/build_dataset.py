@@ -39,6 +39,14 @@ def main() -> None:
         help="LibriSpeech subdir to draw voices from "
         "(e.g. 'dev-clean' for validation, 'train-clean-100' for training)",
     )
+    p.add_argument("--intf-snr", type=float, nargs=2, default=None, metavar=("MIN", "MAX"),
+                   help="target-vs-interference SNR range in dB; e.g. '0 10' for the "
+                        "realistic regime (target never quieter than interferer)")
+    p.add_argument("--augment", action="store_true",
+                   help="apply recording-chain augmentation (mic EQ, band-limiting, "
+                        "codec, room tone) to mimic real recordings")
+    p.add_argument("--partial-overlap", type=float, default=0.0, metavar="PROB",
+                   help="probability of turn-taking mixtures (see train.py)")
     args = p.parse_args()
 
     indices = build_default_indices(librispeech_split=args.source)
@@ -50,6 +58,12 @@ def main() -> None:
         use_noise=not args.no_noise,
         use_rir=not args.no_rir,
     )
+    if args.intf_snr is not None:
+        cfg.interference_snr_db = (args.intf_snr[0], args.intf_snr[1])
+    if args.augment:
+        cfg.augment.enabled = True
+    if args.partial_overlap > 0:
+        cfg.partial_overlap_prob = args.partial_overlap
     # Warn when a requested augmentation has no data backing it.
     if cfg.use_noise and "noise" not in indices:
         print("[warn] --no-noise not set but noise index missing; disabling noise")

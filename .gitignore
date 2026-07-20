@@ -5,9 +5,11 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# Datasets (too big for git)
-data/
-datasets/
+# Datasets (too big for git). Leading slash anchors these to the repo root —
+# a bare "data/" also matched vanta/data/, silently excluding the whole data
+# package source (indexer, synthesize, datasets) from version control.
+/data/
+/datasets/
 
 # Model checkpoints
 checkpoints/

@@ -38,7 +38,10 @@ cp server.py "$HERE/"
 
 echo "[build] copying checkpoint..."
 mkdir -p "$HERE/checkpoints"
-cp checkpoints/real_v2/best.pt "$HERE/checkpoints/best.pt"
+# ami_r3: from-scratch model, val SI-SDR +7.93 dB (median +8.70) on the full
+# realism stack — 952 speakers (921 read + 31 conversational AMI), WHAM real
+# noise, real + simulated RIRs, turn-taking, recording-chain augmentation.
+cp checkpoints/ami_r3/best.pt "$HERE/checkpoints/best.pt"
 
 echo "[build] done. contents:"
 cd "$HERE" && ls -la

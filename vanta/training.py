@@ -19,6 +19,11 @@ class TrainConfig:
     lr: float = 1e-3
     batch_size: int = 4
     val_batch_size: int = 4
+    # Accumulate grads over N batches before stepping. On the 8 GB 4060 we can't
+    # raise batch_size past ~4 (activation maps are (B, 512, 8000)), but SI-SDR
+    # training wants a larger effective batch to calm noisy gradients — the
+    # oscillation we saw at batch 4. Effective batch = batch_size * grad_accum.
+    grad_accum: int = 1
     num_epochs: int = 10
     grad_clip: float = 5.0
     val_every: int = 1          # epochs
@@ -180,12 +185,14 @@ def train(
         running_n = 0
         t0 = time.time()
         bar = tqdm(train_loader, desc=f"epoch {epoch}/{cfg.num_epochs}", leave=False)
+        accum = max(1, cfg.grad_accum)
+        optimizer.zero_grad(set_to_none=True)
+        n_batches = len(train_loader)
         for it, batch in enumerate(bar, 1):
             mix = batch["mixture"].to(device)
             tgt = batch["target"].to(device)
             enr = batch["enrollment"].to(device)
 
-            optimizer.zero_grad(set_to_none=True)
             if amp_on:
                 with torch.autocast(device_type="cuda", dtype=amp_dtype):
                     est = model(mix, enrollment=enr)
@@ -196,11 +203,17 @@ def train(
                 est = model(mix, enrollment=enr)
                 loss = si_sdr_loss(est, tgt)
 
-            scaler.scale(loss).backward()
-            scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(trainable, cfg.grad_clip)
-            scaler.step(optimizer)
-            scaler.update()
+            # Divide so accumulated grads average (not sum) over the micro-batches.
+            scaler.scale(loss / accum).backward()
+
+            # Step every `accum` micro-batches, and always on the final batch so
+            # no gradients are dropped at the epoch boundary.
+            if it % accum == 0 or it == n_batches:
+                scaler.unscale_(optimizer)
+                torch.nn.utils.clip_grad_norm_(trainable, cfg.grad_clip)
+                scaler.step(optimizer)
+                scaler.update()
+                optimizer.zero_grad(set_to_none=True)
 
             running += loss.item() * mix.size(0)
             running_n += mix.size(0)

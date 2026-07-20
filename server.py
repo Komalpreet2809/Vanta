@@ -17,9 +17,13 @@ from vanta.inference import VantaInference, VantaSepFormerInference
 
 # "trained" -> our from-scratch checkpoint (CHECKPOINT_PATH / VANTA_REPEATS)
 # "sepformer" -> SpeechBrain's pretrained SepFormer + our ECAPA selector
-BACKEND = os.environ.get("VANTA_BACKEND", "trained").lower()
-CHECKPOINT_PATH = Path(os.environ.get("VANTA_CHECKPOINT", "checkpoints/real/best.pt"))
-REPEATS = int(os.environ.get("VANTA_REPEATS", "2"))
+# Default backend is "sepformer": the pretrained backbone generalizes to real
+# recordings, whereas the from-scratch model has a domain gap (trained only on
+# synthetic LibriSpeech mixtures). Switch to the trained model — val SI-SDR
+# +7.10 dB on LibriSpeech dev — with VANTA_BACKEND=trained; it needs repeats=3.
+BACKEND = os.environ.get("VANTA_BACKEND", "sepformer").lower()
+CHECKPOINT_PATH = Path(os.environ.get("VANTA_CHECKPOINT", "checkpoints/ami_r3/best.pt"))
+REPEATS = int(os.environ.get("VANTA_REPEATS", "3"))
 SEPFORMER_SOURCE = os.environ.get(
     "VANTA_SEPFORMER", "speechbrain/sepformer-libri2mix"
 )
