@@ -11,6 +11,9 @@ __pycache__/
 /data/
 /datasets/
 
+# Local audio used for real-world listening tests (personal recordings)
+realtest/
+
 # Model checkpoints
 checkpoints/
 *.pt
