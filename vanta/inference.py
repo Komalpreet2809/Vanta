@@ -165,17 +165,32 @@ class VantaInference:
 
         estimate = est.squeeze(0).cpu().numpy()
 
-        # SI-SDR is scale-invariant, so nothing in training penalizes the decoder
-        # for drifting to huge amplitudes. Model outputs routinely peak at
-        # ±100+. Match the mixture's loudness so playback sounds natural and
-        # PCM_16 encoding doesn't clip.
-        mix_peak = float(np.max(np.abs(mixture[: len(estimate)]))) + 1e-8
-        est_peak = float(np.max(np.abs(estimate))) + 1e-8
-        estimate = estimate * (mix_peak * 0.95 / est_peak)
+        # SI-SDR is invariant to BOTH scale and sign, so training never
+        # constrains either: outputs routinely peak at ±100 and are often
+        # phase-inverted (a flipped waveform scores identically). That is
+        # inaudible on its own, but it breaks the residue below, where
+        # subtracting an inverted estimate *adds* it back instead.
+        #
+        # So align the estimate to the mixture by least squares — the scalar
+        # that best explains the mixture — which recovers the correct gain and
+        # sign together, and puts the estimate in the mixture's own frame.
+        mix_ref = mixture[: len(estimate)]
+        alpha = float(np.dot(mix_ref, estimate)) / (float(np.dot(estimate, estimate)) + 1e-8)
+        estimate = (alpha * estimate).astype(np.float32)
 
-        # Residue = what Vanta removed. Handy for demos — users can play it and
-        # hear "this is what the void consumed."
-        residue = mixture[: len(estimate)] - estimate
+        # Residue = what Vanta removed. Valid only because `estimate` is now in
+        # the mixture's frame: estimate + residue reconstructs the input exactly.
+        residue = mix_ref - estimate
+
+        # Playback gain, applied AFTER the decomposition so it can't corrupt it.
+        # A voice that was quiet in the mixture stays quiet once isolated, which
+        # is correct but hard to hear, so lift each track to a usable level.
+        def _for_playback(w: np.ndarray) -> np.ndarray:
+            peak = float(np.max(np.abs(w)))
+            return (w * (0.95 / peak)).astype(np.float32) if peak > 1e-6 else w
+
+        estimate = _for_playback(estimate)
+        residue = _for_playback(residue)
 
         meta = {
             "sample_rate": SAMPLE_RATE,
