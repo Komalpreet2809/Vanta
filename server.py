@@ -15,18 +15,24 @@ from fastapi.responses import JSONResponse, Response
 
 from vanta.inference import VantaInference, VantaSepFormerInference
 
-# "trained" -> our from-scratch checkpoint (CHECKPOINT_PATH / VANTA_REPEATS)
-# "sepformer" -> SpeechBrain's pretrained SepFormer + our ECAPA selector
-# Default backend is "sepformer": the pretrained backbone generalizes to real
-# recordings, whereas the from-scratch model has a domain gap (trained only on
-# synthetic LibriSpeech mixtures). Switch to the trained model — val SI-SDR
-# +7.10 dB on LibriSpeech dev — with VANTA_BACKEND=trained; it needs repeats=3.
-BACKEND = os.environ.get("VANTA_BACKEND", "sepformer").lower()
-CHECKPOINT_PATH = Path(os.environ.get("VANTA_CHECKPOINT", "checkpoints/ami_r3/best.pt"))
+# "trained"   -> our from-scratch separator + our from-scratch speaker encoder.
+#                No pretrained weights: SI-SDR +8.45 dB on the held-out set.
+# "sepformer" -> SpeechBrain's pretrained SepFormer + speaker selection.
+#
+# The backend is resolved ONCE at startup and never changes per request. There
+# is deliberately no automatic fallback: silently serving pretrained output
+# while presenting the result as the trained model would misrepresent what
+# users are getting. Switching backends is a manual, visible operator decision,
+# and /health always reports which one is live.
+BACKEND = os.environ.get("VANTA_BACKEND", "trained").lower()
+CHECKPOINT_PATH = Path(os.environ.get("VANTA_CHECKPOINT", "checkpoints/fully_ours/best.pt"))
 REPEATS = int(os.environ.get("VANTA_REPEATS", "3"))
 # Our own trained speaker encoder. Unset = SpeechBrain's pretrained ECAPA.
-# Must match whichever encoder the checkpoint's separator was trained against.
-SPK_ENCODER = os.environ.get("VANTA_SPK_ENCODER") or None
+# Must match whichever encoder the checkpoint's separator was trained against —
+# fully_ours/best.pt was trained against spk_encoder/best.pt, so they pair.
+SPK_ENCODER = os.environ.get(
+    "VANTA_SPK_ENCODER", "checkpoints/spk_encoder/best.pt"
+) or None
 SEPFORMER_SOURCE = os.environ.get(
     "VANTA_SEPFORMER", "speechbrain/sepformer-libri2mix"
 )

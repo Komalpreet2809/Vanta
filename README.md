@@ -117,15 +117,54 @@ y = s_target + α · s_interference + β · noise
 
 ## Results
 
-Evaluated on 500 held-out mixtures from 40 unseen speakers:
+Evaluated on 500 held-out mixtures from speakers never seen in training, using
+the realistic benchmark (real noise, real and simulated room impulse responses,
+turn-taking, recording-chain degradation):
 
-| Metric | Input mixture | Vanta output | Improvement |
-|---|---|---|---|
-| SI-SDR (mean) | −0.62 dB | +0.82 dB | **+1.43 dB** |
-| SI-SDR (median) | −0.52 dB | +1.48 dB | **+1.51 dB** |
-| STOI | — | 0.66 | — |
+| Metric | Value |
+|---|---|
+| SI-SDR (mean) | **+8.45 dB** |
+| SI-SDR (median) | **+9.28 dB** |
+| Improvement over input mixture | **+5.50 dB** |
+| PESQ | 1.247 |
+| STOI | 0.751 |
 
-On seen speakers (training set), the model reaches **+5 to +9 dB SI-SDR improvement**, showing it can mask cleanly when it has heard the voice. The ~+1.5 dB ceiling on unseen speakers is a data-diversity bottleneck; training on `train-clean-360` with more epochs would push it higher.
+### No pretrained weights
+
+Both learned components are trained from scratch in this repository — 9.5M
+parameters total, none of them borrowed:
+
+| Component | Params | Training |
+|---|---|---|
+| Separator (Conv-TasNet style) | 3.5M | 40 epochs, 952 speakers |
+| Speaker encoder (ECAPA-TDNN) | 6.0M | 20 epochs, 1583 speakers |
+
+Replacing the pretrained ECAPA with our own encoder *improved* every metric
+(+7.93 → +8.45 dB SI-SDR, PESQ 1.182 → 1.247, STOI 0.739 → 0.751) and made CPU
+inference ~6× faster. Measured head-to-head against the pretrained encoder on
+40 held-out speakers (`scripts/compare_encoders.py`):
+
+| | ours | pretrained ECAPA |
+|---|---|---|
+| clean margin | **+0.607** | +0.526 |
+| clean pair-accuracy | **99.8%** | 99.2% |
+| degraded margin | **+0.538** | +0.449 |
+| degraded pair-accuracy | 98.0% | **99.2%** |
+
+The pretrained encoder remains slightly more reliable on hard degraded pairs,
+which is what VoxCeleb's ~4× larger speaker count buys. Note also that this
+evaluation is LibriSpeech throughout — the domain our encoder trained on — so it
+does not settle behaviour on arbitrary real-world recordings.
+
+### Which model is actually serving
+
+The deployment runs the from-scratch models described above. A pretrained
+SepFormer backend also exists in the codebase, but it is **not active in
+production** and there is deliberately no automatic fallback: silently serving
+pretrained output while presenting it as the trained model would misrepresent
+what users receive. Switching is a manual operator decision, and
+[`/health`](https://komalsohal-vanta.hf.space/health) always reports which
+backend is live.
 
 ---
 
