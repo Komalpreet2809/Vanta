@@ -35,6 +35,7 @@ COPY . .
 # Space settings to switch, no rebuild needed.
 ENV VANTA_BACKEND=trained
 ENV VANTA_CHECKPOINT=checkpoints/best.pt
+ENV VANTA_SPK_ENCODER=checkpoints/spk_encoder.pt
 ENV VANTA_REPEATS=3
 # Permissive CORS so the Vercel frontend (or a curl test) can hit the API.
 ENV VANTA_ALLOWED_ORIGINS=*

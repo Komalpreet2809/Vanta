@@ -30,6 +30,7 @@ cp vanta/models/__init__.py "$HERE/vanta/models/"
 cp vanta/models/audio_encoder.py "$HERE/vanta/models/"
 cp vanta/models/separator.py "$HERE/vanta/models/"
 cp vanta/models/speaker_encoder.py "$HERE/vanta/models/"
+cp vanta/models/ecapa_tdnn.py "$HERE/vanta/models/"
 cp vanta/models/vanta.py "$HERE/vanta/models/"
 cp vanta/models/sepformer_tse.py "$HERE/vanta/models/"
 
@@ -38,10 +39,12 @@ cp server.py "$HERE/"
 
 echo "[build] copying checkpoint..."
 mkdir -p "$HERE/checkpoints"
-# ami_r3: from-scratch model, val SI-SDR +7.93 dB (median +8.70) on the full
-# realism stack — 952 speakers (921 read + 31 conversational AMI), WHAM real
-# noise, real + simulated RIRs, turn-taking, recording-chain augmentation.
-cp checkpoints/ami_r3/best.pt "$HERE/checkpoints/best.pt"
+# fully_ours: separator (val SI-SDR +8.45 dB, median +9.28) conditioned on our
+# own trained speaker encoder — no pretrained weights anywhere in the model.
+# Both checkpoints ship: the separator was trained against this exact encoder,
+# so they must be deployed as a pair.
+cp checkpoints/fully_ours/best.pt "$HERE/checkpoints/best.pt"
+cp checkpoints/spk_encoder/best.pt "$HERE/checkpoints/spk_encoder.pt"
 
 echo "[build] done. contents:"
 cd "$HERE" && ls -la
