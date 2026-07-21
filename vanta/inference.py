@@ -113,12 +113,15 @@ class VantaInference:
 
     Load once at startup, call `.extract(mixture_bytes, enrollment_bytes)` per
     request. Returns (extracted_wav_bytes, residue_wav_bytes).
+
+    `repeats` and `speaker_encoder_ckpt` must match how the checkpoint was
+    trained — the current models use repeats=3 with our own encoder.
     """
 
     def __init__(
         self,
         checkpoint_path: Path,
-        repeats: int = 2,
+        repeats: int = 3,
         device: str = "auto",
         speaker_encoder_ckpt: str | None = None,
     ):

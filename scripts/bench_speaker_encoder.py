@@ -1,11 +1,16 @@
 """Benchmark speaker-embedding discriminability under recording degradation.
 
 Why this exists:
-    Analysis of a real phone recording showed the frozen ECAPA encoder gave only
-    a ~0.15 cosine margin between the target speaker and the interferer, where
-    clean audio typically gives 0.3-0.5. A separator conditioned on an uncertain
-    fingerprint hedges — it attenuates everything a little instead of removing
-    the interferer. So the embedding, not the separator, is the bottleneck.
+    A real phone recording appeared to show the encoder giving only a ~0.15
+    cosine margin between target and interferer, suggesting the embedding was
+    the bottleneck. That measurement was wrong — it embedded windows of the
+    *mixture*, and every window contains both voices, so a small margin was
+    inevitable regardless of encoder quality.
+
+    This script measures the encoder properly, on single-speaker audio, clean
+    and degraded. It found the pretrained ECAPA holds 99% pair accuracy even
+    under degradation, ruling it out as the real-world bottleneck, and it is the
+    same protocol later used to evaluate the encoder trained in this repo.
 
 What it measures (the number we optimize):
     margin = mean cos(enroll, same-speaker utt) - mean cos(enroll, other-speaker utt)

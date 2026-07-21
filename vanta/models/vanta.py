@@ -1,16 +1,15 @@
 """The full Vanta model: encoder + separator + decoder + speaker encoder.
 
 Forward pass:
-    1. Speaker encoder (frozen ECAPA-TDNN) turns the enrollment into a 192-d
-       fingerprint. Runs under no_grad so it doesn't train.
+    1. Speaker encoder (frozen) turns the enrollment into a 192-d fingerprint.
+       Runs under no_grad so it doesn't train. Which encoder that is depends on
+       VantaConfig.speaker_encoder_ckpt — our own ECAPA-TDNN when set, otherwise
+       speechbrain's pretrained one. They are NOT interchangeable after
+       training: the separator learns to read one embedding space.
     2. Audio encoder turns the mixture into a (B, N, T') feature map.
     3. Separator predicts a mask (B, N, T'), conditioned on the fingerprint.
     4. Mask * features -> masked features.
     5. Audio decoder turns masked features back into a waveform.
-
-Phase 3 deliverable: this runs end-to-end with random init. The weights are
-trash (untrained), so the output is garbage audio, but shapes, gradients, and
-conditioning pathways must all work.
 """
 
 from __future__ import annotations
