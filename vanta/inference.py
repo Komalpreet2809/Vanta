@@ -29,29 +29,59 @@ ENROLL_SECONDS = 5.0
 
 
 def _ffmpeg_decode(raw: bytes) -> np.ndarray:
-    """Pipe arbitrary-container bytes through ffmpeg, get mono 16 kHz float32.
+    """Decode arbitrary-container bytes to mono 16 kHz float32 via ffmpeg.
 
-    libsndfile can't read MP4/M4A/WebM/MOV and so on. ffmpeg can. We spawn it
-    on demand and stream in/out via pipes to avoid temp files.
+    libsndfile can't read MP4/M4A/WebM/MOV and so on; ffmpeg can.
+
+    Piping is tried first (no temp file), but it is not sufficient on its own:
+    MP4/MOV keep their index in a `moov` atom that may sit *after* the media
+    data, and ffmpeg cannot rewind a pipe to find it. Such files decode to zero
+    samples while still exiting 0 — which surfaces downstream as a confusing
+    "Calculated padded input size per channel: (0)" from the first conv layer.
+    Phone recordings routinely lack the faststart flag, so we fall back to a
+    real temp file, which ffmpeg *can* seek.
     """
     from imageio_ffmpeg import get_ffmpeg_exe
 
-    cmd = [
-        get_ffmpeg_exe(),
-        "-hide_banner",
-        "-loglevel", "error",
-        "-i", "pipe:0",
-        "-vn",                      # ignore any video stream
-        "-ac", "1",                 # mono
-        "-ar", str(SAMPLE_RATE),
-        "-f", "f32le",              # raw float32 output — trivial to np.frombuffer
-        "pipe:1",
-    ]
-    proc = subprocess.run(cmd, input=raw, capture_output=True)
-    if proc.returncode != 0:
-        err = proc.stderr.decode("utf-8", errors="replace").strip()
-        raise ValueError(f"ffmpeg decode failed: {err or 'no stderr'}")
-    return np.frombuffer(proc.stdout, dtype=np.float32).copy()
+    def run(source: str, stdin: bytes | None) -> bytes:
+        cmd = [
+            get_ffmpeg_exe(),
+            "-hide_banner",
+            "-loglevel", "error",
+            "-i", source,
+            "-vn",                  # ignore any video stream
+            "-ac", "1",             # mono
+            "-ar", str(SAMPLE_RATE),
+            "-f", "f32le",          # raw float32 output — trivial to np.frombuffer
+            "pipe:1",
+        ]
+        proc = subprocess.run(cmd, input=stdin, capture_output=True)
+        if proc.returncode != 0:
+            err = proc.stderr.decode("utf-8", errors="replace").strip()
+            raise ValueError(f"ffmpeg decode failed: {err or 'no stderr'}")
+        return proc.stdout
+
+    try:
+        out = run("pipe:0", raw)
+    except ValueError:
+        out = b""
+    if out:
+        return np.frombuffer(out, dtype=np.float32).copy()
+
+    # Empty output: the container needed seeking. Retry from a real file.
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(suffix=".bin", delete=False) as tmp:
+        tmp.write(raw)
+        path = tmp.name
+    try:
+        out = run(path, None)
+    finally:
+        Path(path).unlink(missing_ok=True)
+
+    if not out:
+        raise ValueError("ffmpeg produced no audio — is there an audio stream?")
+    return np.frombuffer(out, dtype=np.float32).copy()
 
 
 def _to_mono_16k(raw: bytes) -> np.ndarray:
@@ -85,13 +115,24 @@ class VantaInference:
     request. Returns (extracted_wav_bytes, residue_wav_bytes).
     """
 
-    def __init__(self, checkpoint_path: Path, repeats: int = 2, device: str = "auto"):
+    def __init__(
+        self,
+        checkpoint_path: Path,
+        repeats: int = 2,
+        device: str = "auto",
+        speaker_encoder_ckpt: str | None = None,
+    ):
         if device == "auto":
             device = "cuda" if torch.cuda.is_available() else "cpu"
         self.device = torch.device(device)
-        self.model = Vanta(VantaConfig(repeats=repeats))
+        self.model = Vanta(
+            VantaConfig(repeats=repeats, speaker_encoder_ckpt=speaker_encoder_ckpt)
+        )
         ck = torch.load(checkpoint_path, map_location=self.device, weights_only=False)
-        self.model.load_state_dict(ck["model_state"])
+        # strict=False when swapping encoders: the separator weights are what the
+        # checkpoint carries, while the speaker encoder's weights come from
+        # whichever encoder was constructed above.
+        self.model.load_state_dict(ck["model_state"], strict=speaker_encoder_ckpt is None)
         self.model.to(self.device).eval()
 
     @torch.no_grad()

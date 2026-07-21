@@ -24,6 +24,9 @@ from vanta.inference import VantaInference, VantaSepFormerInference
 BACKEND = os.environ.get("VANTA_BACKEND", "sepformer").lower()
 CHECKPOINT_PATH = Path(os.environ.get("VANTA_CHECKPOINT", "checkpoints/ami_r3/best.pt"))
 REPEATS = int(os.environ.get("VANTA_REPEATS", "3"))
+# Our own trained speaker encoder. Unset = SpeechBrain's pretrained ECAPA.
+# Must match whichever encoder the checkpoint's separator was trained against.
+SPK_ENCODER = os.environ.get("VANTA_SPK_ENCODER") or None
 SEPFORMER_SOURCE = os.environ.get(
     "VANTA_SEPFORMER", "speechbrain/sepformer-libri2mix"
 )
@@ -55,7 +58,9 @@ def _load_model() -> None:
         if not CHECKPOINT_PATH.exists():
             # Don't crash the server; /health will report degraded and /extract 503s.
             return
-        _inference = VantaInference(CHECKPOINT_PATH, repeats=REPEATS)
+        _inference = VantaInference(
+            CHECKPOINT_PATH, repeats=REPEATS, speaker_encoder_ckpt=SPK_ENCODER
+        )
 
 
 @app.get("/health")
@@ -70,6 +75,7 @@ def health() -> JSONResponse:
         info["sepformer_source"] = SEPFORMER_SOURCE
     else:
         info["checkpoint"] = str(CHECKPOINT_PATH)
+        info["speaker_encoder"] = str(SPK_ENCODER) if SPK_ENCODER else "pretrained-ecapa"
     return JSONResponse(info)
 
 

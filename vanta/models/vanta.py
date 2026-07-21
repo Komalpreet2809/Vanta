@@ -67,6 +67,10 @@ class VantaConfig:
     repeats: int = 3
     speaker_dim: int = 192
     freeze_speaker: bool = True
+    # Path to our own trained ECAPA-TDNN. None = SpeechBrain's pretrained ECAPA.
+    # Switching this changes the embedding space the separator is conditioned on,
+    # so a separator trained against one encoder needs re-training for the other.
+    speaker_encoder_ckpt: str | None = None
     dropout: float = 0.0
     specaug_num_masks: int = 0        # 0 disables SpecAugment
     specaug_max_width: int = 40
@@ -102,7 +106,9 @@ class Vanta(nn.Module):
             num_masks=cfg.specaug_num_masks,
             max_width=cfg.specaug_max_width,
         )
-        self.speaker_encoder = SpeakerEncoder(freeze=cfg.freeze_speaker)
+        self.speaker_encoder = SpeakerEncoder.load(
+            checkpoint=cfg.speaker_encoder_ckpt, freeze=cfg.freeze_speaker
+        )
 
     def embed_speaker(self, enrollment: torch.Tensor) -> torch.Tensor:
         """enrollment: (B, T_enroll). Returns (B, speaker_dim)."""

@@ -72,6 +72,10 @@ def main() -> None:
     p.add_argument("--no-amp", action="store_true", help="disable mixed precision")
     p.add_argument("--amp-dtype", choices=["bf16", "fp16"], default="bf16")
     p.add_argument("--repeats", type=int, default=2, help="TCN R (total blocks = R*X=R*8)")
+    p.add_argument("--speaker-encoder", type=Path, default=None,
+                   help="our trained ECAPA-TDNN checkpoint. Omit to use SpeechBrain's "
+                        "pretrained ECAPA. Switching changes the embedding space the "
+                        "separator conditions on, so re-train after switching.")
     p.add_argument("--dropout", type=float, default=0.0, help="Dropout1d prob in TCN blocks")
     p.add_argument("--specaug-masks", type=int, default=0,
                    help="SpecAugment: number of time masks per sample (0 = off)")
@@ -139,13 +143,23 @@ def main() -> None:
         dropout=args.dropout,
         specaug_num_masks=args.specaug_masks,
         specaug_max_width=args.specaug_width,
+        speaker_encoder_ckpt=str(args.speaker_encoder) if args.speaker_encoder else None,
     )
     model = Vanta(model_cfg)
+    if args.speaker_encoder:
+        print(f"[speaker-encoder] using our trained encoder: {args.speaker_encoder}")
     if args.init_from is not None:
         ck = torch.load(args.init_from, map_location="cpu", weights_only=False)
-        model.load_state_dict(ck["model_state"])
+        # strict=False when the encoder differs from the one in the checkpoint:
+        # we want the separator's weights, not the old encoder's.
+        missing, unexpected = model.load_state_dict(
+            ck["model_state"], strict=args.speaker_encoder is None
+        )
         print(f"[init-from] warm-started model weights from {args.init_from} "
               f"(epoch {ck.get('epoch', '?')}); fresh optimizer/schedule")
+        if args.speaker_encoder:
+            print(f"[init-from] separator loaded; speaker encoder kept from "
+                  f"--speaker-encoder ({len(missing)} missing / {len(unexpected)} unexpected keys)")
     cfg = TrainConfig(
         lr=args.lr,
         batch_size=args.batch_size,
