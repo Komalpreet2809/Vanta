@@ -75,8 +75,12 @@ export function VantaApp() {
       const startTime = Date.now();
       const r = await extract(mixture, enrollment);
       const elapsed = Date.now() - startTime;
-      const minDuration = 5000; // Match the 5s visual sequence
-      
+
+      // Intentional floor, not latency: hold results until the staged animation
+      // finishes. Extraction can return in well under a second on GPU, and an
+      // instant result reads as "nothing happened" rather than "that was fast".
+      // Deliberate — don't remove it as an optimisation.
+      const minDuration = 5000;
       if (elapsed < minDuration) {
         await new Promise(resolve => setTimeout(resolve, minDuration - elapsed));
       }
