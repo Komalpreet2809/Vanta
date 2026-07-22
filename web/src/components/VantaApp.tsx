@@ -178,6 +178,12 @@ export function VantaApp() {
                     />
                 </div>
 
+                {/* Desktop only: balances the activity strip closing the outputs
+                    column, so both columns spend the same height on cards.
+                    Below xl it reappears after the outputs (see end of grid). */}
+                <div className="hidden xl:block h-20 shrink-0 mt-1">
+                  <TipsCard />
+                </div>
             </div>
           </section>
 
@@ -236,7 +242,10 @@ export function VantaApp() {
                     </div>
                  </div>
 
-                 <div className="h-auto min-h-20 xl:h-20 shrink-0 mt-1">
+                 {/* Below xl only: with the columns stacked, tips read best as
+                     a closing note. On desktop it lives in the inputs column
+                     instead, so neither column carries an extra strip. */}
+                 <div className="xl:hidden h-auto min-h-20 shrink-0 mt-1">
                     <TipsCard />
                  </div>
              </div>
