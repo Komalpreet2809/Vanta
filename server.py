@@ -40,8 +40,15 @@ MAX_UPLOAD_BYTES = int(os.environ.get("VANTA_MAX_UPLOAD_BYTES", 25 * 1024 * 1024
 
 app = FastAPI(title="Vanta TSE", version="0.1.0")
 
-# Permissive CORS for the demo deployment. In production you'd lock this down
-# to the Vercel frontend's origin via VANTA_ALLOWED_ORIGINS.
+# Permissive CORS for the demo deployment; set VANTA_ALLOWED_ORIGINS to the
+# frontend's origin to lock it down.
+#
+# Known and accepted for a public demo: /extract runs a neural network on
+# arbitrary uploads with no authentication and no rate limit, so a script could
+# keep the Space's CPU busy indefinitely. Uploads are capped at
+# VANTA_MAX_UPLOAD_BYTES and audio at 30s, which bounds the cost of any single
+# request but not the number of them. Anything handling real traffic wants a
+# per-IP limit and a request queue in front of this.
 origins = os.environ.get("VANTA_ALLOWED_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,

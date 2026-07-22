@@ -279,6 +279,20 @@ recording-chain degradation.
 
 </div>
 
+### What it looks like
+
+![Mixture, extracted and residue spectrograms](docs/spectrogram.png)
+
+Two speakers overlap continuously in the mixture. In the extracted panel the
+target's harmonic stacks survive while the gaps — around 1.5s, 3.5s and 5.5s —
+go dark, which is the model producing silence where the target stops talking
+rather than passing the other voice through. The residue is what it removed;
+it still carries some content, consistent with the 84.3% capture above.
+
+All three panels share one colour scale at true relative levels, so brightness
+is directly comparable. Regenerate with
+[`make_spectrogram_figure.py`](scripts/make_spectrogram_figure.py).
+
 ### How it got here
 
 Each jump came from a diagnosed failure, not from more compute. The full
@@ -503,6 +517,7 @@ at build time.
 | **File-based** | No real-time or streaming inference |
 | **Reverb preserved** | The model keeps room acoustics by design; dereverberation is a separate task |
 | **Objective metrics only** | No MOS-rated listening study |
+| **Demo-grade serving** | `/extract` has no auth or rate limit; uploads and duration are capped, but request volume is not. Real traffic wants a per-IP limit and a queue |
 
 ---
 
