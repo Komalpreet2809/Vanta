@@ -46,3 +46,6 @@ deploy/hf-space/server.py
 # OS
 Thumbs.db
 .DS_Store
+
+# Local commit-message helper, not part of the project
+remove_claude.py
