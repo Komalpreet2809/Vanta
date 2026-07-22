@@ -19,11 +19,30 @@ export async function extract(
 
   // Ask the backend to include the residue so users can hear what Vanta removed.
   const url = `${apiBase()}/extract?include_residue=true`;
-  const resp = await fetch(url, { method: "POST", body });
+
+  let resp: Response;
+  try {
+    resp = await fetch(url, { method: "POST", body });
+  } catch {
+    // fetch only rejects on network-level failure, not HTTP errors.
+    throw new Error("Could not reach the server. Check your connection and try again.");
+  }
 
   if (!resp.ok) {
-    const detail = await resp.text().catch(() => resp.statusText);
-    throw new Error(`extract failed (${resp.status}): ${detail}`);
+    // FastAPI errors come back as {"detail": "..."}; surface just that, since
+    // the raw body would otherwise be shown to the user verbatim.
+    const raw = await resp.text().catch(() => "");
+    let detail = raw;
+    try {
+      const parsed = JSON.parse(raw) as { detail?: string };
+      if (parsed?.detail) detail = parsed.detail;
+    } catch {
+      /* not JSON — fall back to the raw body */
+    }
+    if (resp.status === 413) {
+      throw new Error("That file is too large. Please use a shorter clip.");
+    }
+    throw new Error(detail || `Extraction failed (${resp.status}).`);
   }
 
   const data = (await resp.json()) as ExtractJSON;

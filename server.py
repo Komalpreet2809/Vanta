@@ -105,7 +105,14 @@ async def extract(
     try:
         extracted, residue, meta = _inference.extract(mix_bytes, enr_bytes)
     except Exception as e:
-        raise HTTPException(400, f"failed to decode audio: {e}") from e
+        # The underlying error is usually raw ffmpeg stderr, which is meaningless
+        # to a user and leaks server temp paths. Log it, return something useful.
+        print(f"[SERVER] extraction failed: {type(e).__name__}: {e}")
+        raise HTTPException(
+            400,
+            "Could not read that audio. Check both files play correctly and are "
+            "in a supported format (WAV, MP3, M4A, MP4, FLAC, OGG).",
+        ) from e
 
     # If the caller didn't ask for the residue, return just the extracted voice
     # as raw audio bytes (lowest friction for the frontend's download button).

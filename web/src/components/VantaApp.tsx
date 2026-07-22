@@ -27,6 +27,7 @@ export function VantaApp() {
   const [backend, setBackend] = useState<"checking" | "online" | "offline">("checking");
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -71,6 +72,7 @@ export function VantaApp() {
     if (!mixture || !enrollment) return;
     setStatus("running");
     setResult(null);
+    setError(null);
     try {
       const startTime = Date.now();
       const r = await extract(mixture, enrollment);
@@ -93,6 +95,7 @@ export function VantaApp() {
       }, 800);
     } catch (e) {
       console.error(e);
+      setError(e instanceof Error ? e.message : "Extraction failed. Please try again.");
       setStatus("error");
     }
   }, [mixture, enrollment]);
@@ -113,6 +116,7 @@ export function VantaApp() {
     setStatus("idle");
     setProgress(0);
     setStage("");
+    setError(null);
   }, []);
 
   const startTour = useCallback(() => {
@@ -256,12 +260,24 @@ export function VantaApp() {
                      >
                           <Activity className={`w-6 h-6 ${status === 'running' ? 'animate-pulse' : 'text-[var(--text-muted)] opacity-50 group-hover/status:opacity-100'} transition-opacity`} />
                      </motion.div>
-                    <div className="flex flex-col">
-                        <span className="font-mono-heading text-[12px] font-black tracking-widest">
-                            {status === 'running' ? "PROCESSING IN REAL-TIME" : "READY TO PROCESS"}
+                    <div className="flex flex-col min-w-0">
+                        <span className={`font-mono-heading text-[12px] font-black tracking-widest ${status === 'error' ? 'text-red-400' : ''}`}>
+                            {status === 'error'
+                                ? "EXTRACTION FAILED"
+                                : status === 'running'
+                                    ? "PROCESSING IN REAL-TIME"
+                                    : backend === 'offline'
+                                        ? "BACKEND UNREACHABLE"
+                                        : "READY TO PROCESS"}
                         </span>
-                        <span className="text-[9px] text-[var(--text-muted)] font-bold opacity-80">
-                            {status === 'running' ? `${stage} • ${Math.round(progress)}%` : "Both signals are processed simultaneously for best results."}
+                        <span className={`text-[9px] font-bold opacity-80 truncate ${status === 'error' || backend === 'offline' ? 'text-red-400/80' : 'text-[var(--text-muted)]'}`}>
+                            {status === 'error'
+                                ? error ?? "Something went wrong. Please try again."
+                                : status === 'running'
+                                    ? `${stage} • ${Math.round(progress)}%`
+                                    : backend === 'offline'
+                                        ? "The inference API is not responding — extraction is unavailable."
+                                        : "Both signals are processed simultaneously for best results."}
                         </span>
                     </div>
                 </div>
@@ -279,7 +295,7 @@ export function VantaApp() {
                                 : 'bg-[var(--bg-app)] border border-[var(--border-main)] opacity-30 cursor-not-allowed'
                         }`}
                     >
-                        {status === 'running' ? "EXTRACTING..." : "START EXTRACTION"}
+                        {status === 'running' ? "EXTRACTING..." : status === 'error' ? "TRY AGAIN" : "START EXTRACTION"}
                     </button>
                 </div>
             </motion.div>
