@@ -139,7 +139,9 @@ export function VantaApp() {
     <div className="min-h-screen xl:h-screen w-full flex flex-col bg-[var(--bg-app)] xl:overflow-hidden font-sans">
         <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[450px_1fr_450px] lg:grid-cols-[380px_1fr_380px] xl:overflow-hidden px-4 md:px-8 xl:px-12 gap-8 xl:gap-10 py-6">
+        {/* pb-40 below xl: the extract bar is fixed to the viewport bottom
+            there, so the last card needs room to scroll clear of it. */}
+        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[450px_1fr_450px] lg:grid-cols-[380px_1fr_380px] xl:overflow-hidden px-4 md:px-8 xl:px-12 gap-8 xl:gap-10 pt-6 pb-40 xl:pb-6">
           {/* INPUTS COLUMN */}
           <section id="vanta-inputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden">
             <div className="mb-3 shrink-0">
