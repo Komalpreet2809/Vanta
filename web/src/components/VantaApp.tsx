@@ -117,8 +117,10 @@ export function VantaApp() {
       setEnrollment(ref);
       setMixture(mix);
     } catch {
+      // Deliberately not setStatus("error"): nothing was extracted, and that
+      // state is only cleared by a successful run or a reset, which would leave
+      // the bar reading EXTRACTION FAILED indefinitely.
       setError("Could not load the example. Please upload your own audio.");
-      setStatus("error");
     } finally {
       setSampleLoading(false);
     }
@@ -129,8 +131,17 @@ export function VantaApp() {
     const a = document.createElement("a");
     a.href = url;
     a.download = name;
+    // Firefox requires the anchor to be in the document, and revoking the URL
+    // in the same tick cancels the download or writes a 0-byte file in Firefox
+    // and some Safari versions. Chrome tolerates both, which is why this looked
+    // fine locally.
+    a.style.display = "none";
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 0);
   }, []);
 
   const reset = useCallback(() => {
@@ -312,6 +323,8 @@ export function VantaApp() {
                         <span className={`font-mono-heading text-[12px] font-black tracking-widest ${status === 'error' ? 'text-red-400' : ''}`}>
                             {status === 'error'
                                 ? "EXTRACTION FAILED"
+                                : error
+                                    ? "COULD NOT LOAD"
                                 : status === 'running'
                                     ? "PROCESSING IN REAL-TIME"
                                     : backend === 'offline'
@@ -319,7 +332,7 @@ export function VantaApp() {
                                         : "READY TO PROCESS"}
                         </span>
                         <span className={`text-[9px] font-bold opacity-80 truncate ${status === 'error' || backend === 'offline' ? 'text-red-400/80' : 'text-[var(--text-muted)]'}`}>
-                            {status === 'error'
+                            {status === 'error' || error
                                 ? error ?? "Something went wrong. Please try again."
                                 : status === 'running'
                                     ? `${stage} • ${Math.round(progress)}%`

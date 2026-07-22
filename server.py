@@ -10,7 +10,7 @@ import asyncio
 import os
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
@@ -58,6 +58,8 @@ app.add_middleware(
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
+    # Custom response headers are invisible to browser JS unless named here.
+    expose_headers=["X-Sample-Rate", "X-Output-Seconds", "X-Truncated"],
 )
 
 # Load the model once at import time so the first request isn't slow.
@@ -72,12 +74,26 @@ def _load_model() -> None:
     if BACKEND == "sepformer":
         _inference = VantaSepFormerInference(sepformer_source=SEPFORMER_SOURCE)
     else:
-        if not CHECKPOINT_PATH.exists():
-            # Don't crash the server; /health will report degraded and /extract 503s.
+        # Report degraded rather than crash. Checking only the separator was not
+        # enough: a missing or unreadable speaker encoder raised inside startup
+        # and took uvicorn down with it, which is the failure this guard exists
+        # to prevent. Loading can also fail on a truncated or mismatched
+        # checkpoint, so the whole construction is guarded, not just the paths.
+        missing = [
+            str(p) for p in (CHECKPOINT_PATH, Path(SPK_ENCODER) if SPK_ENCODER else None)
+            if p is not None and not p.exists()
+        ]
+        if missing:
+            print(f"[SERVER] checkpoints missing: {', '.join(missing)}")
+            print("[SERVER] run scripts/download_weights.py; /extract will 503")
             return
-        _inference = VantaInference(
-            CHECKPOINT_PATH, repeats=REPEATS, speaker_encoder_ckpt=SPK_ENCODER
-        )
+        try:
+            _inference = VantaInference(
+                CHECKPOINT_PATH, repeats=REPEATS, speaker_encoder_ckpt=SPK_ENCODER
+            )
+        except Exception as e:
+            print(f"[SERVER] failed to load checkpoints: {type(e).__name__}: {e}")
+            return
 
 
 @app.get("/health")
@@ -98,6 +114,7 @@ def health() -> JSONResponse:
 
 @app.post("/extract")
 async def extract(
+    request: Request,
     mixture: UploadFile = File(..., description="noisy/multi-speaker audio"),
     enrollment: UploadFile = File(..., description="5-second clean clip of target speaker"),
     include_residue: bool = False,
@@ -105,6 +122,13 @@ async def extract(
     print(f"\n[SERVER] Received extraction request: {mixture.filename} & {enrollment.filename}")
     if _inference is None:
         raise HTTPException(503, "model not loaded — did you mount the checkpoint?")
+
+    # Reject on Content-Length first. Reading the bodies before checking meant
+    # an oversized upload was fully received and spooled to disk before being
+    # refused, so the cap bounded processing but not ingest.
+    declared = request.headers.get("content-length")
+    if declared and declared.isdigit() and int(declared) > 2 * MAX_UPLOAD_BYTES:
+        raise HTTPException(413, f"upload too large (max {MAX_UPLOAD_BYTES} bytes per file)")
 
     mix_bytes = await mixture.read()
     enr_bytes = await enrollment.read()
