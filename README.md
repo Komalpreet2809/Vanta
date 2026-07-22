@@ -2,7 +2,7 @@
 
 # Vanta
 
-![Vanta](vantaimage.png)
+
 
 ### Isolate one voice from a room full of them.
 
@@ -20,6 +20,7 @@ It returns only that person — plus a residue track of everything it removed.
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
 **`+9.28 dB`** median SI-SDR on unseen speakers &nbsp;·&nbsp; **`9.5M`** parameters &nbsp;·&nbsp; **`0`** pretrained weights
+![Vanta](vantaimage.png)
 
 </div>
 
