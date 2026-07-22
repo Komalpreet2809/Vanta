@@ -172,9 +172,6 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="h-auto min-h-20 xl:h-20 shrink-0 mt-1">
-                  <TipsCard />
-                </div>
             </div>
           </section>
 
@@ -231,6 +228,10 @@ export function VantaApp() {
                          Your outputs will be available here once processing is complete.
                        </p>
                     </div>
+                 </div>
+
+                 <div className="h-auto min-h-20 xl:h-20 shrink-0 mt-1">
+                    <TipsCard />
                  </div>
              </div>
            </section>
