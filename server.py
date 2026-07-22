@@ -6,10 +6,12 @@ Run locally:
 
 from __future__ import annotations
 
+import asyncio
 import os
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
@@ -60,6 +62,8 @@ app.add_middleware(
 
 # Load the model once at import time so the first request isn't slow.
 _inference: VantaInference | None = None
+# Serialises inference; see the comment at its use site in /extract.
+_extract_lock = asyncio.Lock()
 
 
 @app.on_event("startup")
@@ -110,7 +114,19 @@ async def extract(
         raise HTTPException(400, "both mixture and enrollment files are required")
 
     try:
-        extracted, residue, meta = _inference.extract(mix_bytes, enr_bytes)
+        # Off the event loop: extract() is synchronous CPU-bound torch, and this
+        # handler is async, so calling it directly stalls every other request for
+        # the duration. Measured on the CPU deployment, /health went from 1.3s to
+        # 5.0s while one extraction ran.
+        #
+        # The lock keeps that threadpool to one extraction at a time. A single
+        # model instance is shared across requests, and concurrent CPU inference
+        # on one process would contend for the same cores anyway — serialising is
+        # both safer and no slower in aggregate.
+        async with _extract_lock:
+            extracted, residue, meta = await run_in_threadpool(
+                _inference.extract, mix_bytes, enr_bytes
+            )
     except Exception as e:
         # The underlying error is usually raw ffmpeg stderr, which is meaningless
         # to a user and leaks server temp paths. Log it, return something useful.
