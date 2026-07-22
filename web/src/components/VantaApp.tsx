@@ -197,7 +197,7 @@ export function VantaApp() {
                       heading="CLEAN VOICE"
                       source={result?.extracted ?? null}
                       variant="green"
-                      onDownload={result ? () => download(result.extracted, "vanta_clean.mp3") : undefined}
+                      onDownload={result ? () => download(result.extracted, "vanta_clean.wav") : undefined}
                       emptyLabel="Your clean voice will appear here"
                       className="h-full"
                     />
@@ -209,7 +209,7 @@ export function VantaApp() {
                       heading="RESIDUE (NOISE)"
                       source={result?.residue ?? null}
                       variant="purple"
-                      onDownload={result ? () => download(result.residue, "vanta_residue.mp3") : undefined}
+                      onDownload={result ? () => download(result.residue, "vanta_residue.wav") : undefined}
                       emptyLabel="Noise residue will appear here"
                       className="h-full"
                     />

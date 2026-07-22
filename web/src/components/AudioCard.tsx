@@ -89,7 +89,7 @@ export function AudioCard({
     };
   }, [source, variant]);
 
-  const filename = filenameOverride ?? (source instanceof File ? source.name : "audio.mp3");
+  const filename = filenameOverride ?? (source instanceof File ? source.name : "audio.wav");
   const sizeStr = source ? `${(source.size / (1024 * 1024)).toFixed(1)} MB` : "";
   const colors = COLOR[variant];
 

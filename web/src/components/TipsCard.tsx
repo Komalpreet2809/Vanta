@@ -21,8 +21,8 @@ export function TipsCard() {
         <span className="font-mono-heading text-[12px] opacity-80">TIPS</span>
       </div>
       <ul className="list-disc pl-5 text-[11px] text-[var(--text-main)] space-y-2 marker:text-[var(--text-muted)] font-medium">
-        <li>Supports WAV, MP3, M4A</li>
-        <li>Recommended: 5–30 seconds</li>
+        <li>WAV, MP3, M4A, MP4, FLAC, OGG — up to 30s</li>
+        <li>Reference: ~5s of the target speaker alone</li>
       </ul>
     </div>
   );
