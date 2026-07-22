@@ -40,7 +40,10 @@ export function EngineCenter({
   const activeStageIndex = isRunning ? Math.min(STAGES.length - 1, Math.floor((progress / 100) * STAGES.length)) : -1;
 
   return (
-    <div id={id} className="flex flex-col items-center justify-between w-full h-full py-8">
+    // flex-1 so it fills its section whether that section is height-locked (xl)
+    // or sized by its min-height (below xl, where h-full has nothing to resolve
+    // against and would collapse).
+    <div id={id} className="flex flex-col items-center justify-between w-full flex-1 h-full py-8">
       <div className="flex-1 w-full max-w-[800px] max-h-[600px] relative flex items-center justify-center overflow-visible mx-auto">
         {/* SVG Flow Container */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">

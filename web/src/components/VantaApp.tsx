@@ -133,19 +133,22 @@ export function VantaApp() {
   }, []);
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-[var(--bg-app)] overflow-hidden font-sans">
+    // Below xl the page is a normal scrolling document: the viewport is too
+    // short to hold three stacked columns, and pinning to h-screen forced the
+    // grid rows to overlap. Only the wide layout is height-locked.
+    <div className="min-h-screen xl:h-screen w-full flex flex-col bg-[var(--bg-app)] xl:overflow-hidden font-sans">
         <Header onReset={reset} onStartTour={startTour} id="vanta-header" />
 
-        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[450px_1fr_450px] lg:grid-cols-[380px_1fr_380px] overflow-y-auto xl:overflow-hidden px-4 md:px-8 xl:px-12 gap-6 xl:gap-10 py-6">
+        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[450px_1fr_450px] lg:grid-cols-[380px_1fr_380px] xl:overflow-hidden px-4 md:px-8 xl:px-12 gap-8 xl:gap-10 py-6">
           {/* INPUTS COLUMN */}
-          <section id="vanta-inputs" className="flex flex-col h-fit xl:h-full overflow-hidden order-2 xl:order-1">
+          <section id="vanta-inputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden order-2 xl:order-1">
             <div className="mb-3 shrink-0">
               <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">INPUTS</h2>
               <p className="text-[12px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
             </div>
             
             <div className="flex-1 flex flex-col gap-2 min-h-0">
-                <div className="flex-1 min-h-[180px]">
+                <div className="h-[200px] xl:h-auto xl:flex-1 xl:min-h-[180px]">
                     <AudioCard
                       id="vanta-reference"
                       heading="REFERENCE AUDIO"
@@ -157,7 +160,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="flex-1 min-h-[180px]">
+                <div className="h-[200px] xl:h-auto xl:flex-1 xl:min-h-[180px]">
                     <AudioCard
                       id="vanta-noise"
                       heading="NOISE AUDIO"
@@ -169,14 +172,14 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="h-20 shrink-0 mt-1">
+                <div className="h-auto min-h-20 xl:h-20 shrink-0 mt-1">
                   <TipsCard />
                 </div>
             </div>
           </section>
 
           {/* ENGINE COLUMN */}
-          <section className="flex flex-col h-fit xl:h-full min-h-[450px] overflow-hidden order-1 xl:order-2">
+          <section className="flex flex-col h-auto xl:h-full min-h-[450px] xl:overflow-hidden order-1 xl:order-2">
               <EngineCenter
                 id="vanta-engine"
                 canExtract={!!canRun}
@@ -188,14 +191,14 @@ export function VantaApp() {
           </section>
 
           {/* OUTPUTS COLUMN */}
-          <section id="vanta-outputs" className="flex flex-col h-fit xl:h-full overflow-hidden order-3">
+          <section id="vanta-outputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden order-3">
             <div className="mb-3 shrink-0">
               <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">OUTPUTS</h2>
               <p className="text-[12px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
             </div>
 
             <div className="flex-1 flex flex-col gap-2 min-h-0">
-                <div className="flex-1 min-h-[180px]">
+                <div className="h-[200px] xl:h-auto xl:flex-1 xl:min-h-[180px]">
                     <AudioCard
                       id="vanta-clean"
                       heading="CLEAN VOICE"
@@ -207,7 +210,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                <div className="flex-1 min-h-[180px]">
+                <div className="h-[200px] xl:h-auto xl:flex-1 xl:min-h-[180px]">
                     <AudioCard
                       id="vanta-residue"
                       heading="RESIDUE (NOISE)"
@@ -219,7 +222,7 @@ export function VantaApp() {
                     />
                 </div>
 
-                 <div className="h-20 shrink-0 mt-1">
+                 <div className="h-auto min-h-20 xl:h-20 shrink-0 mt-1">
                     <div className="h-full flex items-start gap-4 group/activity">
                        <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>
                          <Activity className="h-4 w-4 text-[var(--text-muted)] group-hover/activity:text-[var(--text-main)] transition-colors shrink-0 mt-0.5" />
