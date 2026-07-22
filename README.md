@@ -49,12 +49,18 @@ It returns only that person — plus a residue track of everything it removed.
 Blind noise cancellation (Krisp, Zoom) removes *everything that isn't speech*.
 Vanta is **informed** — it needs a fingerprint to know *who* to keep.
 
-```
-  reference clip  ──┐          ┌──▶  extracted   (target only)
-  (~5s, target alone)│          │
-                     ├─▶ Vanta ─┤
-  noisy mixture   ──┘          └──▶  residue     (everything removed)
-  (up to 30s)
+```mermaid
+flowchart LR
+    A["Reference clip<br/><i>~5s, target alone</i>"] --> V(("Vanta"))
+    B["Noisy mixture<br/><i>up to 30s</i>"] --> V
+    V --> C["Extracted<br/><i>target only</i>"]
+    V --> D["Residue<br/><i>everything removed</i>"]
+
+    style V fill:#1f2937,stroke:#60a5fa,stroke-width:3px,color:#fff
+    style A fill:#111827,stroke:#6b7280,color:#e5e7eb
+    style B fill:#111827,stroke:#6b7280,color:#e5e7eb
+    style C fill:#064e3b,stroke:#34d399,color:#d1fae5
+    style D fill:#3b0764,stroke:#c084fc,color:#f3e8ff
 ```
 
 `extracted + residue` reconstructs the input **exactly** — the estimate is
@@ -68,31 +74,41 @@ aligned to the mixture before subtraction, so the decomposition holds.
 
 ## Architecture
 
+```mermaid
+flowchart TB
+    subgraph identity["IDENTITY PATH"]
+        direction TB
+        REF["reference clip"] --> ENC["<b>ECAPA-TDNN</b><br/>SE-Res2Net, attentive stats pooling<br/><i>6.0M params, trained here</i>"]
+        ENC --> EMB(["192-d fingerprint"])
+    end
+
+    subgraph separation["SEPARATION PATH"]
+        direction TB
+        MIX["mixture wav<br/><i>(B, T)</i>"] --> AE["<b>1-D Conv Encoder</b><br/>512 filters, kernel 16, stride 8"]
+        AE --> FEAT(["features (B, 512, T')"])
+        FEAT --> TCN["<b>TCN Separator</b><br/>24 dilated blocks, 3 x 8, dilation 2^k<br/><i>3.5M params, trained here</i>"]
+        TCN --> MASK(["mask (B, 512, T')"])
+        MASK --> MUL(["features x mask"])
+        FEAT -.-> MUL
+        MUL --> AD["<b>Transposed 1-D Conv</b><br/>decoder, mirror of the encoder"]
+        AD --> OUT["extracted wav<br/><i>(B, T)</i>"]
+    end
+
+    EMB -- "conditions every block<br/>(additive bias)" --> TCN
+
+    style ENC fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style TCN fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style AE fill:#111827,stroke:#6b7280,color:#e5e7eb
+    style AD fill:#111827,stroke:#6b7280,color:#e5e7eb
+    style EMB fill:#422006,stroke:#fbbf24,color:#fef3c7
+    style OUT fill:#064e3b,stroke:#34d399,color:#d1fae5
+    style MIX fill:#111827,stroke:#6b7280,color:#e5e7eb
+    style REF fill:#111827,stroke:#6b7280,color:#e5e7eb
 ```
-                            mixture wav (B, T)
-                                   │
-                                   ▼
-                      ┌────────────────────────┐
-                      │ 1-D Conv Audio Encoder │  512 filters, kernel 16, stride 8
-                      └────────────┬───────────┘
-                                   │  (B, 512, T')
-                                   ▼
-reference ─▶ ECAPA-TDNN ─▶ 192-d ──▶ TCN Separator
-             (ours, 6.0M,          24 dilated-conv blocks (3 × 8, dilation 2^k)
-              trained here)        speaker-conditioned (additive bias per block)
-                                   │
-                                   ▼
-                          predicted mask (B, 512, T')
-                                   │
-                            enc × mask
-                                   │
-                      ┌────────────▼───────────┐
-                      │  Transposed 1-D Conv   │  decoder, mirror of the encoder
-                      └────────────┬───────────┘
-                                   │
-                                   ▼
-                          extracted wav (B, T)
-```
+
+Blue blocks are trained in this repository. The fingerprint is not concatenated
+once at the input — it is injected as an additive bias into **all 24** separator
+blocks, so the network is told who to keep at every depth.
 
 <table>
 <tr><th align="left">Component</th><th align="right">Params</th><th align="left">Role</th></tr>
@@ -148,6 +164,25 @@ Noise from all sources is pooled: **16,865 clips** total.
 A **fresh mixture is generated per training step** — nothing is cached to disk,
 so the model cannot memorise a fixed set.
 
+```mermaid
+flowchart LR
+    S1["target speaker"] --> R1["RIR<br/><i>80%</i>"]
+    S2["interferer<br/><i>different speaker</i>"] --> R2["RIR<br/><i>80%</i>"]
+    R1 --> M1["turn-taking mask<br/><i>50%</i>"]
+    R2 --> M2["turn-taking mask<br/><i>50%</i>"]
+    M1 --> SUM((" + "))
+    M2 -- "scale to<br/>0..+10 dB" --> SUM
+    N["noise<br/><i>WHAM / MUSAN</i>"] -- "scale to<br/>+5..+20 dB" --> SUM
+    SUM --> CH["recording chain<br/><i>mic EQ, band-limit,<br/>clipping, codec, noise floor</i>"]
+    CH --> OUT["training mixture"]
+    M1 --> TGT["target label"]
+
+    style SUM fill:#1f2937,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style OUT fill:#7c2d12,stroke:#fb923c,color:#ffedd5
+    style TGT fill:#064e3b,stroke:#34d399,color:#d1fae5
+    style CH fill:#111827,stroke:#6b7280,color:#e5e7eb
+```
+
 ```
 y = mask_t · RIR(s_target) + mask_i · α · RIR(s_interference) + β · noise
 ```
@@ -189,6 +224,22 @@ shouldn't be asked to invent bandwidth the mic never captured. Mixture-only ops
 
 ### Training runs
 
+The encoder is trained first and then frozen, because the separator learns to
+read one specific embedding space — swapping encoders afterwards costs 2.8 dB
+unless the separator is retrained against the new one.
+
+```mermaid
+flowchart LR
+    A["<b>1. Speaker encoder</b><br/>1,583 speakers, 20 epochs<br/>AAM-Softmax<br/><i>~7 h</i>"] --> B{{"frozen"}}
+    B --> C["<b>2. Separator</b><br/>952 speakers, 40 epochs<br/>SI-SDR loss<br/><i>~4 h</i>"]
+    C --> D["<b>Deployed pair</b><br/>+8.45 dB SI-SDR"]
+
+    style A fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style C fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px,color:#fff
+    style B fill:#422006,stroke:#fbbf24,color:#fef3c7
+    style D fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#d1fae5
+```
+
 Both trained on a single **RTX 4060 Laptop (8 GB)**.
 
 | | Separator | Speaker encoder |
@@ -226,6 +277,31 @@ recording-chain degradation.
 | Target energy captured | `84.3%` |
 
 </div>
+
+### How it got here
+
+Each jump came from a diagnosed failure, not from more compute. The full
+reasoning for the two biggest ones is in [Training](#training).
+
+```mermaid
+xychart-beta
+    title "SI-SDR on held-out speakers (dB)"
+    x-axis ["frozen data", "live mixing", "realistic SNR", "real noise", "conversational", "own encoder"]
+    y-axis "SI-SDR (dB)" 0 --> 10
+    bar [0.82, 1.23, 7.10, 7.20, 7.93, 8.45]
+```
+
+| Stage | What changed | SI-SDR |
+|---|---|---|
+| Frozen data | 20k cached mixtures — the model memorised them | +0.82 |
+| Live mixing | Fresh mixture every step, so memorisation is impossible | +1.23 |
+| Realistic SNR | Stopped training on targets buried under louder speakers | +7.10 |
+| Real noise + rooms | WHAM recordings, real measured RIRs, turn-taking | +7.20 |
+| Conversational | AMI meeting speech alongside read audiobooks | +7.93 |
+| Own encoder | Replaced pretrained ECAPA with one trained here | **+8.45** |
+
+The jump from +1.23 to +7.10 is the whole story in one number: nothing about the
+model changed, only the definition of the task it was asked to solve.
 
 ### Self-trained encoder vs. pretrained ECAPA
 
