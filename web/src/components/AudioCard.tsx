@@ -16,6 +16,9 @@ type Props = {
   onDownload?: () => void;
   onFile?: (file: File) => void;
   emptyLabel?: string;
+  /** What this input is for. Shown under the empty state — the headings alone
+   *  assume the reader already knows what a reference clip is. */
+  hint?: string;
   className?: string;
   id?: string;
 };
@@ -37,6 +40,7 @@ export function AudioCard({
   onDownload,
   onFile,
   emptyLabel,
+  hint,
   className = "",
   id,
 }: Props) {
@@ -222,8 +226,13 @@ export function AudioCard({
                 <div className="text-[12px] font-bold text-[var(--text-main)] mb-0.5 uppercase tracking-wider">
                     {onFile ? "Drag & drop or click to upload" : emptyLabel ?? "No signal loaded"}
                 </div>
+                {hint && (
+                  <p className="text-[11px] text-[var(--text-muted)] mt-1 mb-1.5 normal-case tracking-normal opacity-90 max-w-[240px] mx-auto leading-snug">
+                      {hint}
+                  </p>
+                )}
                 <p className="text-[11px] text-[var(--text-muted)] uppercase tracking-tighter opacity-60">
-                    WAV, MP3, M4A
+                    WAV, MP3, M4A, MP4, FLAC, OGG
                 </p>
              </div>
           </div>

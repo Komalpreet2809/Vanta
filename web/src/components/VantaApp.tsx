@@ -28,6 +28,7 @@ export function VantaApp() {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [sampleLoading, setSampleLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,10 +56,12 @@ export function VantaApp() {
       const progressValue = Math.min(95, (elapsed / DURATION) * 100);
       setProgress(progressValue);
       
-      if (progressValue < 25) setStage("ANALYZING SIGNALS...");
-      else if (progressValue < 50) setStage("ISOLATING TARGET...");
-      else if (progressValue < 75) setStage("EXTRACTING RESIDUE...");
-      else setStage("FINALIZING...");
+      // Same four steps the engine visualises, and the same four the model
+      // actually performs.
+      if (progressValue < 25) setStage("ENCODING...");
+      else if (progressValue < 50) setStage("IDENTIFYING VOICE...");
+      else if (progressValue < 75) setStage("SEPARATING...");
+      else setStage("RECONSTRUCTING...");
       
       if (elapsed >= DURATION) clearInterval(interval);
     }, 16); // 60fps for smooth progress sync
@@ -99,6 +102,27 @@ export function VantaApp() {
       setStatus("error");
     }
   }, [mixture, enrollment]);
+
+  const loadSample = useCallback(async () => {
+    setSampleLoading(true);
+    setError(null);
+    try {
+      const grab = async (name: string) => {
+        const r = await fetch(`/sample/${name}`);
+        if (!r.ok) throw new Error("sample unavailable");
+        return new File([await r.blob()], name, { type: "audio/wav" });
+      };
+      const [ref, mix] = await Promise.all([grab("reference.wav"), grab("mixture.wav")]);
+      setResult(null);
+      setEnrollment(ref);
+      setMixture(mix);
+    } catch {
+      setError("Could not load the example. Please upload your own audio.");
+      setStatus("error");
+    } finally {
+      setSampleLoading(false);
+    }
+  }, []);
 
   const download = useCallback((blob: Blob, name: string) => {
     const url = URL.createObjectURL(blob);
@@ -148,9 +172,20 @@ export function VantaApp() {
         <main className="flex-1 grid grid-cols-1 xl:grid-cols-[450px_1fr_450px] lg:grid-cols-[380px_1fr_380px] xl:overflow-hidden px-4 md:px-8 xl:px-12 gap-8 xl:gap-10 pt-6 pb-40 xl:pb-6">
           {/* INPUTS COLUMN */}
           <section id="vanta-inputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden">
-            <div className="mb-3 shrink-0">
-              <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">INPUTS</h2>
-              <p className="text-[12px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
+            <div className="mb-3 shrink-0 flex items-start justify-between gap-3">
+              <div>
+                <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">INPUTS</h2>
+                <p className="text-[12px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
+              </div>
+              {/* Without this, nothing can be heard until the visitor finds and
+                  uploads two files — one of which has to be a clean solo clip. */}
+              <button
+                onClick={loadSample}
+                disabled={sampleLoading || status === 'running'}
+                className="shrink-0 px-3 py-1.5 rounded-lg border border-[var(--border-main)] font-mono-heading text-[10px] font-black tracking-widest text-[var(--text-muted)] hover:text-[var(--text-main)] hover:border-[var(--text-main)]/40 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {sampleLoading ? "LOADING..." : "TRY AN EXAMPLE"}
+              </button>
             </div>
             
             <div className="flex-1 flex flex-col gap-2 min-h-0">
@@ -158,6 +193,7 @@ export function VantaApp() {
                     <AudioCard
                       id="vanta-reference"
                       heading="REFERENCE AUDIO"
+                      hint="A clean clip of the one voice you want to keep."
                       source={enrollment}
                       variant="brown"
                       onClear={() => setEnrollment(null)}
@@ -170,6 +206,7 @@ export function VantaApp() {
                     <AudioCard
                       id="vanta-noise"
                       heading="NOISE AUDIO"
+                      hint="The messy recording with that voice and everything else."
                       source={mixture}
                       variant="red"
                       onClear={() => setMixture(null)}
@@ -236,8 +273,10 @@ export function VantaApp() {
                        <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>
                          <Activity className="h-4 w-4 text-[var(--text-muted)] group-hover/activity:text-[var(--text-main)] transition-colors shrink-0 mt-0.5" />
                        </motion.div>
-                       <p className="text-[12px] text-[var(--text-muted)] leading-relaxed font-medium group-hover/activity:text-[var(--text-main)] transition-colors">
-                         Your outputs will be available here once processing is complete.
+                       <p className={`text-[12px] leading-relaxed font-medium transition-colors ${result?.meta.truncated ? 'text-amber-400/90' : 'text-[var(--text-muted)] group-hover/activity:text-[var(--text-main)]'}`}>
+                         {result?.meta.truncated
+                           ? `Only the first ${Math.round(result.meta.outputSeconds)}s were processed — Vanta caps input at 30 seconds.`
+                           : "Your outputs will be available here once processing is complete."}
                        </p>
                     </div>
                  </div>
@@ -311,7 +350,14 @@ export function VantaApp() {
         </div>
 
         <footer className="px-10 py-4 flex items-center justify-between border-t border-[var(--border-main)]/30 bg-transparent relative z-10">
-           <span className="text-[10px] font-mono font-bold tracking-widest text-[var(--text-muted)] uppercase opacity-60">VANTA v1.0.0</span>
+           <a
+             href="https://github.com/Komalpreet2809/Vanta"
+             target="_blank"
+             rel="noreferrer"
+             className="text-[10px] font-mono font-bold tracking-widest text-[var(--text-muted)] uppercase opacity-60 hover:opacity-100 hover:text-[var(--text-main)] transition-all"
+           >
+             SOURCE ON GITHUB
+           </a>
            <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono font-black tracking-widest text-[var(--text-muted)] uppercase flex items-center gap-1.5 opacity-60">
                 MADE WITH <span className="text-red-500">❤️</span> BY KOMAL

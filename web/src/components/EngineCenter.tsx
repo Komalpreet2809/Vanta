@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
-import { Search, Layers, Wand2, Mic, Activity } from "lucide-react";
+import { AudioWaveform, Fingerprint, Layers, Mic, Activity } from "lucide-react";
 import { useState, useEffect } from "react";
 
 type Props = {
@@ -13,11 +13,15 @@ type Props = {
   id?: string;
 };
 
+// These mirror the actual forward pass rather than a generic pipeline: the
+// encoder produces features, the speaker encoder fingerprints the reference,
+// the separator predicts a mask from both, and the decoder rebuilds a waveform.
+// An earlier "ENHANCE" stage was invented — there is no enhancement step.
 const STAGES = [
-  { id: "analyze", label: "ANALYZE", desc: "Detecting audio patterns", icon: Search, color: "var(--c-node-brown)" },
-  { id: "separate", label: "SEPARATE", desc: "Isolating voice from noise", icon: Layers, color: "var(--c-node-red)" },
-  { id: "enhance", label: "ENHANCE", desc: "Improving clarity and quality", icon: Wand2, color: "var(--c-node-green)" },
-  { id: "reconstruct", label: "RECONSTRUCT", desc: "Building clean voice output", icon: Mic, color: "var(--c-node-purple)" },
+  { id: "encode", label: "ENCODE", desc: "Waveform into learned features", icon: AudioWaveform, color: "var(--c-node-brown)" },
+  { id: "identify", label: "IDENTIFY", desc: "Fingerprinting the target voice", icon: Fingerprint, color: "var(--c-node-red)" },
+  { id: "separate", label: "SEPARATE", desc: "Masking out every other speaker", icon: Layers, color: "var(--c-node-green)" },
+  { id: "reconstruct", label: "RECONSTRUCT", desc: "Features back into audio", icon: Mic, color: "var(--c-node-purple)" },
 ];
 
 export function EngineCenter({
