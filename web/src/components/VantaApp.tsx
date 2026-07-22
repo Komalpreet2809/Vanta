@@ -141,7 +141,7 @@ export function VantaApp() {
 
         <main className="flex-1 grid grid-cols-1 xl:grid-cols-[450px_1fr_450px] lg:grid-cols-[380px_1fr_380px] xl:overflow-hidden px-4 md:px-8 xl:px-12 gap-8 xl:gap-10 py-6">
           {/* INPUTS COLUMN */}
-          <section id="vanta-inputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden order-2 xl:order-1">
+          <section id="vanta-inputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden">
             <div className="mb-3 shrink-0">
               <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">INPUTS</h2>
               <p className="text-[12px] text-[var(--text-muted)] font-medium">Provide reference and noise audio.</p>
@@ -179,7 +179,7 @@ export function VantaApp() {
           </section>
 
           {/* ENGINE COLUMN */}
-          <section className="flex flex-col h-auto xl:h-full min-h-[450px] xl:overflow-hidden order-1 xl:order-2">
+          <section className="flex flex-col h-auto xl:h-full min-h-[450px] xl:overflow-hidden">
               <EngineCenter
                 id="vanta-engine"
                 canExtract={!!canRun}
@@ -191,7 +191,7 @@ export function VantaApp() {
           </section>
 
           {/* OUTPUTS COLUMN */}
-          <section id="vanta-outputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden order-3">
+          <section id="vanta-outputs" className="flex flex-col h-auto xl:h-full xl:overflow-hidden">
             <div className="mb-3 shrink-0">
               <h2 className="font-mono-heading text-[18px] font-black tracking-widest text-[var(--text-main)] mb-0.5 uppercase">OUTPUTS</h2>
               <p className="text-[12px] text-[var(--text-muted)] font-medium">Clean voice and residue (noise).</p>
