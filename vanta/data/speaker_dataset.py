@@ -12,9 +12,10 @@ noise, room reverberation, and the recording chain (mic EQ, band-limiting,
 codec crunch, noise floor) — while the label stays the same person. The encoder
 is forced to find what survives all of it: the voice.
 
-That is also our one genuine edge over the pretrained ECAPA. It saw VoxCeleb,
-which is far larger but not shaped like our deployment audio; this one is
-augmented specifically for it.
+That augmentation is why this encoder beats the pretrained ECAPA despite ~4x
+fewer speakers: VoxCeleb is far larger but not shaped like our deployment audio,
+and this one is corrupted specifically for it. scripts/compare_encoders.py has
+the head-to-head.
 """
 
 from __future__ import annotations

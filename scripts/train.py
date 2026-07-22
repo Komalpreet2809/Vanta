@@ -1,8 +1,20 @@
-"""CLI entry point for training Vanta.
+"""CLI entry point for training the Vanta separator.
 
-Usage:
-    python scripts/train.py --manifest datasets/vanta/dev/manifest.jsonl \\
-        --out checkpoints/smoke --epochs 5 --batch-size 4
+Training uses --dynamic, which synthesises a fresh mixture per step rather than
+reading a frozen manifest; a fixed manifest is only used for validation, so the
+number stays comparable across runs. Pass --speaker-encoder whenever training
+against our own encoder, which the shipped models do.
+
+Usage (how the deployed model was trained):
+    python scripts/train.py --dynamic \\
+        --val-manifest datasets/vanta/dev/manifest.jsonl \\
+        --out checkpoints/separator --train-source train-clean-360 \\
+        --speaker-encoder checkpoints/spk_encoder/best.pt \\
+        --intf-snr 0 10 --augment --partial-overlap 0.5 \\
+        --epochs 40 --batch-size 4 --repeats 3 --clip-seconds 3.0 --lr 5e-4
+
+The legacy --manifest path (train on a pre-built manifest) still works, but it
+is what caused the model to memorise a fixed set early on; prefer --dynamic.
 """
 
 from __future__ import annotations
@@ -41,9 +53,9 @@ def main() -> None:
                    help="training clip length (dynamic mode). Shorter = less VRAM/faster. "
                         "Model is convolutional, so validation still uses full-length clips.")
     p.add_argument("--intf-snr", type=float, nargs=2, default=None, metavar=("MIN", "MAX"),
-                   help="target-vs-interference SNR range in dB (dynamic mode). "
-                        "Default keeps MixConfig's (-5, 5); use '0 10' for the realistic "
-                        "regime where the target is never quieter than the interferer.")
+                   help="target-vs-interference SNR range in dB (dynamic mode). Defaults "
+                        "to MixConfig's (0, 10) — the regime the shipped models trained "
+                        "in, where the target is never the quieter speaker.")
     p.add_argument("--augment", action="store_true",
                    help="recording-chain augmentation: degrade mixtures to mimic real "
                         "recordings (mic EQ, band-limiting, codec, room tone). Closes the "

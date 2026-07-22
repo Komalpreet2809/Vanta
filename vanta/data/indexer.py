@@ -4,8 +4,9 @@ Three corpora sit behind different interfaces:
   - SpeakerIndex  : LibriSpeech, grouped by speaker_id. The key Vanta constraint
                     is that we can draw two *different* clips from the same
                     speaker (mixture clip vs. enrollment clip).
-  - NoiseIndex    : MUSAN, flat list of noise clips.
-  - RirIndex      : RIRS_NOISES, flat list of impulse responses.
+  - NoiseIndex    : flat list of noise clips. `combined()` merges every source
+                    on disk — MUSAN, RIRS_NOISES pointsource/isotropic, WHAM!.
+  - RirIndex      : RIRS_NOISES impulse responses, simulated and real measured.
 """
 
 from __future__ import annotations
@@ -178,7 +179,7 @@ def build_default_indices(
     """Build all available indices from DATA_DIR and cache them to JSON.
 
     `librispeech_split` selects which subdirectory to index. Use "train-clean-100"
-    for training data (251 speakers) and "dev-clean" for validation (40 speakers,
+    for training data and "dev-clean" for validation (40 speakers,
     disjoint from training).
     """
     cache_dir = cache_dir or (DATA_DIR / "_index")

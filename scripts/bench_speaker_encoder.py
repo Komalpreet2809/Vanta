@@ -21,7 +21,7 @@ What it measures (the number we optimize):
 
 Usage:
     python scripts/bench_speaker_encoder.py --n-speakers 40 --trials 200
-    python scripts/bench_speaker_encoder.py --encoder checkpoints/spk_robust/best.pt
+    python scripts/bench_speaker_encoder.py --encoder checkpoints/spk_encoder/best.pt
 """
 
 from __future__ import annotations
@@ -60,7 +60,7 @@ def main() -> None:
         "--encoder",
         type=Path,
         default=None,
-        help="optional fine-tuned encoder state_dict; default = frozen pretrained ECAPA",
+        help="encoder state_dict to measure; default = speechbrain's pretrained ECAPA",
     )
     args = p.parse_args()
 
@@ -78,7 +78,7 @@ def main() -> None:
         ck = torch.load(args.encoder, map_location=device, weights_only=False)
         state = ck.get("encoder_state", ck.get("model_state", ck))
         enc.load_state_dict(state)
-        print(f"loaded fine-tuned encoder: {args.encoder}")
+        print(f"loaded encoder: {args.encoder}")
     else:
         print("using frozen pretrained ECAPA (baseline)")
     enc.eval()

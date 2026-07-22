@@ -28,11 +28,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # App code + model checkpoint (large file — tracked via Git LFS).
 COPY . .
 
-# Default: the from-scratch trained separator — val SI-SDR +7.93 dB (median
-# +8.70) on the realistic benchmark (952 speakers, real noise and rooms,
-# turn-taking, recording-chain degradation). The pretrained SepFormer backbone
-# also ships in this image as a fallback: set VANTA_BACKEND=sepformer in the
-# Space settings to switch, no rebuild needed.
+# Default: the from-scratch pair — separator + our own speaker encoder, no
+# pretrained weights. +8.45 dB SI-SDR (median +9.28) on 500 held-out mixtures.
+# A pretrained SepFormer backend also ships in this image but is NOT active and
+# is never selected automatically; VANTA_BACKEND=sepformer switches manually.
 ENV VANTA_BACKEND=trained
 ENV VANTA_CHECKPOINT=checkpoints/best.pt
 ENV VANTA_SPK_ENCODER=checkpoints/spk_encoder.pt

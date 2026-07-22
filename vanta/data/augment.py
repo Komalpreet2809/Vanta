@@ -1,7 +1,7 @@
 """Recording-chain augmentation — teaches the model real-world audio.
 
-The from-scratch model trained on clean LibriSpeech generalized to LibriSpeech
-(+7 dB) but failed on real phone/laptop recordings: it never saw mic coloration,
+An earlier model trained on clean LibriSpeech generalized to LibriSpeech but
+failed on real phone/laptop recordings: it never saw mic coloration,
 limited bandwidth, compression artifacts, or room tone. This module degrades the
 synthetic mixtures to *look like* real recordings, closing that domain gap.
 

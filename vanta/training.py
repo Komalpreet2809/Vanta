@@ -28,7 +28,8 @@ class TrainConfig:
     grad_clip: float = 5.0
     val_every: int = 1          # epochs
     save_every: int = 1         # epochs (saves "last.pt" and "best.pt")
-    num_workers: int = 0        # Windows + speechbrain + multiprocessing is fragile
+    num_workers: int = 0        # Windows + multiprocessing is fragile; >0 works
+                                # and is what training actually uses
     log_every: int = 10         # iterations
     # Mixed precision cuts activation memory ~2x and speeds up matmul/conv
     # heavy models on Ampere/Ada. Essential for Vanta on the 8 GB 4060.
@@ -42,11 +43,11 @@ class TrainConfig:
     # Early stopping: stop after `patience` epochs with no val improvement.
     # Keeps training ~on budget and avoids picking a bad "best" by chance.
     early_stop_patience: int = 5
-    # SpecAugment-style time masking on the *encoded* features (not spectrogram).
-    # Two time masks per sample, each zeroing up to `specaug_max_width` frames.
-    # Applied only during training; off during validation/inference.
+    # NOTE: SpecAugment is configured on VantaConfig (model side), not here —
+    # these two fields are vestigial and unread. Kept only so old config.json
+    # files written by earlier runs still deserialize.
     specaug_num_masks: int = 2
-    specaug_max_width: int = 40  # at stride 8 and 16 kHz, ~20ms per frame
+    specaug_max_width: int = 40
 
 
 def _default_collate(batch: list[dict]) -> dict:

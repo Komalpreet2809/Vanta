@@ -6,7 +6,8 @@ numpy>=1.26,<3
 scipy>=1.13
 soxr>=0.3
 
-# Frozen ECAPA-TDNN speaker encoder (auto-downloads VoxCeleb checkpoint on first use).
+# Only for the inactive SepFormer fallback. The production speaker encoder is
+# our own (checkpoints/spk_encoder.pt) and needs nothing from speechbrain.
 speechbrain>=1.0
 
 # Transcoding fallback for non-libsndfile containers (MP4/M4A/WebM/MOV).

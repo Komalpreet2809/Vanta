@@ -138,7 +138,10 @@ the per-source ground truth SI-SDR needs.
 | [**AMI Meeting Corpus**](https://groups.inf.ed.ac.uk/ami/corpus/) headsets | 31 speakers of *conversational* speech — interruptions, laughter, fillers |
 | [**WHAM!**](http://wham.whisper.ai/) | 15,000 real ambient recordings — cafés, streets, offices |
 | [**MUSAN**](https://openslr.org/17) noise | 930 ambient clips |
-| [**RIRS_NOISES**](https://openslr.org/28) | 60,218 room impulse responses — simulated **and** real measured rooms |
+| [**RIRS_NOISES**](https://openslr.org/28) | 60,218 room impulse responses (simulated **and** real measured rooms), plus its point-source and isotropic noise |
+
+Noise from all sources is pooled: **16,865 clips** total.
+
 
 ### Mixture synthesis
 
@@ -167,7 +170,8 @@ y = mask_t · RIR(s_target) + mask_i · α · RIR(s_interference) + β · noise
 Training on `[−5, +5] dB` — where the interferer could be *louder* — produced a
 model that scored **+1.2 dB** and hedged on everything, attenuating the whole
 mixture rather than committing. Restricting to the realistic regime, where the
-target is the prominent speaker, took it to **+7.1 dB**. The cost is honest and
+target is the prominent speaker, took it to **+7.1 dB** at that stage (the
+final model reaches +8.45). The cost is honest and
 documented: a voice buried under a louder one is out of distribution.
 
 **Turn-taking exists because full-overlap training never teaches silence.**

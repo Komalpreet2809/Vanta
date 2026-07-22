@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vanta — frontend
 
-## Getting Started
+Next.js + Tailwind interface for [Vanta](../README.md), a target speaker
+extraction system. Upload a reference clip and a noisy recording; the app calls
+the inference API and renders the isolated voice alongside the residue.
 
-First, run the development server:
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Point it at an API — a local server or the deployed Space:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# .env.local
+NEXT_PUBLIC_VANTA_API=http://127.0.0.1:8000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`NEXT_PUBLIC_VANTA_API` is read at **build** time, so for production it must be
+set in the Vercel project settings, not just locally. Production points at
+`https://komalsohal-vanta.hf.space`.
 
-## Learn More
+To run the backend locally, see
+[Running locally](../README.md#running-locally) in the root README.
 
-To learn more about Next.js, take a look at the following resources:
+## Layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/                 # Layout and page
+├── components/
+│   ├── VantaApp.tsx     # Top-level state, upload flow, guided tour
+│   ├── EngineCenter.tsx # Extraction progress visualisation
+│   └── AudioCard.tsx    # Waveform player (wavesurfer.js)
+└── lib/api.ts           # API client — POST /extract, GET /health
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployed to Vercel from this directory. The backend is a separate Docker image
+on Hugging Face Spaces (see [`deploy/hf-space/`](../deploy/hf-space/)).

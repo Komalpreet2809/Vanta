@@ -6,9 +6,9 @@ classification head is discarded and the 192-d embedding is what Vanta uses.
 Validation is the metric that actually matters for the downstream job, not
 classification accuracy: for held-out speakers never seen in training, we
 measure the cosine margin between same-speaker and different-speaker pairs.
-That margin is precisely what the separator's conditioning and the SepFormer
-selector rely on, and it is directly comparable to the pretrained ECAPA
-baseline from scripts/bench_speaker_encoder.py.
+That margin is precisely what the separator's conditioning relies on, and it is
+directly comparable to the pretrained ECAPA baseline measured by
+scripts/compare_encoders.py.
 
 Usage:
     python scripts/train_speaker_encoder.py --epochs 30 --batch-size 64

@@ -40,7 +40,11 @@ class MixConfig:
     clip_seconds: float = 4.0
     enroll_seconds: float = 5.0
     # SNR ranges are (min, max) in dB; sampled uniformly.
-    interference_snr_db: tuple[float, float] = (-5.0, 5.0)
+    # Target-vs-interference SNR. [0, +10] means the target is never the quieter
+    # speaker. Training on [-5, +5], where the interferer could be louder, is
+    # what held an earlier model at ~+1 dB: it learned to hedge and attenuate
+    # everything rather than commit. Widen this only deliberately.
+    interference_snr_db: tuple[float, float] = (0.0, 10.0)
     noise_snr_db: tuple[float, float] = (5.0, 20.0)
     use_noise: bool = True
     use_rir: bool = True
@@ -56,6 +60,7 @@ class MixConfig:
     # fully-overlapped training never teaches "output silence when the target
     # is silent", so the model passes alternating speech straight through.
     # With this prob, each speaker is active only in a random contiguous span.
+    # Shipped models trained at 0.5 (scripts/train.py --partial-overlap).
     partial_overlap_prob: float = 0.0
     # Each speaker's active span covers at least this fraction of the clip.
     min_active_frac: float = 0.35

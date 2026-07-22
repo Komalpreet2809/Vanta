@@ -1,12 +1,22 @@
-"""Pretrained ECAPA-TDNN speaker encoder.
+"""Speaker encoders — the "voice fingerprint" half of Vanta.
 
-Wraps speechbrain's VoxCeleb-trained ECAPA-TDNN. Given an enrollment clip,
-returns a 192-d speaker embedding (the "voice fingerprint").
+Two implementations behind one contract: (B, T) waveform at 16 kHz in, (B, 192)
+embedding out.
 
-Frozen by default: fine-tuning speaker encoders during TSE training tends to
-destabilize the identity space. We want the fingerprint to stay recognizable.
+  TrainedSpeakerEncoder  our own ECAPA-TDNN, trained from scratch by
+                         scripts/train_speaker_encoder.py. This is what
+                         production runs.
+  SpeakerEncoder         speechbrain's VoxCeleb-trained ECAPA. Kept as the
+                         baseline `compare_encoders.py` measures against, and
+                         as the encoder for the inactive SepFormer backend.
 
-The checkpoint (~25 MB) downloads on first use to `data/_models/ecapa_voxceleb/`.
+Use `SpeakerEncoder.load(checkpoint=...)` rather than constructing either
+directly — passing a checkpoint selects ours, omitting it selects the
+pretrained one.
+
+Both are frozen during TSE training: fine-tuning a speaker encoder while the
+separator learns tends to destabilize the identity space, and we want the
+fingerprint to stay recognizable.
 """
 
 from __future__ import annotations

@@ -1,3 +1,22 @@
+[HISTORICAL — ORIGINAL DESIGN PLAN, SUPERSEDED]
+
+This is the Phase 1-5 plan written before Vanta was built. It is kept as a
+record of the original thinking and is NOT a description of the current system.
+Several things below were changed once measured:
+
+  * "pre-trained network (like ECAPA-TDNN)" for the speaker encoder — the
+    shipped system trains its own ECAPA-TDNN from scratch, which outperformed
+    the pretrained one it replaced.
+  * "If we want the task to be hard, we make alpha large (the target is
+    buried)" — training this way capped the model at ~+1 dB. Interference SNR
+    is now [0, +10] dB, so the target is never the quieter speaker.
+  * Mixtures are synthesised fresh per training step, not built into a fixed
+    dataset.
+
+For what the project actually does, see README.md.
+
+--------------------------------------------------------------------------
+
 Phase 1: The Synthesis Engine (Data Generation)In most ML projects, you just download a CSV. In Vanta, we have to "play God" with audio. To train a model to separate voices, we need to show it thousands of examples of what a "messy room" sounds like vs. what the "clean target" sounds like.1. The IngredientsWe don't just use random noise; we need three specific types of audio:Target ($s_1$): The person we want to keep (the "signal").Interference ($s_2$): Other people talking (the "distraction").Ambient Noise ($n$): Non-human sounds (street noise, fan hum, static).2. The Math of a "Mixture"We create a synthetic mixture ($y$) using a simple linear combination:$$y = s_1 + \alpha s_2 + \beta n$$Where $\alpha$ and $\beta$ are scaling factors that control the SNR (Signal-to-Noise Ratio).If we want the task to be easy, we make $\alpha$ small (the target is loud).If we want the task to be hard (the Vanta level), we make $\alpha$ large (the target is buried).3. The "Enrollment" ClipThis is the most critical part of Phase 1. For every mixture we create, we must also provide a separate clean clip of Speaker A.Crucial Constraint: This clip must be different audio than the one in the mixture, but it must be the same person.Why? This teaches the model to recognize the identity (the timbre/pitch) rather than just memorizing the specific words.4. Augmentation (The Pro Touch)To make Vanta "non-cliche" and robust, we apply RIR (Room Impulse Responses).Instead of just adding sounds together, we "convolve" the audio with a room's acoustics. This simulates how sound bounces off walls.Without this, your model will work on clean digital files but fail the moment you use it in a real room.
 
 

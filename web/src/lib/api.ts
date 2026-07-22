@@ -58,7 +58,8 @@ export type ExtractMeta = {
   inputSeconds: number;
   outputSeconds: number;
   truncated: boolean;
-  // SepFormer backend extras (undefined for trained-from-scratch backend)
+  // Extras from the inactive SepFormer backend; undefined in production,
+  // which runs the from-scratch models.
   similarities?: number[][];
   selected?: number[];
   backend?: string;

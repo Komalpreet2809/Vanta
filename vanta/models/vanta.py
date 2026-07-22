@@ -1,11 +1,12 @@
 """The full Vanta model: encoder + separator + decoder + speaker encoder.
 
 Forward pass:
-    1. Speaker encoder (frozen) turns the enrollment into a 192-d fingerprint.
-       Runs under no_grad so it doesn't train. Which encoder that is depends on
-       VantaConfig.speaker_encoder_ckpt — our own ECAPA-TDNN when set, otherwise
-       speechbrain's pretrained one. They are NOT interchangeable after
-       training: the separator learns to read one embedding space.
+    1. Speaker encoder turns the enrollment into a 192-d fingerprint, under
+       no_grad — frozen during TSE training, which is not the same as
+       pretrained. VantaConfig.speaker_encoder_ckpt selects which encoder: our
+       own ECAPA-TDNN when set (what production uses), speechbrain's pretrained
+       one otherwise. The two are NOT interchangeable after training, because
+       the separator learns to read one specific embedding space.
     2. Audio encoder turns the mixture into a (B, N, T') feature map.
     3. Separator predicts a mask (B, N, T'), conditioned on the fingerprint.
     4. Mask * features -> masked features.

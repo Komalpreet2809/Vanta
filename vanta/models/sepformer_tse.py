@@ -1,11 +1,20 @@
 """TSE backbone built on top of SpeechBrain's pretrained SepFormer.
 
-Why this exists:
-    Our from-scratch separator hit a hard ceiling at ~+1 dB val SI-SDR because
-    20k mixtures of 251 speakers isn't enough variety. SepFormer was pretrained
-    by SpeechBrain on much larger speech-separation data. Plugging it in here
-    gives us a strong separation backbone; our ECAPA-based speaker selector on
-    top is what makes it *target* speaker extraction.
+Status: NOT ACTIVE. Production runs the from-scratch separator and speaker
+encoder (see vanta/inference.py). This backend is retained only as a manual
+fallback, selectable with VANTA_BACKEND=sepformer.
+
+Why it exists:
+    It was written when the from-scratch separator was stuck at ~+1 dB val
+    SI-SDR, trained on a frozen set of 20k mixtures from 251 speakers. Switching
+    to on-the-fly synthesis over far more speakers, a realistic interference SNR
+    range and turn-taking mixtures lifted that model to +8.45 dB, so the
+    original justification no longer holds. Kept because a pretrained backbone
+    is still a useful comparison point and an escape hatch.
+
+    The design contrast is instructive: SepFormer separates blindly into two
+    sources and a speaker embedding then picks the match, whereas our model
+    separates and identifies in a single conditioned pass.
 
 Pipeline:
     mixture_16k                      enrollment_16k

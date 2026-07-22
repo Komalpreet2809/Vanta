@@ -4,7 +4,8 @@ Checks:
     - Output waveform has the same shape as the input mixture
     - Speaker embedding can be precomputed and re-used
     - Passing different enrollments yields different outputs (conditioning works)
-    - Parameter count is reasonable (<30M trainable, speaker encoder frozen)
+    - Parameter count is reasonable (separator ~3.5M trainable; the speaker
+      encoder is frozen and excluded)
     - Loss.backward() produces grads in encoder, separator, decoder
     - Speaker encoder remains frozen (no grads in its params)
     - Runs on CUDA

@@ -2,12 +2,13 @@
 backbone and extract a target speaker.
 
 Two backends, same interface:
-  - VantaInference        : our from-scratch trained checkpoint
-  - VantaSepFormerInference : pretrained SepFormer + our ECAPA selector
+  - VantaInference          : our from-scratch separator + our speaker encoder
+  - VantaSepFormerInference : pretrained SepFormer + speaker selection
 
-Pick at server startup via the VANTA_BACKEND env var. The trained-from-scratch
-model is the project's "training pedigree" piece; the SepFormer backbone
-delivers the audio quality we need for the live demo.
+Picked at server startup via VANTA_BACKEND. `trained` is what production runs
+and what the project is: the from-scratch pair reaches +8.45 dB SI-SDR, ahead
+of the pretrained-encoder configuration it replaced. The SepFormer path is kept
+as a manual fallback only and is not active anywhere.
 """
 
 from __future__ import annotations
