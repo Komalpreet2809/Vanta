@@ -36,25 +36,25 @@ It returns only that person — plus a residue track of everything it removed.
 
 | | |
 |---|---|
-| **[How it works](#-how-it-works)** · **[Architecture](#-architecture)** | What the system does and how it's built |
-| **[Training](#-training)** · **[Reproducing](#-reproducing-the-training)** | Data, synthesis, and how to run it yourself |
-| **[Results](#-results)** | Benchmarks, encoder head-to-head, what's actually deployed |
-| **[Repository](#-repository-layout)** · **[Running locally](#-running-locally)** · **[Deployment](#-deployment)** | Getting hands on |
-| **[Limitations](#-limitations)** | What it does *not* do |
+| **[How it works](#how-it-works)** · **[Architecture](#architecture)** | What the system does and how it's built |
+| **[Training](#training)** · **[Reproducing](#reproducing-the-training)** | Data, synthesis, and how to run it yourself |
+| **[Results](#results)** | Benchmarks, encoder head-to-head, what's actually deployed |
+| **[Repository](#repository-layout)** · **[Running locally](#running-locally)** · **[Deployment](#deployment)** | Getting hands on |
+| **[Limitations](#limitations)** | What it does *not* do |
 
 ---
 
-## 🎯 How it works
+## How it works
 
 Blind noise cancellation (Krisp, Zoom) removes *everything that isn't speech*.
 Vanta is **informed** — it needs a fingerprint to know *who* to keep.
 
 ```
-  🎤 reference clip  ─┐
-   (~5s, target alone)│
-                      ├──▶  Vanta  ──▶  🔊 extracted (target only)
-  🔊 noisy mixture   ─┘                 🔉 residue   (everything removed)
-   (up to 30s)
+  reference clip  ──┐          ┌──▶  extracted   (target only)
+  (~5s, target alone)│          │
+                     ├─▶ Vanta ─┤
+  noisy mixture   ──┘          └──▶  residue     (everything removed)
+  (up to 30s)
 ```
 
 `extracted + residue` reconstructs the input **exactly** — the estimate is
@@ -66,7 +66,7 @@ aligned to the mixture before subtraction, so the decomposition holds.
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ```
                             mixture wav (B, T)
@@ -77,9 +77,9 @@ aligned to the mixture before subtraction, so the decomposition holds.
                       └────────────┬───────────┘
                                    │  (B, 512, T')
                                    ▼
-reference ─▶ ECAPA-TDNN  ─▶ 192-d ──▶ TCN Separator
-             ★ ours, 6.0M           24 dilated-conv blocks (3 × 8, dilation 2^k)
-               trained here         speaker-conditioned (additive bias per block)
+reference ─▶ ECAPA-TDNN ─▶ 192-d ──▶ TCN Separator
+             (ours, 6.0M,          24 dilated-conv blocks (3 × 8, dilation 2^k)
+              trained here)        speaker-conditioned (additive bias per block)
                                    │
                                    ▼
                           predicted mask (B, 512, T')
@@ -119,7 +119,7 @@ reference ─▶ ECAPA-TDNN  ─▶ 192-d ──▶ TCN Separator
 
 ---
 
-## 🎓 Training
+## Training
 
 Both models train on **synthetic mixtures**, because real recordings can't supply
 the per-source ground truth SI-SDR needs.
@@ -151,12 +151,12 @@ y = mask_t · RIR(s_target) + mask_i · α · RIR(s_interference) + β · noise
 
 | Stage | Detail |
 |---|---|
-| 🗣 Speakers | Target and interferer are always different people |
-| 🏠 Reverberation | Independent RIR per source, 80% probability |
-| 🔊 Interference SNR | **[0, +10] dB** — the target is never quieter than the interferer |
-| 🌫 Noise SNR | [+5, +20] dB |
-| ⏱ Turn-taking | 50% of mixtures mask each speaker to a random active span |
-| 📻 Recording chain | Mic EQ tilt, band-limiting, soft clipping, µ-law codec, noise floor |
+| Speakers | Target and interferer are always different people |
+| Reverberation | Independent RIR per source, 80% probability |
+| Interference SNR | **[0, +10] dB** — the target is never quieter than the interferer |
+| Noise SNR | [+5, +20] dB |
+| Turn-taking | 50% of mixtures mask each speaker to a random active span |
+| Recording chain | Mic EQ tilt, band-limiting, soft clipping, µ-law codec, noise floor |
 
 <details>
 <summary><b>Two of these came from diagnosed failures — the reasoning matters</b></summary>
@@ -187,7 +187,7 @@ shouldn't be asked to invent bandwidth the mic never captured. Mixture-only ops
 
 Both trained on a single **RTX 4060 Laptop (8 GB)**.
 
-| | 🎛 Separator | 🗣 Speaker encoder |
+| | Separator | Speaker encoder |
 |---|---|---|
 | **Params** | 3.5M | 6.0M |
 | **Speakers** | 952 | 1,583 |
@@ -204,7 +204,7 @@ Both trained on a single **RTX 4060 Laptop (8 GB)**.
 
 ---
 
-## 📊 Results
+## Results
 
 Evaluated on **500 held-out mixtures from speakers never seen in training**, on
 the realistic benchmark — real noise, real and simulated rooms, turn-taking,
@@ -223,7 +223,7 @@ recording-chain degradation.
 
 </div>
 
-### 🥊 Self-trained encoder vs. pretrained ECAPA
+### Self-trained encoder vs. pretrained ECAPA
 
 Replacing SpeechBrain's pretrained ECAPA with the encoder trained here
 **improved every separation metric** and made CPU inference ~6× faster:
@@ -262,7 +262,7 @@ Swapping encoders is also **not free**: the separator learns to read one
 embedding space, and switching without retraining cost **2.8 dB**
 (+8.00 → +5.23). The two checkpoints are trained together and deploy as a pair.
 
-### 🔍 Which model is actually serving
+### Which model is actually serving
 
 Production runs the from-scratch models above. A pretrained SepFormer backend
 exists in the codebase but is **not active**, and there is deliberately **no
@@ -275,7 +275,7 @@ backend is live, so the claim is **verifiable rather than asserted**.
 
 ---
 
-## 📁 Repository layout
+## Repository layout
 
 ```
 vanta/
@@ -289,14 +289,14 @@ vanta/
 │   ├── indexer.py           # Speaker / noise / RIR indices, cached to JSON
 │   ├── synthesize.py        # Mixture synthesiser — reverb, SNR, turn-taking
 │   ├── augment.py           # Recording-chain degradation
-│   ├── dynamic_dataset.py   # ★ Fresh mixture per __getitem__ (training)
+│   ├── dynamic_dataset.py   # Fresh mixture per __getitem__ (training)
 │   ├── dataset.py           # Fixed manifest reader (validation)
-│   ├── speaker_dataset.py   # ★ Speaker-classification data for the encoder
+│   ├── speaker_dataset.py   # Speaker-classification data for the encoder
 │   └── ami.py               # AMI real-recording loader
 │
 ├── models/
 │   ├── audio_encoder.py     # 1-D conv encoder + transposed-conv decoder
-│   ├── ecapa_tdnn.py        # ★ Our ECAPA-TDNN + AAM-Softmax head
+│   ├── ecapa_tdnn.py        # Our ECAPA-TDNN + AAM-Softmax head
 │   ├── speaker_encoder.py   # Encoder wrappers — ours / pretrained
 │   ├── separator.py         # TCN blocks, gLN, speaker-conditioned mask
 │   ├── sepformer_tse.py     # Pretrained fallback backend (not active)
@@ -310,9 +310,9 @@ scripts/
 ├── segment_ami.py           # AMI headsets → single-speaker clips
 ├── build_dataset.py         # Generate a fixed manifest (validation sets)
 ├── train.py                 # Separator training CLI
-├── train_speaker_encoder.py # ★ Speaker encoder training CLI
+├── train_speaker_encoder.py # Speaker encoder training CLI
 ├── evaluate.py              # SI-SDR / PESQ / STOI on a manifest
-├── compare_encoders.py      # ★ Head-to-head vs. pretrained ECAPA
+├── compare_encoders.py      # Head-to-head vs. pretrained ECAPA
 ├── bench_speaker_encoder.py # Embedding discriminability under degradation
 ├── bench_step.py            # Per-batch throughput + VRAM
 └── test_*.py                # Smoke tests
@@ -324,7 +324,7 @@ deploy/hf-space/             # Docker bundle pushed to Hugging Face Spaces
 
 ---
 
-## 💻 Running locally
+## Running locally
 
 **Prerequisites** — Python 3.11+, Node 20+, git-lfs, CUDA GPU (training only)
 
@@ -351,7 +351,7 @@ Then open **http://127.0.0.1:8000/docs** for an interactive API console.
 
 ---
 
-## 🔬 Reproducing the training
+## Reproducing the training
 
 <details>
 <summary><b>Full pipeline, from empty repo to trained models</b></summary>
@@ -393,7 +393,7 @@ Both training scripts checkpoint every epoch and accept `--resume`.
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 **Backend** — Docker image pushed to a Hugging Face Space.
 [`deploy/hf-space/build.sh`](deploy/hf-space/build.sh) copies the minimal
@@ -405,17 +405,17 @@ at build time.
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 | | |
 |---|---|
-| 🔉 **Target must be prominent** | Trained on [0, +10] dB interference SNR — a voice buried under a louder one is out of distribution |
-| 📉 **84% of target energy captured** | The remainder stays in the residue, audible at roughly −33 dB |
-| 📚 **Read-speech bias** | 1,552 of 1,583 speakers are LibriSpeech audiobooks; conversational coverage comes from only 31 AMI speakers |
-| 🌍 **English-only** | Degrades on other languages |
-| 📁 **File-based** | No real-time or streaming inference |
-| 🏠 **Reverb preserved** | The model keeps room acoustics by design; dereverberation is a separate task |
-| 📏 **Objective metrics only** | No MOS-rated listening study |
+| **Target must be prominent** | Trained on [0, +10] dB interference SNR — a voice buried under a louder one is out of distribution |
+| **84% of target energy captured** | The remainder stays in the residue, audible at roughly −33 dB |
+| **Read-speech bias** | 1,552 of 1,583 speakers are LibriSpeech audiobooks; conversational coverage comes from only 31 AMI speakers |
+| **English-only** | Degrades on other languages |
+| **File-based** | No real-time or streaming inference |
+| **Reverb preserved** | The model keeps room acoustics by design; dereverberation is a separate task |
+| **Objective metrics only** | No MOS-rated listening study |
 
 ---
 
