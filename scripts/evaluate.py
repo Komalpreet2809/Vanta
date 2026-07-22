@@ -3,9 +3,15 @@
 Reports per-sample and aggregate SI-SDR / PESQ / STOI, plus an "improvement"
 metric (estimate vs. mixture) so you can see how much Vanta actually helped.
 
+Pass --speaker-encoder whenever the checkpoint was trained against our own
+encoder, which the current models are. Omitting it silently falls back to
+speechbrain's pretrained ECAPA — a different embedding space than the separator
+learned to read, so the reported numbers would understate the model badly.
+
 Usage:
     python scripts/evaluate.py \\
-        --checkpoint checkpoints/smoke/best.pt \\
+        --checkpoint checkpoints/fully_ours/best.pt \\
+        --speaker-encoder checkpoints/spk_encoder/best.pt \\
         --manifest datasets/vanta/dev/manifest.jsonl
 """
 
@@ -42,15 +48,28 @@ def main() -> None:
     p.add_argument("--batch-size", type=int, default=4)
     p.add_argument("--limit", type=int, default=None, help="evaluate at most N samples")
     p.add_argument("--out", type=Path, default=None, help="optional JSON output path")
-    p.add_argument("--repeats", type=int, default=2, help="TCN R used at training time")
+    p.add_argument("--repeats", type=int, default=3, help="TCN R used at training time")
+    p.add_argument("--speaker-encoder", type=Path, default=None,
+                   help="our trained ECAPA-TDNN checkpoint. Must match the encoder the "
+                        "separator was trained against, or the numbers are meaningless — "
+                        "omitting it falls back to speechbrain's pretrained ECAPA.")
     args = p.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = Vanta(VantaConfig(repeats=args.repeats)).to(device)
+    model = Vanta(
+        VantaConfig(
+            repeats=args.repeats,
+            speaker_encoder_ckpt=str(args.speaker_encoder) if args.speaker_encoder else None,
+        )
+    ).to(device)
     if args.checkpoint is not None:
         ck = torch.load(args.checkpoint, map_location=device, weights_only=False)
-        model.load_state_dict(ck["model_state"])
+        # strict=False when an encoder is supplied: take the separator from the
+        # checkpoint and keep the encoder built above.
+        model.load_state_dict(ck["model_state"], strict=args.speaker_encoder is None)
         print(f"loaded checkpoint: {args.checkpoint} (epoch {ck.get('epoch', '?')})")
+        if args.speaker_encoder:
+            print(f"speaker encoder: {args.speaker_encoder}")
     else:
         print("no checkpoint — evaluating random-initialized model (baseline)")
     model.eval()

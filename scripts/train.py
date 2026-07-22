@@ -71,7 +71,8 @@ def main() -> None:
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--no-amp", action="store_true", help="disable mixed precision")
     p.add_argument("--amp-dtype", choices=["bf16", "fp16"], default="bf16")
-    p.add_argument("--repeats", type=int, default=2, help="TCN R (total blocks = R*X=R*8)")
+    p.add_argument("--repeats", type=int, default=3,
+                   help="TCN R (total blocks = R*8); current models use 3")
     p.add_argument("--speaker-encoder", type=Path, default=None,
                    help="our trained ECAPA-TDNN checkpoint. Omit to use SpeechBrain's "
                         "pretrained ECAPA. Switching changes the embedding space the "

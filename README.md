@@ -383,6 +383,7 @@ Then open **http://127.0.0.1:8000/docs** for an interactive API console.
 
 # 5 ── Evaluate
 .venv/Scripts/python scripts/evaluate.py --checkpoint checkpoints/separator/best.pt \
+  --speaker-encoder checkpoints/spk_encoder/best.pt \
   --manifest datasets/vanta/dev/manifest.jsonl --repeats 3
 .venv/Scripts/python scripts/compare_encoders.py
 ```

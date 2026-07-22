@@ -120,7 +120,7 @@ export function VantaApp() {
         { element: '#vanta-inputs', popover: { title: 'The Inputs', description: 'Everything starts here. You need two pieces of audio to begin the extraction process.', side: "right", align: 'start' } },
         { element: '#vanta-reference', popover: { title: 'Reference Audio', description: 'Upload a clean sample of the voice you want to isolate.', side: "right", align: 'center' } },
         { element: '#vanta-noise', popover: { title: 'Noisy Recording', description: 'Upload the recording that contains both the target voice and background noise.', side: "right", align: 'center' } },
-        { element: '#vanta-tour-center', popover: { title: 'Neural Engine & Extraction', description: 'This is the heart of Vanta. Once your signals are loaded, our SepFormer model analyzes them in real-time. Click "START EXTRACTION" at the bottom to begin the process.', side: "top", align: 'center' } },
+        { element: '#vanta-tour-center', popover: { title: 'Neural Engine & Extraction', description: 'This is the heart of Vanta. Once your signals are loaded, our speaker-conditioned separation model — trained from scratch — analyzes them. Click "START EXTRACTION" at the bottom to begin the process.', side: "top", align: 'center' } },
         { element: '#vanta-clean', popover: { title: 'Isolated Clean Voice', description: 'The target speaker will be rendered here. You can play it directly or download the high-fidelity WAV file.', side: "left", align: 'start' } },
         { element: '#vanta-residue', popover: { title: 'The Residue', description: 'Everything else (background noise, other voices) is moved to this card, ensuring your clean signal remains pure.', side: "left", align: 'start' } },
       ]
