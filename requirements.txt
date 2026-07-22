@@ -29,3 +29,6 @@ uvicorn[standard]>=0.27
 python-multipart>=0.0.9
 # Bundled ffmpeg binary for decoding MP4/M4A/WebM uploads before libsndfile
 imageio-ffmpeg>=0.5
+
+# Weight download (scripts/download_weights.py)
+requests>=2.31

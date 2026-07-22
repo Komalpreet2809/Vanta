@@ -11,6 +11,7 @@ It returns only that person — plus a residue track of everything it removed.
 
 [![Live Demo](https://img.shields.io/badge/demo-vanta.komalpreet.me-000000?style=for-the-badge)](https://vanta.komalpreet.me)
 [![API](https://img.shields.io/badge/API-Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://komalsohal-vanta.hf.space/health)
+[![CI](https://github.com/Komalpreet2809/Vanta/actions/workflows/ci.yml/badge.svg)](https://github.com/Komalpreet2809/Vanta/actions/workflows/ci.yml)
 
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
 ![Python](https://img.shields.io/badge/Python%203.11-3776AB?style=flat-square&logo=python&logoColor=white)
@@ -385,6 +386,7 @@ vanta/
 └── utils/audio.py           # Load/save, resample, SNR scaling, peak norm
 
 scripts/
+├── download_weights.py      # Fetch the trained checkpoints (needed to run)
 ├── download_data.py         # Resumable download of speech / noise / RIR corpora
 ├── download_ami.py          # AMI meeting audio
 ├── segment_ami.py           # AMI headsets → single-speaker clips
@@ -412,6 +414,10 @@ deploy/hf-space/             # Docker bundle pushed to Hugging Face Spaces
 python -m venv .venv
 .venv/Scripts/pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu124
 .venv/Scripts/pip install -r requirements.txt
+
+# Trained weights (~110 MB). They are too large for git, so they live in the
+# Space; without this the server starts with no model.
+.venv/Scripts/python scripts/download_weights.py
 
 # Inference server — defaults to the from-scratch separator + encoder pair
 .venv/Scripts/python -m uvicorn server:app --port 8000

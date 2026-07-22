@@ -1,0 +1,117 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  backend:
+    name: backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      # CPU wheels only — CI has no GPU and the CUDA build is ~2.5 GB.
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+
+      # Catches import errors, signature drift and syntax breakage across the
+      # package without needing the datasets or checkpoints, neither of which
+      # are in the repo.
+      - name: Import every module
+        run: |
+          python - <<'PY'
+          import importlib, pkgutil, sys
+          import vanta
+          failed = []
+          for m in pkgutil.walk_packages(vanta.__path__, "vanta."):
+              try:
+                  importlib.import_module(m.name)
+              except Exception as e:
+                  failed.append(f"{m.name}: {type(e).__name__}: {e}")
+          for f in failed:
+              print("FAIL", f)
+          sys.exit(1 if failed else 0)
+          PY
+
+      - name: Model builds and runs a forward pass
+        run: |
+          python - <<'PY'
+          import torch
+          from vanta.models.ecapa_tdnn import EcapaTdnn, AAMSoftmax
+          from vanta.models.separator import Separator
+
+          enc = EcapaTdnn()
+          emb = enc(torch.randn(2, 3 * 16000))
+          assert emb.shape == (2, 192), emb.shape
+
+          loss = AAMSoftmax(192, 50)(emb, torch.tensor([0, 1]))
+          loss.backward()
+          assert torch.isfinite(loss), loss
+
+          sep = Separator(enc_channels=512, bottleneck=128, hidden=512, kernel=3,
+                          blocks_per_repeat=8, repeats=3, speaker_dim=192)
+          mask = sep(torch.randn(1, 512, 200), torch.randn(1, 192))
+          assert mask.shape == (1, 512, 200), mask.shape
+          print("forward passes OK")
+          PY
+
+      - name: Mixture synthesis is well formed
+        run: |
+          python - <<'PY'
+          import numpy as np
+          from vanta.data.synthesize import MixConfig
+          cfg = MixConfig()
+          lo, hi = cfg.interference_snr_db
+          # Training on a target quieter than the interferer capped an earlier
+          # model near +1 dB; keep that regression from creeping back in.
+          assert lo >= 0, f"interference SNR floor regressed to {lo}"
+          assert hi > lo
+          print(f"interference SNR range OK: ({lo}, {hi})")
+          PY
+
+      - name: Server imports without checkpoints present
+        run: |
+          python - <<'PY'
+          # A fresh clone has no weights; the server must still import and be
+          # able to report degraded rather than crash at startup.
+          import server
+          assert server.BACKEND == "trained", server.BACKEND
+          assert server.REPEATS == 3, server.REPEATS
+          print("server config OK:", server.CHECKPOINT_PATH, server.SPK_ENCODER)
+          PY
+
+  frontend:
+    name: frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit -p tsconfig.json
+
+      - name: Build
+        run: npx next build
+        env:
+          NEXT_PUBLIC_VANTA_API: https://komalsohal-vanta.hf.space
