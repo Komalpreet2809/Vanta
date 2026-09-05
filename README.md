@@ -527,4 +527,6 @@ at build time.
 
 **[Try it →](https://vanta.komalpreet.me)**
 
+Made with Love :)
+
 </div>
